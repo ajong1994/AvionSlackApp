@@ -1,25 +1,17 @@
-import logo from './logo.svg';
-import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <></>
   );
 }
+
+// User is able to create his/her account with email and password
+// User is able to login his/her credentials
+// User is able to create new channel
+// User is able to add users on a channel
+// User is able to send message to other user (Direct message)
+// User is able to send message to a channel
+// User is able to receive message from other user (Direct message)
+// User is able to receive message from his/her channels
 
 export default App;
