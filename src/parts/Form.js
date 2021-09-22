@@ -1,9 +1,14 @@
 
-const Form = () => {
+const Form = ({children}) => {
+
+    function onSubmitHandler(e){
+        e.preventDefault();
+    }
+    
     return (
-        <div>
-            
-        </div>
+        <form onSubmit={onSubmitHandler}>
+            {children}
+        </form>
     )
 }
 

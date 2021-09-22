@@ -1,7 +1,23 @@
+import {HashRouter as Router, Route, Switch} from 'react-router-dom';
+import Signin from './pages/Signin';
+import Signup from './pages/Signup'
+import { useState } from 'react';
+
 
 function App() {
+
+  const [loginStat, setLoginStat] = useState(1)
+  function loginUpdater(new_stat) {
+    setLoginStat({new_stat})
+  }
+
   return (
-    <></>
+    <Router>
+      <Switch>
+        <Route path="/signin" render={() => <Signin loginStat={loginStat} loginUpdater={loginUpdater}/>}/>
+        <Route path="/signup" render={() => <Signup loginStat={loginStat} loginUpdater={loginUpdater}/>}/>
+      </Switch>
+    </Router>
   );
 }
 
