@@ -61,25 +61,52 @@ export const postUserSession = (email, password, confirmedPassword) => {
         password_confirmation: confirmedPassword 
     };
     const config = {
-    method: 'post',
+    method: 'POST',
     url: 'https://slackapi.avionschool.com/api/v1/auth',
     headers: {},
     data : data
     };
     
     axios(config)
-    .then(function (response) {
-    console.log(JSON.stringify(response.data));
+    .then((response) => {
+    console.log(response.data);
     //Display success toast
     //Set Login State using credentials
     })
-    .catch(function (error) {
-    console.log(error);
+    .catch((error) => {
+        if(error.response) {
+            console.log(error.response.data.errors.full_messages);
+            //Display toast error with error message from response
+        }
     });
 
 };
 
-export const createUserSession = () => {
+export const createUserSession = (email, password) => {
+    const axios = require('axios')
+    var data = {
+        email: email,
+        password: password, 
+      };
+    var config = {
+    method: 'POST',
+    url: 'https://slackapi.avionschool.com/api/v1/auth/sign_in',
+    headers: {},
+    data : data
+    };
+    
+    axios(config)
+    .then((response) => {
+    console.log(response.data);
+    //Display success toast
+    //Set Login State using credentials
+    })
+    .catch((error) => {
+        if(error.response) {
+            console.log(error.response.data.errors.full_messages);
+            //Display toast error with error message from response
+        }
+    });
 
 };
 
