@@ -6,7 +6,6 @@ import { useState, useEffect } from 'react'
 import { validateEmail, validatePassword} from '../utils/utils'
 
 const Signup = ({loginStat}) => {
-    console.log(loginStat)
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
@@ -23,7 +22,6 @@ const Signup = ({loginStat}) => {
 
     useEffect(() => {
         let emailResult = validateEmail(email)
-        console.log('email')
         if (emailResult.is_valid) {
             setEmailValidationPrompt(null);
         } else {
@@ -33,7 +31,7 @@ const Signup = ({loginStat}) => {
 
     useEffect(() => {
         let passwordResult = validatePassword(password)
-        if (emailResult.is_valid) {
+        if (passwordResult.is_valid) {
             setEmailValidationPrompt(null);
         } else {
             setPasswordValidationPrompt(passwordResult.message)
@@ -42,7 +40,7 @@ const Signup = ({loginStat}) => {
 
     useEffect(() => {
         if ( password !== confirmPassword) {
-            isValid = false;  
+            setConfirmPasswordValidationPrompt('Passwords not matching') 
         }
     }, [confirmPassword]) 
 
