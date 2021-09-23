@@ -7,8 +7,8 @@ export const test_util = () => {
 }
 
 export const validateEmail = (email) => {
-
     const emailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+    
     if (email !== null) {
         if(email.match(emailformat)) {
             return {
@@ -50,4 +50,3 @@ export const validatePassword = (password) => {
     }
 
 }
-
