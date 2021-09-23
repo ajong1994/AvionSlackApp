@@ -2,9 +2,42 @@ import Form from '../parts/Form'
 import { Slacklogo } from '../components/Slacklogo'
 import Textfield from '../components/Textfield'
 import Button from '../components/Button'
+import { useState } from 'react'
+import { validateEmail, validatePassword} from '../utils/utils'
 
 const Signup = ({loginStat}) => {
     console.log(loginStat)
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [emailValidationPrompt, setEmailValidationPrompt] = useState(null)
+    const [passwordValidationPrompt, setPasswordValidationPrompt] = useState(null)
+
+    const handleEmailChange = (email) => {
+        setEmail(email)
+    }
+
+    const handlePasswordChange = (password) => {
+        setPassword(password)
+    }
+
+    const handleSignUpClick = (e) => {
+        let emailResult = validateEmail(email)
+        let passwordResult = validatePassword(password)
+        
+        if (emailResult.is_valid) {
+            setEmailValidationPrompt(null);
+        } else {
+            setEmailValidationPrompt(emailResult.message);
+        }
+        
+        if (passwordResult.is_valid) {
+            setPasswordValidationPrompt(null);
+        } else {
+            setPasswordValidationPrompt(passwordResult.message);
+        }
+
+    }
+
     return (
         <div className='pt-8'>
             <div className='flex justify-center pb-8'>
@@ -15,10 +48,12 @@ const Signup = ({loginStat}) => {
             <div className='mx-auto max-w-md mt-20'>
                 <Form>
                     <div className='flex flex-col gap-4'>
-                        <Textfield label='Email' id='email' type='email' placeholder='Enter your email'/>
-                        <Textfield label='Password' id='password' type='password' placeholder='Enter a password'/>
+                        <Textfield label='Email' onChange={handleEmailChange} id='email' type='text' placeholder='Enter your email'/>
+                        {emailValidationPrompt && <label>{emailValidationPrompt}</label>}
+                        <Textfield label='Password' onChange={handlePasswordChange} id='password' type='password' placeholder='Enter a password'/>
+                        {passwordValidationPrompt && <label>{passwordValidationPrompt}</label>}
                         <Textfield label='Confirm Password' id='confirm_pw' type='password' placeholder='Confirm your password'/>
-                        <Button>Click me</Button>
+                        <Button onClick={handleSignUpClick}>Click me</Button>
                     </div>
                 </Form>
             </div>
