@@ -2,7 +2,7 @@ import Form from '../parts/Form'
 import { Slacklogo } from '../components/Slacklogo'
 import Textfield from '../components/Textfield'
 import Button from '../components/Button'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { validateEmail, validatePassword} from '../utils/utils'
 
 const Signup = ({loginStat}) => {
@@ -12,43 +12,56 @@ const Signup = ({loginStat}) => {
     const [confirmPassword, setConfirmPassword] = useState('')
     const [emailValidationPrompt, setEmailValidationPrompt] = useState(null)
     const [passwordValidationPrompt, setPasswordValidationPrompt] = useState(null)
+    const [confirmPasswordValidationPrompt, setConfirmPasswordValidationPrompt] = useState(null)
 
     // const handlePasswordChange = (password) => {
     //     setPassword(password)
     // }
-    const handleConfirmPassword = (confirmPassword) => {
-        setConfirmPassword(confirmPassword)
-    }
+    // const handleConfirmPassword = (confirmPassword) => {
+    //     setConfirmPassword(confirmPassword)
+    // }
 
-    const handleSignUpClick = (e) => {
+    useEffect(() => {
         let emailResult = validateEmail(email)
-        let passwordResult = validatePassword(password)
-        
+        console.log('email')
         if (emailResult.is_valid) {
             setEmailValidationPrompt(null);
         } else {
             setEmailValidationPrompt(emailResult.message);
         }
-        
-        if (passwordResult.is_valid) {
-            setPasswordValidationPrompt(null);
-        } else {
-            setPasswordValidationPrompt(passwordResult.message);
-        }
-  
-        
+    }, [email]) 
 
+    useEffect(() => {
+        let passwordResult = validatePassword(password)
+        if (emailResult.is_valid) {
+            setEmailValidationPrompt(null);
+        } else {
+            setPasswordValidationPrompt(passwordResult.message)
+        }
+    }, [password]) 
+
+    useEffect(() => {
+        if ( password !== confirmPassword) {
+            isValid = false;  
+        }
+    }, [confirmPassword]) 
+
+
+
+    const handleSignUpClick = (e) => {
+        if(emailValidationPrompt === null && passwordValidationPrompt === null){
+            alert('success')
+        }
     }
 
     const handleValueChange = (e, inputType) => {
-        
         if(inputType === 'email') {
             setEmail(e.target.value)
         }else if(inputType === 'password') {
             setPassword(e.target.value)
-        }
-       
-        
+        }else if(inputType === 'confirmPassword') {
+            setConfirmPassword(e.target.value)
+        }    
     }
 
     return (
@@ -63,9 +76,9 @@ const Signup = ({loginStat}) => {
                     <div className='flex flex-col gap-4'>
                         <Textfield label='Email' value={email} onChange={(e) => {handleValueChange(e,'email')} } id='email' type='text' placeholder='Enter your email'/>
                         {emailValidationPrompt && <label>{emailValidationPrompt}</label>}
-                        <Textfield label='Password' onChange={(e) => {handleValueChange(e,'password')}} id='password' type='password' placeholder='Enter a password'/>
+                        <Textfield label='Password' value={password} onChange={(e) => {handleValueChange(e,'password')}} id='password' type='password' placeholder='Enter a password'/>
                         {passwordValidationPrompt && <label>{passwordValidationPrompt}</label>}
-                        <Textfield label='Confirm Password' id='confirm_pw' type='password' placeholder='Confirm your password'/>
+                        <Textfield label='Confirm Password' value={confirmPassword}onChange={(e) => {handleValueChange(e,'confirmPassword')}} id='confirm_pw' type='password' placeholder='Confirm your password'/>
                         <Button onClick={handleSignUpClick}>Click me</Button>
                     </div>
                 </Form>
