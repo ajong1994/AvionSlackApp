@@ -1,13 +1,5 @@
 import axios from 'axios'
 
-export const test_util = () => {
-    return (
-        <div>
-            
-        </div>
-    )
-}
-
 export const validateEmail = (email) => {
     const emailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
     if (email !== '') {
@@ -52,8 +44,7 @@ export const validatePassword = (password) => {
 
 }
 
-export const postUserSession = (email, password, confirmedPassword) => {
-    const axios = require('axios')
+export const postUserRegistration = (email, password, confirmedPassword, setAuth, setUser) => {
 
     const data = {
         email: email,
@@ -70,8 +61,19 @@ export const postUserSession = (email, password, confirmedPassword) => {
     axios(config)
     .then((response) => {
     console.log(response.data);
-    //Display success toast
-    //Set Login State using credentials
+    console.log(response.headers);
+    if (response.data.status === 'success'){
+        //Update login Bool to true. This conditional will be used in pages for redirect/access validation
+        setAuth(true);
+        //Update activeUser state with an object containing necessary details from header of response
+        setUser({
+            'access-token': response.headers['access-token'],
+            'client': response.headers.client,
+            'expiry': response.headers.expiry,
+            'uid': response.headers.uid
+        });
+        //Display success toast
+    }
     })
     .catch((error) => {
         if(error.response) {
@@ -83,7 +85,6 @@ export const postUserSession = (email, password, confirmedPassword) => {
 };
 
 export const createUserSession = (email, password) => {
-    const axios = require('axios')
     var data = {
         email: email,
         password: password, 
@@ -111,7 +112,6 @@ export const createUserSession = (email, password) => {
 };
 
 export const getAllUsers = () => {
-    const axios = require('axios')
 
     var config = {
         method: 'get',
