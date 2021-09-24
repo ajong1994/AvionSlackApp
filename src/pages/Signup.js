@@ -3,7 +3,7 @@ import { Slacklogo } from '../components/Slacklogo'
 import Textfield from '../components/Textfield'
 import Button from '../components/Button'
 import { useState, useEffect, useContext } from 'react'
-import { validateEmail, validatePassword} from '../utils/Utils'
+import { validateConfirmPassword, validateEmail, validatePassword} from '../utils/Utils'
 import {postUserRegistration} from '../utils/Utils'
 import { AuthContext } from '../contexts/AuthContext'
 
@@ -16,14 +16,7 @@ const Signup = ({loginStat}) => {
     const [passwordValidationPrompt, setPasswordValidationPrompt] = useState(null)
     const [confirmPasswordValidationPrompt, setConfirmPasswordValidationPrompt] = useState(null)
     const {isAuthenticated, setAuth, activeUser, setUser} = useContext(AuthContext)
-    // const handlePasswordChange = (password) => {
-    //     setPassword(password)
-    // }
-    // const handleConfirmPassword = (confirmPassword) => {
-    //     setConfirmPassword(confirmPassword)
-    // }
-    
-
+ 
     useEffect(() => {
         let emailResult = validateEmail(email)
         if (emailResult.is_valid) {
@@ -36,22 +29,25 @@ const Signup = ({loginStat}) => {
     useEffect(() => {
         let passwordResult = validatePassword(password)
         if (passwordResult.is_valid) {
-            setEmailValidationPrompt(null);
+            setPasswordValidationPrompt(null);
         } else {
             setPasswordValidationPrompt(passwordResult.message)
         }
     }, [password]) 
 
     useEffect(() => {
-        if ( password !== confirmPassword) {
-            setConfirmPasswordValidationPrompt('Passwords not matching') 
+        let confirmPasswordResult = validateConfirmPassword(password, confirmPassword)
+        if (confirmPasswordResult.is_valid) {
+            setConfirmPasswordValidationPrompt(null) 
+        }else {
+            setConfirmPasswordValidationPrompt(confirmPasswordResult.message)
         }
     }, [confirmPassword]) 
 
 
 
     const handleSignUpClick = () => {
-        if(emailValidationPrompt === null){
+        if(emailValidationPrompt === null && passwordValidationPrompt === null && confirmPasswordValidationPrompt === null){
             postUserRegistration(email, password, confirmPassword, setAuth, setUser)
         }
     }
@@ -77,10 +73,11 @@ const Signup = ({loginStat}) => {
                 <Form>
                     <div className='flex flex-col gap-4'>
                         <Textfield label='Email' value={email} onChange={(e) => {handleValueChange(e,'email')} } id='email' type='text' placeholder='Enter your email'/>
-                        {emailValidationPrompt && <label>{emailValidationPrompt}</label>}
+                        {emailValidationPrompt && <span className='text-red-400'>{emailValidationPrompt}</span>}
                         <Textfield label='Password' value={password} onChange={(e) => {handleValueChange(e,'password')}} id='password' type='password' placeholder='Enter a password'/>
-                        {passwordValidationPrompt && <label>{passwordValidationPrompt}</label>}
-                        <Textfield label='Confirm Password' value={confirmPassword}onChange={(e) => {handleValueChange(e,'confirmPassword')}} id='confirm_pw' type='password' placeholder='Confirm your password'/>
+                        {passwordValidationPrompt && <span className='text-red-400'>{passwordValidationPrompt}</span>}
+                        <Textfield label='Confirm Password' value={confirmPassword} onChange={(e) => {handleValueChange(e,'confirmPassword')}} id='confirm_pw' type='password' placeholder='Confirm your password'/>
+                        {confirmPasswordValidationPrompt && <span className='text-red-400'>{confirmPasswordValidationPrompt}</span>}
                         <Button onClick={handleSignUpClick}>Click me</Button>
                     </div>
                 </Form>

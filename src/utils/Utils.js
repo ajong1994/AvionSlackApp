@@ -10,7 +10,7 @@ export const validateEmail = (email) => {
         } else {
             return {
                 is_valid: false,
-                message: 'Invalid email format'
+                message: 'Invalid email address'
             } 
         }
     } else {
@@ -22,26 +22,48 @@ export const validateEmail = (email) => {
 }
 
 export const validatePassword = (password) => {
-    const minChar = /^.*(?=.{8,})(?=.*[a-zA-Z]).*$/g
-
-    if(password !== null) {
-        if(password.match(minChar)) {
-            return {
-                is_valid: true
-            }
-        } else {
+    if(password !== '') {
+        if(password.length < 8) {
             return {
                 is_valid: false,
                 message: 'password should not be less than 8 characters'
+            }
+        }else {
+            return {
+                is_valid: true,    
             }
         }
     }else {
         return {
             is_valid: false,
-            message: 'password cannot be empty'
+            message: 'Password cannot be empty'
         }
     }
+}
 
+export const validateConfirmPassword = (password, confirmPassword) => {
+
+    if(confirmPassword !== '') {
+        console.log(`password is: ${password}`)
+        console.log(`confirmpassword is: ${confirmPassword}`)
+        
+        if(password === confirmPassword) {
+            return {
+                is_valid: true
+            }
+        }else {
+            return {
+                is_valid: false,
+                message: 'passwords do not match'
+            }
+        }
+    }else {
+        return {
+            is_valid:false,
+            message: 'Confirm password'
+        }
+    }
+ 
 }
 
 export const postUserRegistration = (email, password, confirmedPassword, setAuth, setUser) => {
@@ -114,7 +136,7 @@ export const createUserSession = (email, password) => {
 export const getAllUsers = () => {
 
     var config = {
-        method: 'get',
+        method: 'GET',
         url: '206.189.91.54/api/v1/users',
         headers: { 
           'access-token': 'TTLtXEQUjd1i0BlR6q8zVg', 
