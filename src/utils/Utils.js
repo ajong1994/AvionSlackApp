@@ -2,6 +2,7 @@ import axios from 'axios'
 
 export const validateEmail = (email) => {
     const emailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+    //Added email !== null as a condition to account for our new initial states for email, password and confirm password
     if (email !== '' && email !== null) {
         if(email.match(emailformat)) {
             return {
@@ -14,6 +15,7 @@ export const validateEmail = (email) => {
             } 
         }
     } else if (email === '') {
+        //Instead of using else, we use else if to restrict the returning of an object only when a user has typed into the input
         return {
             is_valid: false,
             message: 'Email cannot be blank'
@@ -22,6 +24,7 @@ export const validateEmail = (email) => {
 }
 
 export const validatePassword = (password) => {
+    //Added email !== null as a condition to account for our new initial states for email, password and confirm password
     if(password !== '' && password !== null) {
         if(password.length < 8) {
             return {
@@ -33,7 +36,8 @@ export const validatePassword = (password) => {
                 is_valid: true,    
             }
         }
-    }else if (password === '') {
+    } else if (password === '') {
+        //Instead of using else, we use else if to restrict the returning of an object only when a user has typed into the input
         return {
             is_valid: false,
             message: 'Password cannot be empty'
@@ -42,11 +46,8 @@ export const validatePassword = (password) => {
 }
 
 export const validateConfirmPassword = (password, confirmPassword) => {
-
+    //Added email !== null as a condition to account for our new initial states for email, password and confirm password
     if(confirmPassword !== '' && confirmPassword !== null) {
-        console.log(`password is: ${password}`)
-        console.log(`confirmpassword is: ${confirmPassword}`)
-        
         if(password === confirmPassword) {
             return {
                 is_valid: true
@@ -57,17 +58,16 @@ export const validateConfirmPassword = (password, confirmPassword) => {
                 message: 'passwords do not match'
             }
         }
-    }else if(confirmPassword === ''){
+    } else if (confirmPassword === '') {
+        //Instead of using else, we use else if to restrict the returning of an object only when a user has typed into the input
         return {
-            is_valid:false,
-            message: 'Confirm password'
+            is_valid: false,
+            message: 'Confirm password cannot be empty'
         }
     }
- 
 }
 
-export const postUserRegistration = (email, password, confirmedPassword, setAuth, setUser) => {
-
+export const postUserRegistration = (email, password, confirmedPassword, setAuth, setUser, history) => {
     const data = {
         email: email,
         password: password,
@@ -95,6 +95,9 @@ export const postUserRegistration = (email, password, confirmedPassword, setAuth
             'uid': response.headers.uid
         });
         //Display success toast
+
+        //Redirect to Main page
+        history.push("/")
     }
     })
     .catch((error) => {
@@ -133,7 +136,7 @@ export const createUserSession = (email, password) => {
 
 };
 
-export const getAllUsers = () => {
+export const getAllUsers = (activeUser) => {
 
     var config = {
         method: 'GET',

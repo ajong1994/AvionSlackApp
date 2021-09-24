@@ -2,62 +2,95 @@ import Form from '../parts/Form'
 import { Slacklogo } from '../components/Slacklogo'
 import Textfield from '../components/Textfield'
 import Button from '../components/Button'
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect, useContext} from 'react'
 import { validateConfirmPassword, validateEmail, validatePassword} from '../utils/Utils'
 import {postUserRegistration} from '../utils/Utils'
+import { useHistory } from 'react-router'
 import { AuthContext } from '../contexts/AuthContext'
 
 
-const Signup = ({loginStat}) => {
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [confirmPassword, setConfirmPassword] = useState('')
-    const [emailValidationPrompt, setEmailValidationPrompt] = useState(null)
-    const [passwordValidationPrompt, setPasswordValidationPrompt] = useState(null)
-    const [confirmPasswordValidationPrompt, setConfirmPasswordValidationPrompt] = useState(null)
+
+const Signup = () => {
+    //Initialize email, password and confirmPassword to null instead of empty string so that we can add a validation conditional
+    // to only display error messages for empty string states (which happens when they start typing and not on load)
+    const [email, setEmail] = useState(null)
+    const [password, setPassword] = useState(null)
+    const [confirmPassword, setConfirmPassword] = useState(null)
+    const [emailValidationPrompt, setEmailValidationPrompt] = useState(undefined)
+    const [passwordValidationPrompt, setPasswordValidationPrompt] = useState(undefined)
+    const [confirmPasswordValidationPrompt, setConfirmPasswordValidationPrompt] = useState(undefined)
     const {isAuthenticated, setAuth, activeUser, setUser} = useContext(AuthContext)
+
+    //Instantiated an array of objects with state as the validationPrompt state and setter for the corresponding setState
+    //This is so we have an 
+    const validators = [{
+        state: emailValidationPrompt,
+        setter: setEmail
+    },
+    {   state: passwordValidationPrompt,
+        setter: setPassword
+    },
+    {   state: confirmPasswordValidationPrompt,
+        setter: setConfirmPassword
+    }
+    ]
+
+    const history = useHistory();
  
     useEffect(() => {
         let emailResult = validateEmail(email)
-        if (emailResult.is_valid) {
+        // On load, emailResult will return UNDEFINED. As long as user has not started typing, everything here will be undefined. 
+        if (emailResult?.is_valid) {
             setEmailValidationPrompt(null);
         } else {
-            setEmailValidationPrompt(emailResult.message);
+            //Because validateEmail only returns an object when email is not null (e.g. when user has begun typing), 
+            //No error message will be displayed until then
+            setEmailValidationPrompt(emailResult?.message);
         }
     }, [email]) 
 
     useEffect(() => {
         let passwordResult = validatePassword(password)
-        if (passwordResult.is_valid) {
+        // On load, passwordResult will return UNDEFINED. As long as user has not started typing, everything here will be undefined.
+        if (passwordResult?.is_valid) {
             setPasswordValidationPrompt(null);
         } else {
-            setPasswordValidationPrompt(passwordResult.message)
+            setPasswordValidationPrompt(passwordResult?.message)
         }
     }, [password]) 
 
     useEffect(() => {
         let confirmPasswordResult = validateConfirmPassword(password, confirmPassword)
-        if (confirmPasswordResult.is_valid) {
+        // On load, confirmPasswordResult will return UNDEFINED. As long as user has not started typing, everything here will be undefined.
+        if (confirmPasswordResult?.is_valid) {
             setConfirmPasswordValidationPrompt(null) 
-        }else {
-            setConfirmPasswordValidationPrompt(confirmPasswordResult.message)
+        } else {
+            setConfirmPasswordValidationPrompt(confirmPasswordResult?.message)
         }
     }, [confirmPassword]) 
 
 
-
-    const handleSignUpClick = () => {
-        if(emailValidationPrompt === null && passwordValidationPrompt === null && confirmPasswordValidationPrompt === null){
-            postUserRegistration(email, password, confirmPassword, setAuth, setUser)
+    const handleSignUpClick = (validators) => {
+        //Loop through validators' array objects and check if the validationPrompt is undefined--this means that the user has not touched the input
+        //if true, then setState the corresponding field to an empty string to make the error appear
+        validators.forEach((validationPrompt) => {
+            if (validationPrompt.state === undefined) {
+                validationPrompt.setter('')
+            }
+        })
+        if (emailValidationPrompt === null && passwordValidationPrompt === null && confirmPasswordValidationPrompt === null) {
+            // alert('button works')
+            postUserRegistration(email, password, confirmPassword, setAuth, setUser, history)
         }
+
     }
 
     const handleValueChange = (e, inputType) => {
         if(inputType === 'email') {
             setEmail(e.target.value)
-        }else if(inputType === 'password') {
+        } else if(inputType === 'password') {
             setPassword(e.target.value)
-        }else if(inputType === 'confirmPassword') {
+        } else if(inputType === 'confirmPassword') {
             setConfirmPassword(e.target.value)
         }    
     }
@@ -72,13 +105,13 @@ const Signup = ({loginStat}) => {
             <div className='mx-auto max-w-md mt-20'>
                 <Form>
                     <div className='flex flex-col gap-4'>
-                        <Textfield label='Email' value={email} onChange={(e) => {handleValueChange(e,'email')} } id='email' type='text' placeholder='Enter your email'/>
+                        <Textfield label='Email' value={email === null ? '' : email} onChange={(e) => {handleValueChange(e,'email')} } id='email' type='text' placeholder='Enter your email'/>
                         {emailValidationPrompt && <span className='text-red-400'>{emailValidationPrompt}</span>}
-                        <Textfield label='Password' value={password} onChange={(e) => {handleValueChange(e,'password')}} id='password' type='password' placeholder='Enter a password'/>
+                        <Textfield label='Password' value={password === null ? '' : password} onChange={(e) => {handleValueChange(e,'password')}} id='password' type='password' placeholder='Enter a password'/>
                         {passwordValidationPrompt && <span className='text-red-400'>{passwordValidationPrompt}</span>}
-                        <Textfield label='Confirm Password' value={confirmPassword} onChange={(e) => {handleValueChange(e,'confirmPassword')}} id='confirm_pw' type='password' placeholder='Confirm your password'/>
+                        <Textfield label='Confirm Password' value={confirmPassword === null ? '' : confirmPassword} onChange={(e) => {handleValueChange(e,'confirmPassword')}} id='confirm_pw' type='password' placeholder='Confirm your password'/>
                         {confirmPasswordValidationPrompt && <span className='text-red-400'>{confirmPasswordValidationPrompt}</span>}
-                        <Button onClick={handleSignUpClick}>Click me</Button>
+                        <Button onClick={() => handleSignUpClick(validators)}>Click me</Button>
                     </div>
                 </Form>
             </div>
