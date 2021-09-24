@@ -2,8 +2,11 @@ import Form from '../parts/Form'
 import { Slacklogo } from '../components/Slacklogo'
 import Textfield from '../components/Textfield'
 import Button from '../components/Button'
-import { useState, useEffect } from 'react'
-import { validateEmail, validatePassword} from '../utils/utils'
+import { useState, useEffect, useContext } from 'react'
+import { validateEmail, validatePassword} from '../utils/Utils'
+import {postUserRegistration} from '../utils/Utils'
+import { AuthContext } from '../contexts/AuthContext'
+
 
 const Signup = ({loginStat}) => {
     const [email, setEmail] = useState('')
@@ -12,13 +15,14 @@ const Signup = ({loginStat}) => {
     const [emailValidationPrompt, setEmailValidationPrompt] = useState(null)
     const [passwordValidationPrompt, setPasswordValidationPrompt] = useState(null)
     const [confirmPasswordValidationPrompt, setConfirmPasswordValidationPrompt] = useState(null)
-
+    const {isAuthenticated, setAuth, activeUser, setUser} = useContext(AuthContext)
     // const handlePasswordChange = (password) => {
     //     setPassword(password)
     // }
     // const handleConfirmPassword = (confirmPassword) => {
     //     setConfirmPassword(confirmPassword)
     // }
+    
 
     useEffect(() => {
         let emailResult = validateEmail(email)
@@ -46,9 +50,9 @@ const Signup = ({loginStat}) => {
 
 
 
-    const handleSignUpClick = (e) => {
-        if(emailValidationPrompt === null && passwordValidationPrompt === null){
-            alert('success')
+    const handleSignUpClick = () => {
+        if(emailValidationPrompt === null){
+            postUserRegistration(email, password, confirmPassword, setAuth, setUser)
         }
     }
 

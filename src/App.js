@@ -1,31 +1,33 @@
 import {HashRouter as Router, Route, Switch} from 'react-router-dom';
 import Signin from './pages/Signin';
 import Signup from './pages/Signup'
-import { useState } from 'react';
+import AuthContextProvider from './contexts/AuthContext';
 
 
 function App() {
 
-  const [loginStat, setLoginStat] = useState(1)
-  function loginUpdater(new_stat) {
-    setLoginStat({new_stat})
-  }
-
   return (
-    <Router>
-      <Switch>
-        <Route path="/signin" render={() => <Signin loginStat={loginStat} loginUpdater={loginUpdater}/>}/>
-        <Route path="/signup" render={() => <Signup loginStat={loginStat} loginUpdater={loginUpdater}/>}/>
-      </Switch>
-    </Router>
+    //We add the Context Provider component
+    <AuthContextProvider>
+      <Router>
+        <Switch>
+          <Route path="/signin">
+            <Signin/>
+          </Route>
+          <Route path="/signup">
+            <Signup/>
+          </Route>
+        </Switch>
+      </Router>
+    </AuthContextProvider>
   );
 }
 
 // 1. User is able to create his/her account with email and password
 // - Sign up page with: 
-// - Slack logo component
-// - "Join Avion School h2 native"
-// - Form part component
+// - Slack logo component [ok]
+// - "Join Avion School h2 native" [ok]
+// - Form part component [ok]
 //   - Email address input + validation
 //     - Validation: 
 //        - Not blank
@@ -40,7 +42,7 @@ function App() {
 //        - Must match password
 //   - Sign up Button component
 //      - Submit the form, POST data to API, wait for response. If no error, display success message. 
-//      - If error (422) then display user exists
+//      - If error (422) then display error toast with error message from API
 // - Create account link component -> Link to Signup Page Component
 // 2. User is able to login his/her credentials
 // - Login Page with: 
