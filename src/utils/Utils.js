@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export const validateEmail = (email) => {
     const emailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
-    if (email !== '') {
+    if (email !== '' && email !== null) {
         if(email.match(emailformat)) {
             return {
                 is_valid: true
@@ -13,7 +13,7 @@ export const validateEmail = (email) => {
                 message: 'Invalid email address'
             } 
         }
-    } else {
+    } else if (email === '') {
         return {
             is_valid: false,
             message: 'Email cannot be blank'
@@ -22,7 +22,7 @@ export const validateEmail = (email) => {
 }
 
 export const validatePassword = (password) => {
-    if(password !== '') {
+    if(password !== '' && password !== null) {
         if(password.length < 8) {
             return {
                 is_valid: false,
@@ -33,7 +33,7 @@ export const validatePassword = (password) => {
                 is_valid: true,    
             }
         }
-    }else {
+    }else if (password === '') {
         return {
             is_valid: false,
             message: 'Password cannot be empty'
@@ -43,7 +43,7 @@ export const validatePassword = (password) => {
 
 export const validateConfirmPassword = (password, confirmPassword) => {
 
-    if(confirmPassword !== '') {
+    if(confirmPassword !== '' && confirmPassword !== null) {
         console.log(`password is: ${password}`)
         console.log(`confirmpassword is: ${confirmPassword}`)
         
@@ -57,7 +57,7 @@ export const validateConfirmPassword = (password, confirmPassword) => {
                 message: 'passwords do not match'
             }
         }
-    }else {
+    }else if(confirmPassword === ''){
         return {
             is_valid:false,
             message: 'Confirm password'
