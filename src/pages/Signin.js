@@ -8,26 +8,26 @@ import Button from '../components/Button'
 import { validateEmail, validatePassword} from '../utils/Utils'
 
 const Login = () => {
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
+    const [email, setEmail] = useState(null)
+    const [password, setPassword] = useState(null)
     const [emailValidationPrompt, setEmailValidationPrompt] = useState(null)
     const [passwordValidationPrompt, setPasswordValidationPrompt] = useState(null)
 
     useEffect(() => {
         let emailResult = validateEmail(email)
-        if (emailResult.is_valid) {
+        if (emailResult?.is_valid) {
             setEmailValidationPrompt(null);
         } else {
-            setEmailValidationPrompt(emailResult.message);
+            setEmailValidationPrompt(emailResult?.message);
         }
     }, [email]) 
 
     useEffect(() => {
         let passwordResult = validatePassword(password)
-        if (passwordResult.is_valid) {
+        if (passwordResult?.is_valid) {
             setPasswordValidationPrompt(null);
         } else {
-            setPasswordValidationPrompt(passwordResult.message)
+            setPasswordValidationPrompt(passwordResult?.message)
         }
     }, [password]) 
 
