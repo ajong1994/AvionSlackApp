@@ -13,12 +13,15 @@ const Signup = ({loginStat}) => {
     const [passwordValidationPrompt, setPasswordValidationPrompt] = useState(null)
     const [confirmPasswordValidationPrompt, setConfirmPasswordValidationPrompt] = useState(null)
 
+    //let emailRef = useRef(null)
+
     // const handlePasswordChange = (password) => {
     //     setPassword(password)
     // }
     // const handleConfirmPassword = (confirmPassword) => {
     //     setConfirmPassword(confirmPassword)
     // }
+
 
     useEffect(() => {
         let emailResult = validateEmail(email)
@@ -45,7 +48,6 @@ const Signup = ({loginStat}) => {
     }, [confirmPassword]) 
 
 
-
     const handleSignUpClick = (e) => {
         if(emailValidationPrompt === null && passwordValidationPrompt === null){
             alert('success')
@@ -62,6 +64,9 @@ const Signup = ({loginStat}) => {
         }    
     }
 
+    // const submitRef = () => {
+
+    // }
     return (
         <div className='pt-8'>
             <div className='flex justify-center pb-8'>
@@ -72,7 +77,7 @@ const Signup = ({loginStat}) => {
             <div className='mx-auto max-w-md mt-20'>
                 <Form>
                     <div className='flex flex-col gap-4'>
-                        <Textfield label='Email' value={email} onChange={(e) => {handleValueChange(e,'email')} } id='email' type='text' placeholder='Enter your email'/>
+                        <Textfield label='Email' /*ref={ emailRef }*/ value={email} onChange={(e) => {handleValueChange(e,'email')} } id='email' type='text' placeholder='Enter your email'/>
                         {emailValidationPrompt && <label>{emailValidationPrompt}</label>}
                         <Textfield label='Password' value={password} onChange={(e) => {handleValueChange(e,'password')}} id='password' type='password' placeholder='Enter a password'/>
                         {passwordValidationPrompt && <label>{passwordValidationPrompt}</label>}

@@ -114,7 +114,7 @@ export const getAllUsers = () => {
     const axios = require('axios')
 
     var config = {
-        method: 'get',
+        method: 'GET',
         url: '206.189.91.54/api/v1/users',
         headers: { 
           'access-token': 'TTLtXEQUjd1i0BlR6q8zVg', 
