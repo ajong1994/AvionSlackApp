@@ -2,8 +2,12 @@ import Form from '../parts/Form'
 import { Slacklogo } from '../components/Slacklogo'
 import Textfield from '../components/Textfield'
 import Button from '../components/Button'
-import { useState, useEffect } from 'react'
-import { validateEmail, validatePassword} from '../utils/utils'
+import { useState, useEffect, useContext } from 'react'
+import { validateEmail, validatePassword} from '../utils/Utils'
+import {postUserRegistration} from '../utils/utils'
+import { AuthContext } from '../contexts/AuthContext'
+
+
 
 const Signup = ({loginStat}) => {
     const [email, setEmail] = useState('')
@@ -12,15 +16,14 @@ const Signup = ({loginStat}) => {
     const [emailValidationPrompt, setEmailValidationPrompt] = useState(null)
     const [passwordValidationPrompt, setPasswordValidationPrompt] = useState(null)
     const [confirmPasswordValidationPrompt, setConfirmPasswordValidationPrompt] = useState(null)
-
-    //let emailRef = useRef(null)
-
+    const {isAuthenticated, setAuth, activeUser, setUser} = useContext(AuthContext)
     // const handlePasswordChange = (password) => {
     //     setPassword(password)
     // }
     // const handleConfirmPassword = (confirmPassword) => {
     //     setConfirmPassword(confirmPassword)
     // }
+    
 
 
     useEffect(() => {
@@ -48,9 +51,10 @@ const Signup = ({loginStat}) => {
     }, [confirmPassword]) 
 
 
-    const handleSignUpClick = (e) => {
-        if(emailValidationPrompt === null && passwordValidationPrompt === null){
-            alert('success')
+
+    const handleSignUpClick = () => {
+        if(emailValidationPrompt === null){
+            postUserRegistration(email, password, confirmPassword, setAuth, setUser)
         }
     }
 
@@ -64,9 +68,6 @@ const Signup = ({loginStat}) => {
         }    
     }
 
-    // const submitRef = () => {
-
-    // }
     return (
         <div className='pt-8'>
             <div className='flex justify-center pb-8'>
@@ -77,7 +78,7 @@ const Signup = ({loginStat}) => {
             <div className='mx-auto max-w-md mt-20'>
                 <Form>
                     <div className='flex flex-col gap-4'>
-                        <Textfield label='Email' /*ref={ emailRef }*/ value={email} onChange={(e) => {handleValueChange(e,'email')} } id='email' type='text' placeholder='Enter your email'/>
+                        <Textfield label='Email' value={email} onChange={(e) => {handleValueChange(e,'email')} } id='email' type='text' placeholder='Enter your email'/>
                         {emailValidationPrompt && <label>{emailValidationPrompt}</label>}
                         <Textfield label='Password' value={password} onChange={(e) => {handleValueChange(e,'password')}} id='password' type='password' placeholder='Enter a password'/>
                         {passwordValidationPrompt && <label>{passwordValidationPrompt}</label>}
