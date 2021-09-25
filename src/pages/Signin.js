@@ -106,7 +106,7 @@ const Login = () => {
                         {emailValidationPrompt && <span className='text-red-400'>{emailValidationPrompt}</span>}
                         <Textfield label='Password' value={password === null ? '' : password} onChange={(e) => {handleValueChange(e,'password')}} id='password' type='password' placeholder='Enter a password'/>
                         {passwordValidationPrompt && <span className='text-red-400'>{passwordValidationPrompt}</span>}
-                        <Button onClick={()=>handleSignUpClick(validators)}>Click me</Button>
+                        <Button onClick={()=>handleSignUpClick(validators)}>Sign In</Button>
                     </div>
                 </Form>
             </div>
