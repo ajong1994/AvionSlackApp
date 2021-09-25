@@ -7,6 +7,8 @@ import { validateConfirmPassword, validateEmail, validatePassword} from '../util
 import {postUserRegistration} from '../utils/Utils'
 import { useHistory } from 'react-router'
 import { AuthContext } from '../contexts/AuthContext'
+import { Transition } from '@headlessui/react'
+import Toast from '../parts/Toast'
 
 
 
@@ -20,9 +22,14 @@ const Signup = () => {
     const [passwordValidationPrompt, setPasswordValidationPrompt] = useState(undefined)
     const [confirmPasswordValidationPrompt, setConfirmPasswordValidationPrompt] = useState(undefined)
     const {isAuthenticated, setAuth, activeUser, setUser} = useContext(AuthContext)
+    const [isToastShowing, setIsToastShowing] = useState(false)
+    const [toastStat, setToastStat] = useState({
+        toastType: '',
+        toastMst: ''
+    });
 
     //Instantiated an array of objects with state as the validationPrompt state and setter for the corresponding setState
-    //This is so we have an 
+    //This is so we have a checklist to loop through
     const validators = [{
         state: emailValidationPrompt,
         setter: setEmail
@@ -79,12 +86,12 @@ const Signup = () => {
             }
         })
         if (emailValidationPrompt === null && passwordValidationPrompt === null && confirmPasswordValidationPrompt === null) {
-            // alert('button works')
-            postUserRegistration(email, password, confirmPassword, setAuth, setUser, history)
+            postUserRegistration(email, password, confirmPassword, setAuth, setUser, history, toggleToast, updateToastStat)
         }
 
     }
 
+    /*----INPUT HANDLERS----*/
     const handleValueChange = (e, inputType) => {
         if(inputType === 'email') {
             setEmail(e.target.value)
@@ -95,8 +102,29 @@ const Signup = () => {
         }    
     }
 
+    /*----TOAST HANDLER FUNCTIONS----*/
+    const toggleToast = (bool) => {
+        setIsToastShowing(bool);
+    }
+    
+    const updateToastStat = (type, msg) => {
+        setToastStat({
+            toastType: type,
+            toastMsg: msg
+        });
+    };
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setIsToastShowing(false);
+        },3000)
+        return () => clearTimeout(timer);
+    }, [isToastShowing]) 
+
+
+
     return (
-        <div className='pt-8'>
+        <div className='pt-8 h-full'>
             <div className='flex justify-center pb-8'>
                 <Slacklogo width={120}/>
             </div>
@@ -111,11 +139,21 @@ const Signup = () => {
                         {passwordValidationPrompt && <span className='text-red-400'>{passwordValidationPrompt}</span>}
                         <Textfield label='Confirm Password' value={confirmPassword === null ? '' : confirmPassword} onChange={(e) => {handleValueChange(e,'confirmPassword')}} id='confirm_pw' type='password' placeholder='Confirm your password'/>
                         {confirmPasswordValidationPrompt && <span className='text-red-400'>{confirmPasswordValidationPrompt}</span>}
-                        <Button onClick={() => handleSignUpClick(validators)}>Click me</Button>
+                        <Button onClick={() => handleSignUpClick(validators)}>Sign Up</Button>
                     </div>
                 </Form>
             </div>
-
+            <Transition
+                show={isToastShowing}
+                enter="transition-opacity duration-75"
+                enterFrom="opacity-0"
+                enterTo="opacity-100"
+                leave="transition-opacity duration-150"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0"
+            >
+                <Toast type={toastStat.toastType} onClick={() => {toggleToast(false)}}>{toastStat.toastMsg}</Toast>
+            </Transition>
         </div>
     )
 }

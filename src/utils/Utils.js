@@ -67,7 +67,7 @@ export const validateConfirmPassword = (password, confirmPassword) => {
     }
 }
 
-export const postUserRegistration = (email, password, confirmedPassword, setAuth, setUser, history) => {
+export const postUserRegistration = (email, password, confirmedPassword, setAuth, setUser, history, toggleToast, updateToastStat) => {
     const data = {
         email: email,
         password: password,
@@ -82,8 +82,6 @@ export const postUserRegistration = (email, password, confirmedPassword, setAuth
     
     axios(config)
     .then((response) => {
-    console.log(response.data);
-    console.log(response.headers);
     if (response.data.status === 'success'){
         //Update login Bool to true. This conditional will be used in pages for redirect/access validation
         setAuth(true);
@@ -95,21 +93,26 @@ export const postUserRegistration = (email, password, confirmedPassword, setAuth
             'uid': response.headers.uid
         });
         //Display success toast
-
+        toggleToast(true);
+        updateToastStat('success','Success! Account has been created.')
         //Redirect to Main page
         history.push("/")
     }
     })
     .catch((error) => {
         if(error.response) {
-            console.log(error.response.data.errors.full_messages);
+            const errMsgs = error.response.data.errors.full_messages
+            const formattedErrs = errMsgs.map(msg => msg.concat('.')).reduce((prev, current) => `${prev} ${current}`)
             //Display toast error with error message from response
+            toggleToast(true);
+            updateToastStat('error', formattedErrs)
+            // updateToastMsg(`${error.response.data.errors.full_messages}.`)
         }
     });
 
 };
 
-export const createUserSession = (email, password) => {
+export const createUserSession = (email, password, setAuth, setUser, history, toggleToast, updateToastStat) => {
     var data = {
         email: email,
         password: password, 
@@ -123,17 +126,30 @@ export const createUserSession = (email, password) => {
     
     axios(config)
     .then((response) => {
-    console.log(response.data);
+    //Update login Bool to true. This conditional will be used in pages for redirect/access validation
+    setAuth(true);
+    //Update activeUser state with an object containing necessary details from header of response
+    setUser({
+        'access-token': response.headers['access-token'],
+        'client': response.headers.client,
+        'expiry': response.headers.expiry,
+        'uid': response.headers.uid
+    });
     //Display success toast
-    //Set Login State using credentials
+    toggleToast(true);
+    updateToastStat('success','Success! Account has been created.')
+    //Redirect to Main page
+    history.push("/")
     })
     .catch((error) => {
         if(error.response) {
-            console.log(error.response.data.errors.full_messages);
+            const errMsg = error.response.data.errors
             //Display toast error with error message from response
+            toggleToast(true);
+            updateToastStat('error', errMsg)
+            // updateToastMsg(`${error.response.data.errors.full_messages}.`)
         }
     });
-
 };
 
 export const getAllUsers = (activeUser) => {
