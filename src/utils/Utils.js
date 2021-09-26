@@ -152,6 +152,65 @@ export const createUserSession = (email, password, setAuth, setUser, history, to
     });
 };
 
+export const removeUserSession = (setAuth, setUser, history) => {
+    setAuth(false);
+    //setting new values (null), as to somehow delete it from the session storage
+    setUser({
+        'access-token': null,
+        'client': null,
+        'expiry': null,
+        'uid': null
+    })
+
+    //Redirect to Main page
+    history.push('/signin')
+}
+
+// export const postCreateChannel = (channelName, user_ids) => {
+//     var data = {
+//         name: channelName,
+//         user_ids: user_ids 
+//       };
+//     var config = {
+//         method: 'POST',
+//         url: 'https://slackapi.avionschool.com/api/v1/channels',
+//         headers: {
+//             'access-token': response.headers['access-token'],
+//             'expiry': response.headers.expiry,
+//             'client': response.headers.client, 
+//             'uid': response.headers.uid
+//         },
+//         data : data
+//     };
+    
+//     axios(config)
+//     .then((response) => {
+//     //Update login Bool to true. This conditional will be used in pages for redirect/access validation
+//     setAuth(true);
+//     //Update activeUser state with an object containing necessary details from header of response
+//     setUser({
+//         'access-token': response.headers['access-token'],
+//         'client': response.headers.client,
+//         'expiry': response.headers.expiry,
+//         'uid': response.headers.uid
+//     });
+//     //Display success toast
+//     toggleToast(true);
+//     updateToastStat('success','Success! Channel has been created.')
+//     //Redirect to Main page
+//     history.push("/")
+//     })
+//     .catch((error) => {
+//         if(error.response) {
+//             const errMsg = error.response.data.errors
+//             //Display toast error with error message from response
+//             toggleToast(true);
+//             updateToastStat('error', errMsg)
+//             // updateToastMsg(`${error.response.data.errors.full_messages}.`)
+//         }
+//     });
+// }
+
 export const getAllUsers = (activeUser) => {
 
     var config = {

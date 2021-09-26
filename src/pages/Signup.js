@@ -9,8 +9,7 @@ import { useHistory } from 'react-router'
 import { AuthContext } from '../contexts/AuthContext'
 import { Transition } from '@headlessui/react'
 import Toast from '../parts/Toast'
-
-
+import { Redirect, Link } from 'react-router-dom';
 
 const Signup = () => {
     //Initialize email, password and confirmPassword to null instead of empty string so that we can add a validation conditional
@@ -88,7 +87,6 @@ const Signup = () => {
         if (emailValidationPrompt === null && passwordValidationPrompt === null && confirmPasswordValidationPrompt === null) {
             postUserRegistration(email, password, confirmPassword, setAuth, setUser, history, toggleToast, updateToastStat)
         }
-
     }
 
     /*----INPUT HANDLERS----*/
@@ -121,7 +119,9 @@ const Signup = () => {
         return () => clearTimeout(timer);
     }, [isToastShowing]) 
 
-
+    if (isAuthenticated && activeUser) {
+        return <Redirect to='/' />
+    }
 
     return (
         <div className='pt-8 h-full'>
@@ -140,6 +140,7 @@ const Signup = () => {
                         <Textfield label='Confirm Password' value={confirmPassword === null ? '' : confirmPassword} onChange={(e) => {handleValueChange(e,'confirmPassword')}} id='confirm_pw' type='password' placeholder='Confirm your password'/>
                         {confirmPasswordValidationPrompt && <span className='text-red-400'>{confirmPasswordValidationPrompt}</span>}
                         <Button onClick={() => handleSignUpClick(validators)}>Sign Up</Button>
+                        <Link to="/signin">Already have an account? Sign in here.</Link>
                     </div>
                 </Form>
             </div>

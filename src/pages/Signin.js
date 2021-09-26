@@ -9,6 +9,7 @@ import { validateEmail, validatePassword} from '../utils/Utils'
 import { Transition } from '@headlessui/react'
 import Toast from '../parts/Toast'
 import { AuthContext } from '../contexts/AuthContext'
+import { Link, Redirect } from 'react-router-dom';
 
 const Login = () => {
     const [email, setEmail] = useState(null)
@@ -92,13 +93,17 @@ const Login = () => {
         return () => clearTimeout(timer);
     }, [isToastShowing]) 
 
+    if (isAuthenticated && activeUser) {
+        return <Redirect to='/' />
+    }
+
     return (
         <div className='pt-8 h-full'>
             <div className='flex justify-center pb-8'>
                 <Slacklogo width={120}/>
             </div>
-            <h2 className='text-center'>Join Avion School on Slack</h2>
-            <p className='text-center'>Start by signing up.</p>
+            <h2 className='text-center'>Avion School on Slack</h2>
+            <p className='text-center'>Sign in to your account</p>
             <div className='mx-auto max-w-md mt-20'>
                 <Form>
                     <div className='flex flex-col gap-4'>
@@ -107,6 +112,7 @@ const Login = () => {
                         <Textfield label='Password' value={password === null ? '' : password} onChange={(e) => {handleValueChange(e,'password')}} id='password' type='password' placeholder='Enter a password'/>
                         {passwordValidationPrompt && <span className='text-red-400'>{passwordValidationPrompt}</span>}
                         <Button onClick={()=>handleSignUpClick(validators)}>Sign In</Button>
+                        <Link to='/signup'>No account yet? Sign up here.</Link>
                     </div>
                 </Form>
             </div>

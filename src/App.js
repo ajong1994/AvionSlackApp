@@ -1,6 +1,7 @@
 import {HashRouter as Router, Route, Switch} from 'react-router-dom';
 import Signin from './pages/Signin';
 import Signup from './pages/Signup';
+import CreateChannel from './pages/CreateChannel';
 import Main from './pages/Main'
 import AuthContextProvider from './contexts/AuthContext';
 
@@ -17,6 +18,9 @@ function App() {
           </Route>
           <Route path="/signup">
             <Signup/>
+          </Route>
+          <Route path="/create-channel">
+            <CreateChannel />
           </Route>
           <Route path="/">
             <Main/>
