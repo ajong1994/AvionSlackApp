@@ -70,7 +70,7 @@ const Login = () => {
             }
         })
         if(emailValidationPrompt === null && passwordValidationPrompt === null){
-            createUserSession(email, password, setAuth, setUser, history, toggleToast, updateToastStat)
+            createUserSession(email, password, setAuth, setUser, toggleToast, updateToastStat)
         }
     }
 
@@ -95,13 +95,17 @@ const Login = () => {
 
     useEffect(() => {
        if (activeUser) {
-           history.push("/")
+           history.push('/')
        }
     }, [activeUser]) 
 
-    if (isAuthenticated && activeUser) {
-        return <Redirect to='/' />
-    }
+    useEffect(() => {
+        if (isAuthenticated && activeUser) {
+            return <Redirect to='/' />
+        }
+     }, []) 
+
+
 
     return (
         <div className='pt-8 h-full'>

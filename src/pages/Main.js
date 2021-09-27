@@ -7,16 +7,18 @@ import Button from '../components/Button'
 import { Redirect, Link } from 'react-router-dom';
 import Sidebar from '../parts/Sidebar';
 import { getAllUsers } from '../utils/Utils'
+import { getAllSubscribedChannels } from '../utils/Utils'
 
 
 const Main = () => {
     const {isAuthenticated, setAuth, activeUser, setUser} = useContext(AuthContext)
-    const {userList, updateUserList} = useContext(SessionContext)
+    const {userList, updateUserList, channelList, updateChannelList, channelData, updateChannelData} = useContext(SessionContext)
     const history = useHistory();
 
     useEffect(() => {
         if (activeUser) {
             getAllUsers(activeUser, updateUserList)
+            getAllSubscribedChannels(activeUser, updateChannelList)
         }
     },[activeUser])
 

@@ -72,7 +72,7 @@ export const validateConfirmPassword = (password, confirmPassword) => {
 
 
 /* UTILITY FUNCTIONS RELATED TO USER */
-export const postUserRegistration = (email, password, confirmedPassword, setAuth, setUser, history, toggleToast, updateToastStat) => {
+export const postUserRegistration = (email, password, confirmedPassword, setAuth, setUser, toggleToast, updateToastStat) => {
     const data = {
         email: email,
         password: password,
@@ -100,8 +100,6 @@ export const postUserRegistration = (email, password, confirmedPassword, setAuth
         //Display success toast
         toggleToast(true);
         updateToastStat('success','Success! Account has been created.')
-        // //Redirect to Main page
-        // history.push("/")
     }
     })
     .catch((error) => {
@@ -117,7 +115,7 @@ export const postUserRegistration = (email, password, confirmedPassword, setAuth
 
 };
 
-export const createUserSession = (email, password, setAuth, setUser, history, toggleToast, updateToastStat) => {
+export const createUserSession = (email, password, setAuth, setUser, toggleToast, updateToastStat) => {
     var data = {
         email: email,
         password: password, 
@@ -131,17 +129,15 @@ export const createUserSession = (email, password, setAuth, setUser, history, to
     
     axios(config)
     .then((response) => {
-    //Update login Bool to true. This conditional will be used in pages for redirect/access validation
-    setAuth(true);
-    //Update activeUser state with an object containing necessary details from header of response
-    setUser({
-        'access-token': response.headers['access-token'],
-        'client': response.headers.client,
-        'expiry': response.headers.expiry,
-        'uid': response.headers.uid
-    });
-    //Redirect to Main page
-    history.push("/")
+        //Update login Bool to true. This conditional will be used in pages for redirect/access validation
+        setAuth(true);
+        //Update activeUser state with an object containing necessary details from header of response
+        setUser({
+            'access-token': response.headers['access-token'],
+            'client': response.headers.client,
+            'expiry': response.headers.expiry,
+            'uid': response.headers.uid
+        });
     })
     .catch((error) => {
         if(error.response) {
@@ -188,10 +184,10 @@ export const getAllUsers = (activeUser, updateUserList) => {
 
 
 /* UTILITY FUNCTIONS RELATED TO CHANNELS */
-export const postCreateChannel = (channelName, user_ids, activeUser) => {
+export const postCreateChannel = (channelName, user_ids, activeUser, updateChannelList) => {
     var data = {
         name: channelName,
-        user_ids: user_ids  //should this be an array instead? 
+        user_ids: user_ids  //should this be an array instead? >> yes, the passed argument should be an array
       };
     var config = {
         method: 'POST',
@@ -206,12 +202,94 @@ export const postCreateChannel = (channelName, user_ids, activeUser) => {
     };  
     axios(config)
     .then(function (response) {
-      console.log(response.data);
+      //Display success toast for creation
+
+      //Reload channel list from API to ensure it was added
+      getAllSubscribedChannels(activeUser, updateChannelList)
     })
     .catch(function (error) {
       console.log(error);
     });
 }
 
-export const getAllSubscribedChannel
+export const getAllSubscribedChannels = (activeUser, updateChannelList) => {
+    var config = {
+        method: 'GET',
+        url: 'https://slackapi.avionschool.com/api/v1/channels',
+        headers: { 
+            'access-token': activeUser['access-token'],
+            'client': activeUser.client, 
+            'expiry': activeUser.expiry,
+            'uid': activeUser.uid
+        }
+      };
+      
+      axios(config)
+      .then(function (response) {
+          if(response.data) {
+            //Returns an array of object; each one representing a channel with channel id, name, create date and owner id
+            updateChannelList(response.data)
+          }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+};
+
+//Honestly don't know the use of this other than displaying a modal containing active members of channel when icon is clicked inside channel
+export const getChannelData = (activeUser, channelId, updateChannelData) => {
+    var config = {
+        method: 'GET',
+        url: `https://slackapi.avionschool.com/api/v1/channels/${channelId}`,
+        headers: { 
+            'access-token': activeUser['access-token'],
+            'client': activeUser.client, 
+            'expiry': activeUser.expiry,
+            'uid': activeUser.uid
+        }
+      };
+      
+      axios(config)
+      .then(function (response) {
+          if(response.data) {
+            //Returns an object with channel ID, owner ID, channel name, create and update dates and an array called channel members
+            //which contains user info as objects
+            updateChannelData(response.data)
+          }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+};
+
+export const postInviteToChannel = (activeUser, channelId, memberId, updateChannelData) => {
+    var data = {
+        id: channelId,
+        member_id: memberId
+      };
+    var config = {
+        method: 'GET',
+        url: `https://slackapi.avionschool.com/api/v1/channels/${channelId}`,
+        headers: { 
+            'access-token': activeUser['access-token'],
+            'client': activeUser.client, 
+            'expiry': activeUser.expiry,
+            'uid': activeUser.uid
+        },
+        data: data
+      };
+      
+      axios(config)
+      .then(function (response) {
+          if(response.data) {
+            //Returns an object with channel ID, owner ID, channel name, create and update dates and an array called channel members
+            //which contains user info as objects
+            updateChannelData(response.data)
+          }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+};
+
 /* END UTILITY FUNCTIONS RELATED TO CHANNELS */
