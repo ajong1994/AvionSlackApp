@@ -23,10 +23,6 @@ const Channels = () => {
         setChannelName(e.target.value) 
     }
    
-    if (!isAuthenticated || !activeUser) {
-        return <Redirect to='/signin' />
-    }
-    console.log(channelName)
     return (
         <div>
             <h1>Create a channel</h1>
