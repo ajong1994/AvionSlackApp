@@ -211,6 +211,7 @@ export const postCreateChannel = (channelName, user_ids, activeUser) => {
     .catch(function (error) {
       console.log(error);
     });
-  
 }
+
+export const getAllSubscribedChannel
 /* END UTILITY FUNCTIONS RELATED TO CHANNELS */

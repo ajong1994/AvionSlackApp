@@ -24,7 +24,6 @@ const Main = () => {
         removeUserSession(setAuth, setUser, history);
     }
 
-    console.log(userList)
 
     if (!isAuthenticated) {
         return <Redirect to='/signin' />
