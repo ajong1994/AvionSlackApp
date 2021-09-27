@@ -85,7 +85,7 @@ const Signup = () => {
             }
         })
         if (emailValidationPrompt === null && passwordValidationPrompt === null && confirmPasswordValidationPrompt === null) {
-            postUserRegistration(email, password, confirmPassword, setAuth, setUser, history, toggleToast, updateToastStat)
+            postUserRegistration(email, password, confirmPassword, setAuth, setUser, toggleToast, updateToastStat)
         }
     }
 
@@ -115,13 +115,20 @@ const Signup = () => {
     useEffect(() => {
         const timer = setTimeout(() => {
             setIsToastShowing(false);
-        },3000)
+            if (activeUser) {
+                history.push('/')
+            }
+        },2000)
         return () => clearTimeout(timer);
     }, [isToastShowing]) 
 
-    if (isAuthenticated) {
-        return <Redirect to='/' />
-    }
+    //Wrapped Redirect in a on-mount useEffect so that it will not be triggered by re-renders caused by updates to Global States
+    //like setIsAuthenticated or setUser. This way, only history.push can redirect the user (after displaying success toast)
+    useEffect(() => {
+        if (isAuthenticated && activeUser) {
+            return <Redirect to='/' />
+        }
+     }, []) 
 
     return (
         <div className='pt-8 h-full'>
