@@ -4,6 +4,7 @@ import Signup from './pages/Signup';
 import Channels from './pages/Channels'
 import Main from './pages/Main'
 import AuthContextProvider from './contexts/AuthContext';
+import SessionContextProvider from './contexts/SessionContext';
 
 
 function App() {
@@ -11,22 +12,24 @@ function App() {
   return (
     //We add the Context Provider component
     <AuthContextProvider>
-      <Router>
-        <Switch>
-          <Route path="/signin">
-            <Signin/>
-          </Route>
-          <Route path="/signup">
-            <Signup/>
-          </Route>
-          <Route path="/channels">
-            <Channels />
-          </Route>
-          <Route path="/">
-            <Main/>
-          </Route>
-        </Switch>
-      </Router>
+      <SessionContextProvider>
+        <Router>
+          <Switch>
+            <Route path="/signin">
+              <Signin/>
+            </Route>
+            <Route path="/signup">
+              <Signup/>
+            </Route>
+            <Route path="/channels">
+              <Channels />
+            </Route>
+            <Route path="/">
+              <Main/>
+            </Route>
+          </Switch>
+        </Router>
+      </SessionContextProvider>
     </AuthContextProvider>
   );
 }

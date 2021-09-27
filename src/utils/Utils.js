@@ -1,5 +1,7 @@
 import axios from 'axios'
 
+
+/* UTILITY FUNCTIONS RELATED TO VALIDATION */
 export const validateEmail = (email) => {
     const emailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
     //Added email !== null as a condition to account for our new initial states for email, password and confirm password
@@ -66,7 +68,10 @@ export const validateConfirmPassword = (password, confirmPassword) => {
         }
     }
 }
+/* END OF UTILITY FUNCTIONS RELATED TO VALIDATION */
 
+
+/* UTILITY FUNCTIONS RELATED TO USER */
 export const postUserRegistration = (email, password, confirmedPassword, setAuth, setUser, history, toggleToast, updateToastStat) => {
     const data = {
         email: email,
@@ -95,8 +100,8 @@ export const postUserRegistration = (email, password, confirmedPassword, setAuth
         //Display success toast
         toggleToast(true);
         updateToastStat('success','Success! Account has been created.')
-        //Redirect to Main page
-        history.push("/")
+        // //Redirect to Main page
+        // history.push("/")
     }
     })
     .catch((error) => {
@@ -135,9 +140,6 @@ export const createUserSession = (email, password, setAuth, setUser, history, to
         'expiry': response.headers.expiry,
         'uid': response.headers.uid
     });
-    //Display success toast
-    toggleToast(true);
-    updateToastStat('success','Success! Account has been created.')
     //Redirect to Main page
     history.push("/")
     })
@@ -155,17 +157,37 @@ export const createUserSession = (email, password, setAuth, setUser, history, to
 export const removeUserSession = (setAuth, setUser, history) => {
     setAuth(false);
     //setting new values (null), as to somehow delete it from the session storage
-    setUser({
-        'access-token': null,
-        'client': null,
-        'expiry': null,
-        'uid': null
-    })
-
+    setUser(null);
     //Redirect to Main page
     history.push('/signin')
 }
 
+export const getAllUsers = (activeUser, updateUserList) => {
+    var config = {
+        method: 'GET',
+        url: 'https://slackapi.avionschool.com/api/v1/users',
+        headers: { 
+            'access-token': activeUser['access-token'],
+            'client': activeUser.client, 
+            'expiry': activeUser.expiry,
+            'uid': activeUser.uid
+        }
+      };
+      
+      axios(config)
+      .then(function (response) {
+          if(response.data) {
+            updateUserList(response.data)
+          }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+};
+/* END OF UTILITY FUNCTIONS RELATED TO USER */
+
+
+/* UTILITY FUNCTIONS RELATED TO CHANNELS */
 export const postCreateChannel = (channelName, user_ids, activeUser) => {
     var data = {
         name: channelName,
@@ -191,25 +213,4 @@ export const postCreateChannel = (channelName, user_ids, activeUser) => {
     });
   
 }
-
-export const getAllUsers = (activeUser) => {
-
-    var config = {
-        method: 'GET',
-        url: '206.189.91.54/api/v1/users',
-        headers: { 
-            'access-token': activeUser['access-token'],
-            'client': activeUser.client, 
-            'expiry': activeUser.expiry,
-            'uid': activeUser.uid
-        }
-      };
-      
-      axios(config)
-      .then(function (response) {
-        console.log(response.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-};
+/* END UTILITY FUNCTIONS RELATED TO CHANNELS */
