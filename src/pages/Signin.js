@@ -93,7 +93,13 @@ const Login = () => {
         return () => clearTimeout(timer);
     }, [isToastShowing]) 
 
-    if (isAuthenticated) {
+    useEffect(() => {
+       if (activeUser) {
+           history.push("/")
+       }
+    }, [activeUser]) 
+
+    if (isAuthenticated && activeUser) {
         return <Redirect to='/' />
     }
 
