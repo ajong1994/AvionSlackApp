@@ -18,13 +18,16 @@ const AuthContextProvider = ({children}) => {
 
     //Pull Auth state data from session storage and set current states to that on mount
     useEffect(()=>{
-        setAuth(sessionStorage.getItem('isAuthenticated'));
+        setAuth(JSON.parse(sessionStorage.getItem('isAuthenticated')));
         setUser(JSON.parse(sessionStorage.getItem('activeUser')));
+        console.log('auth mount runs')
+        // console.log(Boolean(false))
+        console.log(typeof(JSON.parse(sessionStorage.getItem('isAuthenticated'))))
     },[])
 
     //Save Auth states to Session storage on set/change
     useEffect(()=>{
-        sessionStorage.setItem('isAuthenticated', isAuthenticated);
+        sessionStorage.setItem('isAuthenticated', JSON.stringify(isAuthenticated));
         sessionStorage.setItem('activeUser', JSON.stringify(activeUser));
     },[isAuthenticated, activeUser])
 

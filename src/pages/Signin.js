@@ -20,7 +20,7 @@ const Login = () => {
     const [isToastShowing, setIsToastShowing] = useState(false)
     const [toastStat, setToastStat] = useState({
         toastType: '',
-        toastMst: ''
+        toastMsg: ''
     });
 
     //Instantiated an array of objects with state as the validationPrompt state and setter for the corresponding setState
@@ -93,7 +93,7 @@ const Login = () => {
         return () => clearTimeout(timer);
     }, [isToastShowing]) 
 
-    if (isAuthenticated && activeUser) {
+    if (isAuthenticated) {
         return <Redirect to='/' />
     }
 

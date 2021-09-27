@@ -119,7 +119,7 @@ const Signup = () => {
         return () => clearTimeout(timer);
     }, [isToastShowing]) 
 
-    if (isAuthenticated && activeUser) {
+    if (isAuthenticated) {
         return <Redirect to='/' />
     }
 
