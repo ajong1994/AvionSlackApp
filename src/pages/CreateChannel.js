@@ -15,7 +15,7 @@ const CreateChannel = () => {
 
     const handleCreateChannel = () => {
         if(channelName !== '') {
-            // postCreateChannel(channelName, user_ids);
+            postCreateChannel(channelName, user_ids);
         }
     }
 

@@ -166,50 +166,31 @@ export const removeUserSession = (setAuth, setUser, history) => {
     history.push('/signin')
 }
 
-// export const postCreateChannel = (channelName, user_ids) => {
-//     var data = {
-//         name: channelName,
-//         user_ids: user_ids 
-//       };
-//     var config = {
-//         method: 'POST',
-//         url: 'https://slackapi.avionschool.com/api/v1/channels',
-//         headers: {
-//             'access-token': response.headers['access-token'],
-//             'expiry': response.headers.expiry,
-//             'client': response.headers.client, 
-//             'uid': response.headers.uid
-//         },
-//         data : data
-//     };
-    
-//     axios(config)
-//     .then((response) => {
-//     //Update login Bool to true. This conditional will be used in pages for redirect/access validation
-//     setAuth(true);
-//     //Update activeUser state with an object containing necessary details from header of response
-//     setUser({
-//         'access-token': response.headers['access-token'],
-//         'client': response.headers.client,
-//         'expiry': response.headers.expiry,
-//         'uid': response.headers.uid
-//     });
-//     //Display success toast
-//     toggleToast(true);
-//     updateToastStat('success','Success! Channel has been created.')
-//     //Redirect to Main page
-//     history.push("/")
-//     })
-//     .catch((error) => {
-//         if(error.response) {
-//             const errMsg = error.response.data.errors
-//             //Display toast error with error message from response
-//             toggleToast(true);
-//             updateToastStat('error', errMsg)
-//             // updateToastMsg(`${error.response.data.errors.full_messages}.`)
-//         }
-//     });
-// }
+export const postCreateChannel = (channelName, user_ids, activeUser) => {
+    var data = {
+        name: channelName,
+        user_ids: user_ids  //should this be an array instead? 
+      };
+    var config = {
+        method: 'POST',
+        url: 'https://slackapi.avionschool.com/api/v1/channels',
+        headers: {
+            'access-token': activeUser['access-token'],
+            'client': activeUser.client, 
+            'expiry': activeUser.expiry,
+            'uid': activeUser.uid
+        },
+        data : data
+    };  
+    axios(config)
+    .then(function (response) {
+      console.log(response.data);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  
+}
 
 export const getAllUsers = (activeUser) => {
 
@@ -217,10 +198,10 @@ export const getAllUsers = (activeUser) => {
         method: 'GET',
         url: '206.189.91.54/api/v1/users',
         headers: { 
-          'access-token': 'TTLtXEQUjd1i0BlR6q8zVg', 
-          'client': 'TdmPB-prCbBtjStYuOeuCg', 
-          'expiry': '1631322970', 
-          'uid': 'akosipc@gmail.com'
+            'access-token': activeUser['access-token'],
+            'client': activeUser.client, 
+            'expiry': activeUser.expiry,
+            'uid': activeUser.uid
         }
       };
       
