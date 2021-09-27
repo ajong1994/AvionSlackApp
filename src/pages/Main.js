@@ -3,7 +3,6 @@ import { AuthContext } from '../contexts/AuthContext'
 import {removeUserSession} from '../utils/Utils'
 import { useHistory } from 'react-router'
 import Button from '../components/Button'
-import CreateChannel from './CreateChannel';
 import { Redirect, Link } from 'react-router-dom';
 
 
@@ -26,7 +25,7 @@ const Main = () => {
             <p>{activeUser.expiry}</p>
             <p>{activeUser.uid}</p>
             <Button onClick={()=>handleSignOutClick()}>Sign Out</Button>
-            <Link to="/create-channel"><Button>create channel</Button></Link>
+            <Link to="/channels"><Button>create channel</Button></Link>
         </div>
 
     )

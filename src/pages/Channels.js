@@ -1,21 +1,21 @@
 import { useState, useEffect, useContext} from 'react'
 import { AuthContext } from '../contexts/AuthContext'
 import { Redirect } from 'react-router-dom';
-import {removeUserSession} from '../utils/Utils'
 import { useHistory } from 'react-router'
 import Button from '../components/Button'
 import Textfield from '../components/Textfield';
-// import { postCreateChannel } from '../utils/Utils';
+import { postCreateChannel } from '../utils/Utils';
 
 
-const CreateChannel = () => {
+const Channels = () => {
     const {isAuthenticated, setAuth, activeUser, setUser} = useContext(AuthContext)
     const history = useHistory();
     const [channelName, setChannelName] = useState(null)
+    const [userIds, setUserIds] = useState([])
 
     const handleCreateChannel = () => {
         if(channelName !== '') {
-            postCreateChannel(channelName, user_ids);
+            postCreateChannel(channelName, userIds);
         }
     }
 
@@ -36,4 +36,4 @@ const CreateChannel = () => {
     )
 }
 
-export default CreateChannel
+export default Channels
