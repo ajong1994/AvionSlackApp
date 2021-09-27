@@ -152,16 +152,56 @@ export const createUserSession = (email, password, setAuth, setUser, history, to
     });
 };
 
+export const removeUserSession = (setAuth, setUser, history) => {
+    setAuth(false);
+    //setting new values (null), as to somehow delete it from the session storage
+    setUser({
+        'access-token': null,
+        'client': null,
+        'expiry': null,
+        'uid': null
+    })
+
+    //Redirect to Main page
+    history.push('/signin')
+}
+
+export const postCreateChannel = (channelName, user_ids, activeUser) => {
+    var data = {
+        name: channelName,
+        user_ids: user_ids  //should this be an array instead? 
+      };
+    var config = {
+        method: 'POST',
+        url: 'https://slackapi.avionschool.com/api/v1/channels',
+        headers: {
+            'access-token': activeUser['access-token'],
+            'client': activeUser.client, 
+            'expiry': activeUser.expiry,
+            'uid': activeUser.uid
+        },
+        data : data
+    };  
+    axios(config)
+    .then(function (response) {
+      console.log(response.data);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  
+}
+
 export const getAllUsers = (activeUser) => {
 
     var config = {
         method: 'GET',
         url: '206.189.91.54/api/v1/users',
         headers: { 
-          'access-token': 'TTLtXEQUjd1i0BlR6q8zVg', 
-          'client': 'TdmPB-prCbBtjStYuOeuCg', 
-          'expiry': '1631322970', 
-          'uid': 'akosipc@gmail.com'
+            'access-token': activeUser['access-token'],
+            'client': activeUser.client, 
+            'expiry': activeUser.expiry,
+            'uid': activeUser.uid
         }
       };
       
