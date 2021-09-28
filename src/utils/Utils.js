@@ -118,7 +118,7 @@ export const createUserSession = (email, password, setAuth, setUser, toggleToast
     var data = {
         email: email,
         password: password, 
-      };
+    };
     var config = {
     method: 'POST',
     url: 'https://slackapi.avionschool.com/api/v1/auth/sign_in',
@@ -167,17 +167,17 @@ export const getAllUsers = (activeUser, updateUserList) => {
             'expiry': activeUser.expiry,
             'uid': activeUser.uid
         }
-      };
+    };
       
-      axios(config)
-      .then(function (response) {
-          if(response.data) {
+    axios(config)
+    .then(function (response) {
+        if(response.data) {
             updateUserList(response.data)
-          }
-      })
-      .catch(function (error) {
+        }
+    })
+    .catch(function (error) {
         console.log(error);
-      });
+    });
 };
 /* END OF UTILITY FUNCTIONS RELATED TO USER */
 
@@ -223,16 +223,16 @@ export const getAllSubscribedChannels = (activeUser, updateChannelList) => {
         }
       };
       
-      axios(config)
-      .then(function (response) {
-          if(response.data) {
-            //Returns an array of object; each one representing a channel with channel id, name, create date and owner id
-            updateChannelList(response.data)
-          }
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    axios(config)
+    .then(function (response) {
+        if(response.data) {
+        //Returns an array of object; each one representing a channel with channel id, name, create date and owner id
+        updateChannelList(response.data)
+        }
+    })
+    .catch(function (error) {
+    console.log(error);
+    });
 };
 
 //Honestly don't know the use of this other than displaying a modal containing active members of channel when icon is clicked inside channel
@@ -246,26 +246,26 @@ export const getChannelData = (activeUser, channelId, updateChannelData) => {
             'expiry': activeUser.expiry,
             'uid': activeUser.uid
         }
-      };
+    };
       
-      axios(config)
-      .then(function (response) {
-          if(response.data) {
-            //Returns an object with channel ID, owner ID, channel name, create and update dates and an array called channel members
-            //which contains user info as objects
-            updateChannelData(response.data)
-          }
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    axios(config)
+    .then(function (response) {
+        if(response.data) {
+        //Returns an object with channel ID, owner ID, channel name, create and update dates and an array called channel members
+        //which contains user info as objects
+        updateChannelData(response.data)
+        }
+    })
+    .catch(function (error) {
+    console.log(error);
+    });
 };
 
 export const postInviteToChannel = (activeUser, channelId, memberId, updateChannelData) => {
     var data = {
         id: channelId,
         member_id: memberId
-      };
+    };
     var config = {
         method: 'GET',
         url: `https://slackapi.avionschool.com/api/v1/channels/${channelId}`,
@@ -276,19 +276,128 @@ export const postInviteToChannel = (activeUser, channelId, memberId, updateChann
             'uid': activeUser.uid
         },
         data: data
-      };
-      
-      axios(config)
-      .then(function (response) {
-          if(response.data) {
-            //Returns an object with channel ID, owner ID, channel name, create and update dates and an array called channel members
-            //which contains user info as objects
-            updateChannelData(response.data)
-          }
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    };
+    
+    axios(config)
+    .then(function (response) {
+        if(response.data) {
+        //Returns an object with channel ID, owner ID, channel name, create and update dates and an array called channel members
+        //which contains user info as objects
+        updateChannelData(response.data)
+        }
+    })
+    .catch(function (error) {
+    console.log(error);
+    });
 };
 
 /* END UTILITY FUNCTIONS RELATED TO CHANNELS */
+
+
+/* UTILITY FUNCTIONS RELATED TO MESSAGES */
+export const getAllChannelMsgs = (activeUser, channelId) => {
+    const receiver_id = channelId;
+    const receiver_class = 'Channel';
+    var config = {
+        method: 'GET',
+        url: `https://slackapi.avionschool.com/api/v1/messages?receiver_id=${receiver_id}&receiver_class=${receiver_class}`,
+        headers: { 
+            'access-token': activeUser['access-token'],
+            'client': activeUser.client, 
+            'expiry': activeUser.expiry,
+            'uid': activeUser.uid
+        }
+    };
+    axios(config)
+    .then(function (response) {
+        if(response.data) {
+            console.log(response.data)
+        }
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
+};
+
+export const postMsgToChannel = (activeUser, channelId, msg) => {
+    var data = {
+        receiver_id: channelId,
+        receiver_class: 'Channel',
+        body: msg
+    };
+    var config = {
+        method: 'GET',
+        url: `https://slackapi.avionschool.com/api/v1/messages`,
+        headers: { 
+            'access-token': activeUser['access-token'],
+            'client': activeUser.client, 
+            'expiry': activeUser.expiry,
+            'uid': activeUser.uid
+        },
+        data: data
+    };
+    axios(config)
+    .then(function (response) {
+        if(response.data) {
+            //On success message post, re-fetch the channel messages to update state [TO-DO]
+            getAllChannelMsgs(activeUser, channelId)
+        }
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
+};
+
+export const getAllUserMsgs = (activeUser, userId) => {
+    const receiver_id = userId;
+    const receiver_class = 'User';
+    var config = {
+        method: 'GET',
+        url: `https://slackapi.avionschool.com/api/v1/messages?receiver_id=${receiver_id}&receiver_class=${receiver_class}`,
+        headers: { 
+            'access-token': activeUser['access-token'],
+            'client': activeUser.client, 
+            'expiry': activeUser.expiry,
+            'uid': activeUser.uid
+        }
+    };
+    axios(config)
+    .then(function (response) {
+        if(response.data) {
+            console.log(response.data)
+        }
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
+};
+
+export const postMsgToUser = (activeUser, userId, msg) => {
+    var data = {
+        receiver_id: userId,
+        receiver_class: 'User',
+        body: msg
+    };
+    var config = {
+        method: 'GET',
+        url: `https://slackapi.avionschool.com/api/v1/messages`,
+        headers: { 
+            'access-token': activeUser['access-token'],
+            'client': activeUser.client, 
+            'expiry': activeUser.expiry,
+            'uid': activeUser.uid
+        },
+        data: data
+    };
+    axios(config)
+    .then(function (response) {
+        if(response.data) {
+            //On success message post, re-fetch the user messages to update state [TO-DO]
+            getAllUserMsgs(activeUser, userId)
+        }
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
+};
+/* END OF UTILITY FUNCTIONS RELATED TO MESSAGES */

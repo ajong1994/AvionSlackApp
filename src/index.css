@@ -10,6 +10,9 @@
     #root {
         height: 100%;
     }
+    h5, h4, h3, h2, h1 {
+        font-weight: 700
+    }
 }
 
 @layer components {
@@ -24,5 +27,14 @@
             transform: rotate(360deg);
             transition: .5s;
         }
+    }
+    .main-grid {
+        grid-template-rows: 50px 1fr;
+        grid-template-columns: 250px 1fr;
+    }
+    .custom-textarea {
+        @apply w-full bg-gray-700 border border-gray-400 rounded focus:ring-0 focus:border-gray-300 focus:outline-none px-2 py-3 text-gray-100 text-sm;
+        overflow: auto;
+        resize: none
     }
 }
