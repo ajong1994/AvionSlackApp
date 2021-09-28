@@ -5,6 +5,7 @@ import Channels from './pages/Channels'
 import Main from './pages/Main'
 import AuthContextProvider from './contexts/AuthContext';
 import SessionContextProvider from './contexts/SessionContext';
+import CreateChannel from './parts/CreateChannel';
 
 
 function App() {
@@ -21,9 +22,9 @@ function App() {
             <Route path="/signup">
               <Signup/>
             </Route>
-            <Route path="/channels">
-              <Channels />
-            </Route>
+            {/* <Route path="/create-channel">
+              <CreateChannel />
+            </Route> */}
             <Route path="/">
               <Main/>
             </Route>

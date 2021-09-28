@@ -1,6 +1,5 @@
 import axios from 'axios'
 
-
 /* UTILITY FUNCTIONS RELATED TO VALIDATION */
 export const validateEmail = (email) => {
     const emailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
