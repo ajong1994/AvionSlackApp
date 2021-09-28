@@ -7,6 +7,7 @@ import { validateConfirmPassword, validateEmail, validatePassword} from '../util
 import {postUserRegistration} from '../utils/Utils'
 import { useHistory } from 'react-router'
 import { AuthContext } from '../contexts/AuthContext'
+import { SessionContext } from '../contexts/SessionContext'
 import { Transition } from '@headlessui/react'
 import Toast from '../parts/Toast'
 import { Redirect, Link } from 'react-router-dom';

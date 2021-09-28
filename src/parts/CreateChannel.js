@@ -6,24 +6,30 @@ import Button from '../components/Button'
 import Textfield from '../components/Textfield';
 import { postCreateChannel } from '../utils/Utils';
 import { Dialog, Transition  } from '@headlessui/react'
+import { SessionContext } from '../contexts/SessionContext'
+//import ReactMultiSelectCheckboxes from 'react-multiselect-checkboxes';
 
 
 const CreateChannel = ({setOpenModal, openModal}) => {
     const {isAuthenticated, setAuth, activeUser, setUser} = useContext(AuthContext)
+    const { userList, updateUserList, updateChannelList} = useContext(SessionContext)
     const history = useHistory();
     const [channelName, setChannelName] = useState(null)
     const [friendName, setfriendName] = useState(null)
-    const [userIds, setUserIds] = useState([])
+    const [user_ids, setUser_ids] = useState([])
 
-    const handleCreateChannel = () => {
-        if(channelName !== '') {
-            postCreateChannel(channelName, userIds);
-        }
-    }
+  
+    
+    const handleValueChange = (e, inputType) => {
+      if(inputType === 'channelName') {
+        setChannelName(e.target.value)
+      } else if(inputType === 'friendName') {
+        setfriendName(e.target.value)
+      }  
+   }
 
-    const handleValueChange = (e, channelName) => {
-        setChannelName(e.target.value) 
-    }
+   postCreateChannel(channelName, user_ids, activeUser, updateChannelList)
+    
  
     return (
       <div>
@@ -64,15 +70,20 @@ const CreateChannel = ({setOpenModal, openModal}) => {
               >
                 <div className="inline-block p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
                   <div className="mt-2">
-                    <Textfield label='channelName' onChange={(e) => {handleValueChange(e, channelName)} } value={channelName} id='channelName'type='text' placeholder='channel name'/>
-                    <Textfield label='searchFriends' id='channelName'type='text' placeholder=' type the name of a friend'/>
+                    <Textfield label='channelName' onChange={(e) => {handleValueChange(e, 'channelName')} } value={channelName} id='channelName'type='text' placeholder='channel name'/>
+                    <Textfield label='searchFriends'onChange={(e) => {handleValueChange(e, 'friendName')} } value={friendName} id='channelName'type='text' placeholder=' type the name of a friend'/>
                   </div>
               
                   <div className="mt-2">
                     <span>List of friends</span>
+                    <ul className='list-group mb-4'>
+                      {/* {posts.map(post => (
+                        <li key={post.id} className='list-group-item'>
+                          {post.title}
+                        </li>
+                      ))} */}
+                  </ul>
                   </div>
-              
-
                   <div className="mt-4">
                     <button
                       type="button"
