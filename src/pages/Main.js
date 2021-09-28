@@ -1,19 +1,21 @@
 import { useState, useEffect, useContext} from 'react'
 import { AuthContext } from '../contexts/AuthContext'
 import { SessionContext } from '../contexts/SessionContext'
-import {removeUserSession} from '../utils/Utils'
-import { useHistory } from 'react-router'
-import Button from '../components/Button'
-import { Redirect, Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import Sidebar from '../parts/Sidebar';
-import { getAllUsers } from '../utils/Utils'
-import { getAllSubscribedChannels } from '../utils/Utils'
+import Workspace from '../parts/Workspace';
+import MainHeader from '../parts/MainHeader';
+import ChatInterface from '../parts/ChatInterface';
+import { getAllUsers, getAllSubscribedChannels } from '../utils/Utils'
 
 
 const Main = () => {
-    const {isAuthenticated, setAuth, activeUser, setUser} = useContext(AuthContext)
-    const {userList, updateUserList, channelList, updateChannelList, channelData, updateChannelData} = useContext(SessionContext)
-    const history = useHistory();
+    const {isAuthenticated, setAuth, activeUser, setUser} = useContext(AuthContext);
+    const {userList, updateUserList, channelList, updateChannelList, channelData, updateChannelData} = useContext(SessionContext);
+    const [isNewMessage, setIsNewMessage] = useState(false);
+    const updateIsNewMessage = (bool) => {
+        setIsNewMessage(bool);
+    }
 
     useEffect(() => {
         if (activeUser) {
@@ -22,25 +24,17 @@ const Main = () => {
         }
     },[activeUser])
 
-    const handleSignOutClick = () => {
-        removeUserSession(setAuth, setUser, history);
-    }
 
-
-    if (!isAuthenticated) {
+    if (!isAuthenticated && activeUser) {
         return <Redirect to='/signin' />
     }
 
     return (
-        <div className="h-full flex">
-            <Sidebar/>
-            <div className="page-content">
-                <p>{activeUser['access-token']}</p>
-                <p>{activeUser?.client}</p>
-                <p>{activeUser?.expiry}</p>
-                <p>{activeUser?.uid}</p>
-                <Button onClick={()=>handleSignOutClick()}>Sign Out</Button>
-            </div>
+        <div className="h-full grid main-grid bg-gray-800">
+            <Workspace onClick={setIsNewMessage}/>
+            <Sidebar />
+            <MainHeader title={isNewMessage ? 'New message' : 'Channel or DM placeholder'}/>
+            <ChatInterface msgStat={isNewMessage} />
         </div>
     )
 }
