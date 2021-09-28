@@ -40,7 +40,6 @@ const Main = () => {
                 <p>{activeUser?.expiry}</p>
                 <p>{activeUser?.uid}</p>
                 <Button onClick={()=>handleSignOutClick()}>Sign Out</Button>
-                <Link to="/channels"><Button>create channel</Button></Link>
             </div>
         </div>
     )

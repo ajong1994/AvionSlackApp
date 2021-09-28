@@ -1,6 +1,8 @@
 import {Link} from 'react-router-dom';
 import { Disclosure } from '@headlessui/react';
-import { useState } from 'react';
+import { useState, Fragment } from 'react';
+import Button from '../components/Button'
+import CreateChannel from './CreateChannel';
 
 
 const Sidebar = () => {
@@ -9,7 +11,12 @@ const Sidebar = () => {
     //Use Util function to get Channel list and set ChannelList State
 
     //Create Util function to open modal when Add Channel is clicked
+    const [openModal, setOpenModal] = useState(false)
 
+    const toggleModal = () => {
+        setOpenModal(!openModal)
+    }
+  
     return (
         <div className="h-full p-4 border-r border-gray-500 flex flex-col items-start">
             <p>Avion School</p>
@@ -21,11 +28,12 @@ const Sidebar = () => {
                     <div>
                         Map all current channels here
                     </div>
-                    <p>
-                        Add channel
-                    </p>
+                    <Button onClick={toggleModal}>
+                       add channel
+                    </Button>
                 </Disclosure.Panel>
             </Disclosure>
+            {openModal && <CreateChannel openModal={openModal} setOpenModal={setOpenModal}/>} 
             <Disclosure>
                 <Disclosure.Button className="py-2">
                     Direct Messages
@@ -36,6 +44,8 @@ const Sidebar = () => {
                     </div>
                 </Disclosure.Panel>
             </Disclosure>
+
+          
         </div>
     )
 }
