@@ -24,14 +24,13 @@ const Main = () => {
         }
     },[activeUser])
 
-
     if (!isAuthenticated && activeUser) {
         return <Redirect to='/signin' />
     }
 
     return (
         <div className="h-full grid main-grid bg-gray-800">
-            <Workspace onClick={setIsNewMessage}/>
+            <Workspace onClick={updateIsNewMessage}/>
             <Sidebar />
             <MainHeader title={isNewMessage ? 'New message' : 'Channel or DM placeholder'}/>
             <ChatInterface msgStat={isNewMessage} />

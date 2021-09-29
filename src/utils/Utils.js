@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { useState, useEffect, useRef } from 'react';
 
 /* UTILITY FUNCTIONS RELATED TO VALIDATION */
 export const validateEmail = (email) => {
@@ -402,3 +403,26 @@ export const postMsgToUser = (activeUser, userId, msg) => {
     });
 };
 /* END OF UTILITY FUNCTIONS RELATED TO MESSAGES */
+
+//Outside click custom hook from https://codesandbox.io/s/989y0758np
+export default function useComponentVisible(initialIsVisible) {
+    const [isComponentVisible, setIsComponentVisible] = useState(initialIsVisible);
+    const ref = useRef(null);
+
+    const handleClickOutside = (event) => {
+        //Checks if the node which triggered the click contains the child element initially declared in useRef instance
+        //Only the wrapper component would contain the child element, so...
+        if (ref.current && !ref.current.contains(event.target)) {
+            setIsComponentVisible(false);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('click', handleClickOutside, true);
+        return () => {
+            document.removeEventListener('click', handleClickOutside, true);
+        };
+    });
+
+    return { ref, isComponentVisible, setIsComponentVisible };
+}

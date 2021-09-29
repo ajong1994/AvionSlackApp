@@ -34,7 +34,11 @@
     }
     .custom-textarea {
         @apply w-full bg-gray-700 border border-gray-400 rounded focus:ring-0 focus:border-gray-300 focus:outline-none px-2 py-3 text-gray-100 text-sm;
-        overflow: auto;
-        resize: none
+        resize: none;
+        overflow-y: visible;
+    }
+    .recipient-results {
+        width: calc(100% - 2rem);
+        top: 50px;
     }
 }
