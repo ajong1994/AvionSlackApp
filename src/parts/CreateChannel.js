@@ -15,31 +15,28 @@ const CreateChannel = ({setOpenModal, openModal}) => {
     const { userList, updateUserList, updateChannelList} = useContext(SessionContext)
     const history = useHistory();
     let channelName = useRef(null)
-    const [searchFriend, setSearchFriend] = useState(null)
+    const [searchFriend, setSearchFriend] = useState('')
+    const [searchFriendList, setSearchFriendList] = useState(null)
     const [user_ids, setUser_ids] = useState([])
     
-    const handleValueChange = (e, inputType) => {
-      if(inputType === 'searchFriend') {
-        setSearchFriend(e.target.value)
-      }  
-   }
+    useEffect(() => {
+      if (searchFriend !== '') {
+        const regex = new RegExp(`${searchFriend}`, 'i')
+        setSearchFriendList(userList?.filter(user => regex.test(user.uid)))
+      } else {
+        setSearchFriendList(userList)
+      }
+    },[searchFriend])
 
-   //attempting to display searched users from server in the modal
-  //  const displayFriendsList = (searchFriend) => {
-  //   const friendsList =  updateUserList(userList) //or getAllUsers(activeUser, updateUserList)?
-  //   if (searchFriend === user_ids) {
-  //     return friendsList.filter(friend => friend.user_ids === searchFriend)
-  //   }
-  //   return friendsList    
-  // }
+    const handleSearchFriendChange = (e) => {
+      setSearchFriend(e.target.value)
+    }
   
+    const handleCreateChannelClick = () => {
+      postCreateChannel( user_ids, activeUser, updateChannelList)
+      setOpenModal(false)
+    }
 
-  const handleCreateChannelClick = () => {
-    postCreateChannel(channelName.current.value, user_ids, activeUser, updateChannelList)
-    setOpenModal(false)
-    
-  }
- 
     return (
       <div>
         <Transition appear show={openModal} as={Fragment}>
@@ -79,14 +76,14 @@ const CreateChannel = ({setOpenModal, openModal}) => {
               >
                 <div className="inline-block p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
                   <div className="mt-2">
-                    <Textfield label='channelName' ref={channelName} id='channelName'type='text' placeholder='channel name'/>
-                    <Textfield label='searchFriends'onChange={(e) => {handleValueChange(e, 'searchFriend')} } value={searchFriend} id='channelName'type='text' placeholder=' type the name of a friend'/>
+                    <Textfield label='channel Name' id='channelName'type='text' placeholder='channel name'/>
+                    <Textfield label='search Friends' onChange={handleSearchFriendChange} value={searchFriend} type='text' placeholder=' type the name of a friend'/>
                   </div>
               
                   <div className="mt-2">
                     <span>List of friends</span>
                     <ul className="h-40 overflow-y-auto">
-                      {userList?.map(user => (
+                      {searchFriendList?.map(user => (
                         <li key={user.uid} className="p-2">
                           {user.uid}
                         </li>

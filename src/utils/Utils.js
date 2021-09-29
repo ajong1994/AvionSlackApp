@@ -171,7 +171,7 @@ export const getAllUsers = (activeUser, updateUserList) => {
 
     axios(config)
     .then(function (response) {
-        if(response.data.data) {
+        if(response.data) {
             updateUserList(response.data.data)
         }
     })
