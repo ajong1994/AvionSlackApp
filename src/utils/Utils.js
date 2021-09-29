@@ -168,11 +168,11 @@ export const getAllUsers = (activeUser, updateUserList) => {
             'uid': activeUser.uid
         }
     };
-      
+
     axios(config)
     .then(function (response) {
-        if(response.data) {
-            updateUserList(response.data)
+        if(response.data.data) {
+            updateUserList(response.data.data)
         }
     })
     .catch(function (error) {
@@ -185,13 +185,14 @@ export const getAllUsers = (activeUser, updateUserList) => {
 /* UTILITY FUNCTIONS RELATED TO CHANNELS */
 export const postCreateChannel = (channelName, user_ids, activeUser, updateChannelList) => {
     var data = {
-        name: channelName,
+        name: channelName.current.value,
         user_ids: user_ids  //should this be an array instead? >> yes, the passed argument should be an array
       };
     var config = {
         method: 'POST',
         url: 'https://slackapi.avionschool.com/api/v1/channels',
         headers: {
+            
             'access-token': activeUser['access-token'],
             'client': activeUser.client, 
             'expiry': activeUser.expiry,

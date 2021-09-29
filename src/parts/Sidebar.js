@@ -34,9 +34,13 @@ const Sidebar = () => {
                         Channels
                     </Disclosure.Button>
                     <Disclosure.Panel className="text-gray-500">
-                        <div>
-                            Map all current channels here
-                        </div>
+                    <div>
+                        {/* {channelList.map(channel => (
+                        <li className='list-group-item'>
+                          {channel}
+                        </li>
+                      ))} */}
+                    </div>
                         <Button onClick={toggleModal}>
                         add channel
                         </Button>

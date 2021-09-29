@@ -1,7 +1,7 @@
 import {HashRouter as Router, Route, Switch} from 'react-router-dom';
 import Signin from './pages/Signin';
 import Signup from './pages/Signup';
-import Channels from './pages/Channels'
+
 import Main from './pages/Main'
 import AuthContextProvider from './contexts/AuthContext';
 import SessionContextProvider from './contexts/SessionContext';
