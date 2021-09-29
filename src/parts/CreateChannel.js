@@ -1,10 +1,10 @@
-import { useState, useEffect, useContext, Fragment} from 'react'
+import { useState, useEffect, useContext, Fragment, useRef} from 'react'
 import { AuthContext } from '../contexts/AuthContext'
 import { Redirect } from 'react-router-dom';
 import { useHistory } from 'react-router'
 import Button from '../components/Button'
 import Textfield from '../components/Textfield';
-import { postCreateChannel } from '../utils/Utils';
+import { getAllSubscribedChannels, getAllUsers, postCreateChannel } from '../utils/Utils';
 import { Dialog, Transition  } from '@headlessui/react'
 import { SessionContext } from '../contexts/SessionContext'
 //import ReactMultiSelectCheckboxes from 'react-multiselect-checkboxes';
@@ -14,22 +14,31 @@ const CreateChannel = ({setOpenModal, openModal}) => {
     const {isAuthenticated, setAuth, activeUser, setUser} = useContext(AuthContext)
     const { userList, updateUserList, updateChannelList} = useContext(SessionContext)
     const history = useHistory();
-    const [channelName, setChannelName] = useState(null)
-    const [friendName, setfriendName] = useState(null)
+    let channelName = useRef(null)
+    const [searchFriend, setSearchFriend] = useState(null)
     const [user_ids, setUser_ids] = useState([])
-
-  
     
     const handleValueChange = (e, inputType) => {
-      if(inputType === 'channelName') {
-        setChannelName(e.target.value)
-      } else if(inputType === 'friendName') {
-        setfriendName(e.target.value)
+      if(inputType === 'searchFriend') {
+        setSearchFriend(e.target.value)
       }  
    }
 
-   postCreateChannel(channelName, user_ids, activeUser, updateChannelList)
+   //attempting to display searched users from server in the modal
+  //  const displayFriendsList = (searchFriend) => {
+  //   const friendsList =  updateUserList(userList) //or getAllUsers(activeUser, updateUserList)?
+  //   if (searchFriend === user_ids) {
+  //     return friendsList.filter(friend => friend.user_ids === searchFriend)
+  //   }
+  //   return friendsList    
+  // }
+  
+
+  const handleCreateChannelClick = () => {
+    postCreateChannel(channelName.current.value, user_ids, activeUser, updateChannelList)
+    setOpenModal(false)
     
+  }
  
     return (
       <div>
@@ -70,25 +79,26 @@ const CreateChannel = ({setOpenModal, openModal}) => {
               >
                 <div className="inline-block p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
                   <div className="mt-2">
-                    <Textfield label='channelName' onChange={(e) => {handleValueChange(e, 'channelName')} } value={channelName} id='channelName'type='text' placeholder='channel name'/>
-                    <Textfield label='searchFriends'onChange={(e) => {handleValueChange(e, 'friendName')} } value={friendName} id='channelName'type='text' placeholder=' type the name of a friend'/>
+                    <Textfield label='channelName' ref={channelName} id='channelName'type='text' placeholder='channel name'/>
+                    <Textfield label='searchFriends'onChange={(e) => {handleValueChange(e, 'searchFriend')} } value={searchFriend} id='channelName'type='text' placeholder=' type the name of a friend'/>
                   </div>
               
                   <div className="mt-2">
                     <span>List of friends</span>
-                    <ul className='list-group mb-4'>
-                      {/* {posts.map(post => (
-                        <li key={post.id} className='list-group-item'>
-                          {post.title}
+                    <ul className="h-40 overflow-y-auto">
+                      {userList?.map(user => (
+                        <li key={user.uid} className="p-2">
+                          {user.uid}
                         </li>
-                      ))} */}
-                  </ul>
+                      ))}
+                    </ul>
+                  
                   </div>
                   <div className="mt-4">
                     <button
                       type="button"
                       className="inline-flex justify-center px-4 py-2 text-sm font-large text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-                      onClick={() => setOpenModal(false)}
+                      // onClick={handleCreateChannelClick}
                     >
                       create channel
                     </button>
