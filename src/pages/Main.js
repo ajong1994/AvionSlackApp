@@ -33,7 +33,7 @@ const Main = () => {
             <Workspace onClick={updateIsNewMessage}/>
             <Sidebar />
             <MainHeader title={isNewMessage ? 'New message' : 'Channel or DM placeholder'}/>
-            <ChatInterface msgStat={isNewMessage} />
+            <ChatInterface msgStat={isNewMessage} activeUser={activeUser} />
         </div>
     )
 }
