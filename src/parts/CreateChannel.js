@@ -8,17 +8,29 @@ import { getAllSubscribedChannels, getAllUsers, postCreateChannel } from '../uti
 import { Dialog, Transition  } from '@headlessui/react'
 import { SessionContext } from '../contexts/SessionContext'
 //import ReactMultiSelectCheckboxes from 'react-multiselect-checkboxes';
+import ReactPaginate from 'react-paginate';
 
 
 const CreateChannel = ({setOpenModal, openModal}) => {
     const {isAuthenticated, setAuth, activeUser, setUser} = useContext(AuthContext)
     const { userList, updateUserList, updateChannelList} = useContext(SessionContext)
-    const history = useHistory();
+
     let channelName = useRef(null)
-    const [searchFriend, setSearchFriend] = useState('')
-    const [searchFriendList, setSearchFriendList] = useState(null)
     const [user_ids, setUser_ids] = useState([])
-    
+
+    //states for searching friends' emails & rendering new filtered list of friends 
+    const [searchFriend, setSearchFriend] = useState('')
+    const [searchFriendList, setSearchFriendList] = useState([])
+
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const PER_PAGE = 10;
+    const offset = currentPage * PER_PAGE;
+
+    const pageCount = Math.ceil(searchFriendList.length / PER_PAGE);
+    const pageRangeDisplayed = 2;
+
+    // filtering friendslist if email matches 
     useEffect(() => {
       if (searchFriend !== '') {
         const regex = new RegExp(`${searchFriend}`, 'i')
@@ -28,6 +40,7 @@ const CreateChannel = ({setOpenModal, openModal}) => {
       }
     },[searchFriend])
 
+
     const handleSearchFriendChange = (e) => {
       setSearchFriend(e.target.value)
     }
@@ -35,6 +48,10 @@ const CreateChannel = ({setOpenModal, openModal}) => {
     const handleCreateChannelClick = () => {
       postCreateChannel( user_ids, activeUser, updateChannelList)
       setOpenModal(false)
+    }
+
+    function handlePageClick({ selected: selectedPage }) {
+      setCurrentPage(selectedPage);
     }
 
     return (
@@ -74,7 +91,7 @@ const CreateChannel = ({setOpenModal, openModal}) => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <div className="inline-block p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+                <div className="inline-block p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl min-w-200">
                   <div className="mt-2">
                     <Textfield label='channel Name' id='channelName'type='text' placeholder='channel name'/>
                     <Textfield label='search Friends' onChange={handleSearchFriendChange} value={searchFriend} type='text' placeholder=' type the name of a friend'/>
@@ -82,14 +99,27 @@ const CreateChannel = ({setOpenModal, openModal}) => {
               
                   <div className="mt-2">
                     <span>List of friends</span>
+                
                     <ul className="h-40 overflow-y-auto">
-                      {searchFriendList?.map(user => (
+                      {searchFriendList?.slice(offset, offset + PER_PAGE).map(user => (
                         <li key={user.uid} className="p-2">
-                          {user.uid}
+                          <label for={user.uid}>{user.uid}</label>
+                          <input className="flex justify-end" type='checkbox' value={user.uid}/>
                         </li>
                       ))}
                     </ul>
-                  
+                    <ReactPaginate classname="flex bg-black"
+                      previousLabel={"← Previous"}
+                      nextLabel={"Next →"}
+                      pageCount={pageCount}
+                      onPageChange={handlePageClick}
+                      containerClassName={"pagination"}
+                      previousLinkClassName={"pagination__link"}
+                      nextLinkClassName={"pagination__link"}
+                      disabledClassName={"pagination__link--disabled"}
+                      activeClassName={"pagination__link--active"}
+                      pageRangeDisplayed={pageRangeDisplayed}
+                    />
                   </div>
                   <div className="mt-4">
                     <button

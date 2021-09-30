@@ -6,6 +6,7 @@ import Main from './pages/Main'
 import AuthContextProvider from './contexts/AuthContext';
 import SessionContextProvider from './contexts/SessionContext';
 import CreateChannel from './parts/CreateChannel';
+import Pagination from './parts/Pagination';
 
 
 function App() {
@@ -22,9 +23,6 @@ function App() {
             <Route path="/signup">
               <Signup/>
             </Route>
-            {/* <Route path="/create-channel">
-              <CreateChannel />
-            </Route> */}
             <Route path="/">
               <Main/>
             </Route>
