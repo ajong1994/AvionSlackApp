@@ -255,7 +255,7 @@ export const getChannelData = (activeUser, channelId, updateChannelData) => {
         if(response.data) {
         //Returns an object with channel ID, owner ID, channel name, create and update dates and an array called channel members
         //which contains user info as objects
-        updateChannelData(response.data)
+        updateChannelData(response.data.data)
         }
     })
     .catch(function (error) {
