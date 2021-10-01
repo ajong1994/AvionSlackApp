@@ -5,12 +5,13 @@ import CreateChannel from './CreateChannel';
 import {removeUserSession} from '../utils/Utils'
 import { useHistory } from 'react-router'
 import { AuthContext } from '../contexts/AuthContext'
+import { SessionContext } from '../contexts/SessionContext';
 
 
 
 const Sidebar = () => {
     const {isAuthenticated, setAuth, activeUser, setUser} = useContext(AuthContext)
-    const [channelList, setChannelList] = useState(null);
+    const { channelList } = useContext(SessionContext)
 
     //Use Util function to get Channel list and set ChannelList State
 
@@ -25,6 +26,7 @@ const Sidebar = () => {
     const handleSignOutClick = () => {
         removeUserSession(setAuth, setUser, history);
     }
+
   
     return (
         <div className="col-start-1 col-end-2 row-start-2">
@@ -34,12 +36,11 @@ const Sidebar = () => {
                         Channels
                     </Disclosure.Button>
                     <Disclosure.Panel className="text-gray-500">
-                    <div>
-                        {/* {channelList.map(channel => (
-                        <li className='list-group-item'>
-                          {channel}
-                        </li>
-                      ))} */}
+                    <div className="overflow-scroll h-48">
+                    {channelList?.map(channel => (
+                        <li key={channel.id} className="p-2 list-none">
+                            {channel.name}
+                         </li>))} 
                     </div>
                         <Button onClick={toggleModal}>
                         add channel

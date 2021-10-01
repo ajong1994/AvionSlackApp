@@ -6,7 +6,7 @@ import Main from './pages/Main'
 import AuthContextProvider from './contexts/AuthContext';
 import SessionContextProvider from './contexts/SessionContext';
 import CreateChannel from './parts/CreateChannel';
-import Pagination from './parts/Pagination';
+
 
 
 function App() {

@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { useState, useEffect, useRef } from 'react';
+import Toast from '../parts/Toast'
 
 /* UTILITY FUNCTIONS RELATED TO VALIDATION */
 export const validateEmail = (email) => {
@@ -184,16 +185,15 @@ export const getAllUsers = (activeUser, updateUserList) => {
 
 
 /* UTILITY FUNCTIONS RELATED TO CHANNELS */
-export const postCreateChannel = (channelName, user_ids, activeUser, updateChannelList) => {
+export const postCreateChannel = (channelName, user_ids, activeUser, updateChannelList, toggleToast, updateToastStat) => {
     var data = {
-        name: channelName.current.value,
+        name: channelName,
         user_ids: user_ids  //should this be an array instead? >> yes, the passed argument should be an array
       };
     var config = {
         method: 'POST',
         url: 'https://slackapi.avionschool.com/api/v1/channels',
         headers: {
-            
             'access-token': activeUser['access-token'],
             'client': activeUser.client, 
             'expiry': activeUser.expiry,
@@ -204,7 +204,8 @@ export const postCreateChannel = (channelName, user_ids, activeUser, updateChann
     axios(config)
     .then(function (response) {
         //Display success toast for creation
-        
+        toggleToast(true);
+        updateToastStat('success','Success! Channel has been created.')
         //Reload channel list from API to ensure it was added
         getAllSubscribedChannels(activeUser, updateChannelList)
     })
