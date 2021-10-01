@@ -36,11 +36,13 @@ const ChatInterface = ({activeUser, msgStat}) => {
     },[msgRecipient])
 
     useEffect(() => {
-        const id = recipientMetadata.id;
-        const type = recipientMetadata.type;
-        getAllMsgs(activeUser, id, type)
-            .then(msgs => setMsgList(msgs))
-            .catch(e => console.error(e))
+        if (activeUser) {
+            const id = recipientMetadata.id;
+            const type = recipientMetadata.type;
+            getAllMsgs(activeUser, id, type)
+                .then(msgs => setMsgList(msgs))
+                .catch(e => console.error(e))
+        }
     },[recipientMetadata])
 
     const handleOnChange = (e) => {
@@ -53,6 +55,7 @@ const ChatInterface = ({activeUser, msgStat}) => {
         setRecipientMetadata({id, type})
         setIsComponentVisible(false)
     }
+
     const handleMsgSubmit = () => {
         const id = recipientMetadata.id;
         const type = recipientMetadata.type;
