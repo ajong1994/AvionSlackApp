@@ -332,7 +332,7 @@ export const postMsg = (activeUser, receiverId, msg, type) => {
         body: msg
     };
     var config = {
-        method: 'GET',
+        method: 'POST',
         url: `https://slackapi.avionschool.com/api/v1/messages`,
         headers: { 
             'access-token': activeUser['access-token'],
@@ -342,11 +342,11 @@ export const postMsg = (activeUser, receiverId, msg, type) => {
         },
         data: data
     };
-    axios(config)
+    return axios(config)
     .then(function (response) {
         if(response.data) {
             //On success message post, re-fetch the channel messages to update state [TO-DO]
-            getAllMsgs(activeUser, receiverId, type)
+            return getAllMsgs(activeUser, receiverId, type)
         }
     })
     .catch(function (error) {

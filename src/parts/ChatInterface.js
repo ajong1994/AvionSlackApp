@@ -53,6 +53,17 @@ const ChatInterface = ({activeUser, msgStat}) => {
         setRecipientMetadata({id, type})
         setIsComponentVisible(false)
     }
+    const handleMsgSubmit = () => {
+        const id = recipientMetadata.id;
+        const type = recipientMetadata.type;
+        const msgBody = msgRef.current.value
+        postMsg(activeUser, id, msgBody, type)
+            .then(msgs => {
+                setMsgList(msgs);
+                msgRef.current.value = ''
+            })
+            .catch(e => console.error(e))
+    }
     
     //Later on, add an onKeyPress for enter key on the input to setMsgRecipient and Uid state
 
@@ -97,7 +108,8 @@ const ChatInterface = ({activeUser, msgStat}) => {
                 ref={msgRef}
                 placeholder="Enter a message"
                 ></textarea>
-                <div className="bg-green-700 hover:bg-green-500 cursor-pointer flex items-center justify-center px-4 rounded">
+                <div className="bg-green-700 hover:bg-green-500 cursor-pointer flex items-center justify-center px-4 rounded"
+                    onClick={handleMsgSubmit}>
                     <PaperAirplaneIcon className="h-6 w-6 transform rotate-45 -mt-1 pb-1 text-white"/>
                 </div>
             </div>
