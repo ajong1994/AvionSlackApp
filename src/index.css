@@ -13,6 +13,7 @@
     h5, h4, h3, h2, h1 {
         font-weight: 700
     }
+
 }
 
 @layer components {
@@ -41,4 +42,5 @@
         width: calc(100% - 2rem);
         top: 50px;
     }
+    
 }
