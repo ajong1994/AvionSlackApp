@@ -203,10 +203,10 @@ export const postCreateChannel = (channelName, user_ids, activeUser, updateChann
     };  
     axios(config)
     .then(function (response) {
-      //Display success toast for creation
-
-      //Reload channel list from API to ensure it was added
-      getAllSubscribedChannels(activeUser, updateChannelList)
+        //Display success toast for creation
+        
+        //Reload channel list from API to ensure it was added
+        getAllSubscribedChannels(activeUser, updateChannelList)
     })
     .catch(function (error) {
       console.log(error);
@@ -229,7 +229,7 @@ export const getAllSubscribedChannels = (activeUser, updateChannelList) => {
     .then(function (response) {
         if(response.data) {
         //Returns an array of object; each one representing a channel with channel id, name, create date and owner id
-        updateChannelList(response.data)
+        updateChannelList(response.data.data)
         }
     })
     .catch(function (error) {
@@ -285,7 +285,8 @@ export const postInviteToChannel = (activeUser, channelId, memberId, updateChann
         if(response.data) {
         //Returns an object with channel ID, owner ID, channel name, create and update dates and an array called channel members
         //which contains user info as objects
-        updateChannelData(response.data)
+        console.log(response.data.data)
+        updateChannelData(response.data.data)
         }
     })
     .catch(function (error) {
@@ -297,9 +298,9 @@ export const postInviteToChannel = (activeUser, channelId, memberId, updateChann
 
 
 /* UTILITY FUNCTIONS RELATED TO MESSAGES */
-export const getAllChannelMsgs = (activeUser, channelId) => {
-    const receiver_id = channelId;
-    const receiver_class = 'Channel';
+export const getAllMsgs = (activeUser, receiverId, type) => {
+    const receiver_id = receiverId;
+    const receiver_class = type;
     var config = {
         method: 'GET',
         url: `https://slackapi.avionschool.com/api/v1/messages?receiver_id=${receiver_id}&receiver_class=${receiver_class}`,
@@ -310,25 +311,28 @@ export const getAllChannelMsgs = (activeUser, channelId) => {
             'uid': activeUser.uid
         }
     };
-    axios(config)
+    var result = [];
+    return axios(config)
     .then(function (response) {
         if(response.data) {
-            console.log(response.data)
+            return response.data.data
         }
     })
     .catch(function (error) {
         console.log(error);
+        return result
     });
+    
 };
 
-export const postMsgToChannel = (activeUser, channelId, msg) => {
+export const postMsg = (activeUser, receiverId, msg, type) => {
     var data = {
-        receiver_id: channelId,
-        receiver_class: 'Channel',
+        receiver_id: receiverId,
+        receiver_class: type,
         body: msg
     };
     var config = {
-        method: 'GET',
+        method: 'POST',
         url: `https://slackapi.avionschool.com/api/v1/messages`,
         headers: { 
             'access-token': activeUser['access-token'],
@@ -338,64 +342,11 @@ export const postMsgToChannel = (activeUser, channelId, msg) => {
         },
         data: data
     };
-    axios(config)
+    return axios(config)
     .then(function (response) {
         if(response.data) {
             //On success message post, re-fetch the channel messages to update state [TO-DO]
-            getAllChannelMsgs(activeUser, channelId)
-        }
-    })
-    .catch(function (error) {
-        console.log(error);
-    });
-};
-
-export const getAllUserMsgs = (activeUser, userId) => {
-    const receiver_id = userId;
-    const receiver_class = 'User';
-    var config = {
-        method: 'GET',
-        url: `https://slackapi.avionschool.com/api/v1/messages?receiver_id=${receiver_id}&receiver_class=${receiver_class}`,
-        headers: { 
-            'access-token': activeUser['access-token'],
-            'client': activeUser.client, 
-            'expiry': activeUser.expiry,
-            'uid': activeUser.uid
-        }
-    };
-    axios(config)
-    .then(function (response) {
-        if(response.data) {
-            console.log(response.data)
-        }
-    })
-    .catch(function (error) {
-        console.log(error);
-    });
-};
-
-export const postMsgToUser = (activeUser, userId, msg) => {
-    var data = {
-        receiver_id: userId,
-        receiver_class: 'User',
-        body: msg
-    };
-    var config = {
-        method: 'GET',
-        url: `https://slackapi.avionschool.com/api/v1/messages`,
-        headers: { 
-            'access-token': activeUser['access-token'],
-            'client': activeUser.client, 
-            'expiry': activeUser.expiry,
-            'uid': activeUser.uid
-        },
-        data: data
-    };
-    axios(config)
-    .then(function (response) {
-        if(response.data) {
-            //On success message post, re-fetch the user messages to update state [TO-DO]
-            getAllUserMsgs(activeUser, userId)
+            return getAllMsgs(activeUser, receiverId, type)
         }
     })
     .catch(function (error) {
@@ -408,7 +359,6 @@ export const postMsgToUser = (activeUser, userId, msg) => {
 export default function useComponentVisible(initialIsVisible) {
     const [isComponentVisible, setIsComponentVisible] = useState(initialIsVisible);
     const ref = useRef(null);
-
     const handleClickOutside = (event) => {
         //Checks if the node which triggered the click contains the child element initially declared in useRef instance
         //Only the wrapper component would contain the child element, so...
@@ -416,13 +366,11 @@ export default function useComponentVisible(initialIsVisible) {
             setIsComponentVisible(false);
         }
     };
-
     useEffect(() => {
         document.addEventListener('click', handleClickOutside, true);
         return () => {
             document.removeEventListener('click', handleClickOutside, true);
         };
     });
-
     return { ref, isComponentVisible, setIsComponentVisible };
 }
