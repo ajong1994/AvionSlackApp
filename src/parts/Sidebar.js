@@ -1,18 +1,21 @@
 import { Disclosure } from '@headlessui/react';
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import Button from '../components/Button'
 import CreateChannel from './CreateChannel';
-import {removeUserSession} from '../utils/Utils'
 import { useHistory } from 'react-router'
 import { AuthContext } from '../contexts/AuthContext'
 import { SessionContext } from '../contexts/SessionContext';
 import { PlusCircleIcon } from '@heroicons/react/solid';
 import { getChannelData } from '../utils/Utils';
+import { assignImage, assignBg, removeUserSession } from "../utils/Utils";
+import { ChevronRightIcon } from '@heroicons/react/solid';
+import { Transition } from '@headlessui/react'
 
 
-const Sidebar = () => {
-    const { setAuth, setUser, activeUser } = useContext(AuthContext)
-    const { channelList, updateChannelData } = useContext(SessionContext)
+
+const Sidebar = ({updateMsgStat}) => {
+    const { isAuthenticated, setAuth, setUser, activeUser } = useContext(AuthContext)
+    const { userList, channelList, updateChannelData, updateRecipientMetadata, updateMsgRecipient, updateMsgList  } = useContext(SessionContext)
 
     //Use Util function to get Channel list and set ChannelList State
 
@@ -21,6 +24,11 @@ const Sidebar = () => {
     const toggleModal = () => {
         setOpenModal(!openModal)
     }
+    const [dmList, setDmList] = useState(null)
+
+    useEffect(() => {
+        setDmList(userList?.slice(-10))
+    },[userList])
 
     const history = useHistory();
 
@@ -33,42 +41,90 @@ const Sidebar = () => {
         console.log('hello')
     }
 
-
+    const handleMsgClick = (id, type, email) => {
+        updateMsgList([])
+        updateMsgStat(false)
+        updateRecipientMetadata(id, type)
+        updateMsgRecipient(email)
+    }
 
     return (
         <div className="col-start-1 col-end-2 row-start-2">
-            <div className="h-full p-4 border-r border-gray-600 flex flex-col items-start text-gray-300 bg-gray-900">
-                <Disclosure defaultOpen={true}>
-                    <Disclosure.Button className="py-2">
-                        Channels
-                    </Disclosure.Button>
-                    <Disclosure.Panel className="text-gray-500">
-                    <ul className="overflow-y-scroll no-scrollbar w-52 h-72">
-                        {channelList?.map(channel => (
-                            <li key={channel.id}  onClick={() => { handleChannelNameClick(channel.id) }} className="cursor-pointer p-2 list-none">
-                                {channel.name}
-                            </li>))} 
-                    </ul>
-                    <div className="flex relative" onClick={toggleModal}>
-                        <PlusCircleIcon className="absolute -top-1 right-14 top-0 cursor-pointer mx-3 h-9 w-6"  stroke="currentColor"/>
-                        <span>Add channel</span>
-                    </div>
-                    </Disclosure.Panel>
+            <div className="h-full p-4 border-r border-gray-600 flex flex-col items-start text-gray-300 bg-gray-900 truncate">
+                <Disclosure>
+                    {({open}) => (
+                        <>
+                            <Disclosure.Button className="py-2 px-4 flex items-center">
+                                <ChevronRightIcon
+                                    className={`${open ? 'transform rotate-90' : ''} w-5 h-5 text-gray-300 mr-2`} />
+                                <span>Channels</span>
+                            </Disclosure.Button>
+                            <Transition
+                                show={open}
+                                enter="transition duration-100 ease-out"
+                                enterFrom="transform scale-95 opacity-0"
+                                enterTo="transform scale-100 opacity-100"
+                                leave="transition duration-75 ease-out"
+                                leaveFrom="transform scale-100 opacity-100"
+                                leaveTo="transform scale-95 opacity-0"
+                            >
+                                <Disclosure.Panel className="text-gray-500" static>
+                                    <ul className="overflow-y-scroll no-scrollbar w-52 h-72">
+                                        {channelList?.map(channel => (
+                                            <li key={channel.id} onClick={() => { handleChannelNameClick(channel.id); } } className="cursor-pointer p-2 list-none">
+                                                {channel.name}
+                                            </li>))}
+                                    </ul>
+                                    <div className="flex relative" onClick={toggleModal}>
+                                        <PlusCircleIcon className="absolute -top-1 right-14 top-0 cursor-pointer mx-3 h-9 w-6" stroke="currentColor" />
+                                        <span>Add channel</span>
+                                    </div>
+                                </Disclosure.Panel>
+                            </Transition>
+                        </>
+                     )}
                 </Disclosure>
                 {openModal && <CreateChannel openModal={openModal} setOpenModal={setOpenModal}/>} 
                 <Disclosure>
-                    <Disclosure.Button className="py-2">
-                        Direct Messages
-                    </Disclosure.Button>
-                    <Disclosure.Panel className="text-gray-500">
-                        <div>
-                            Map all direct messages here
-                        </div>
-                    </Disclosure.Panel>
+                {({open}) => (
+                    <>
+                        <Disclosure.Button className="py-2 px-4 flex items-center">
+                        <ChevronRightIcon
+                            className={`${
+                                open ? 'transform rotate-90' : ''
+                            } w-5 h-5 text-gray-300 mr-2`}
+                        />
+                        <span>Direct Messages</span>
+                        </Disclosure.Button>
+                        <Transition
+                            show={open}
+                            enter="transition duration-100 ease-out"
+                            enterFrom="transform scale-95 opacity-0"
+                            enterTo="transform scale-100 opacity-100"
+                            leave="transition duration-75 ease-out"
+                            leaveFrom="transform scale-100 opacity-100"
+                            leaveTo="transform scale-95 opacity-0"
+                            className="w-full"
+                        >
+                            <Disclosure.Panel className="text-gray-500 w-full" static>
+                                {!!dmList?.length
+                                && dmList.map((user) => (
+                                <div key={user.id} className="flex py-1 px-6 items-center hover:bg-gray-700 cursor-pointer" onClick={()=>handleMsgClick(user?.id, "User", user.uid)}>
+                                    <div className="flex justify-center items-center h-5 w-5 mr-2">
+                                        <span className={assignBg(user?.id)}>
+                                            <img src={assignImage(user?.id, "User")} className="h-5 w-5 items-center"/>
+                                        </span>
+                                    </div>
+                                    <div className="text-gray-300 truncate text-sm">{user.uid}</div>
+                                </div>))}
+                            </Disclosure.Panel>
+                        </Transition>
+                    </>
+                    )}
                 </Disclosure>
                 <Button onClick={()=>handleSignOutClick()}>Sign Out</Button>
             </div>
-        </div>
+            </div>
     )
 }
 

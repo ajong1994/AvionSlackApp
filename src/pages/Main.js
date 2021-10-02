@@ -17,6 +17,18 @@ const Main = () => {
     const updateIsNewMessage = (bool) => {
         setIsNewMessage(bool);
     }
+    const [chatTitle, setChatTitle] = useState('New message')
+    const updateChatTitle = (newTitle) => {
+        setChatTitle(newTitle)
+    }
+    // This is for the avatar image beside the chat interface title (displays nothing if it's a new message)
+    const [headerInfo, setHeaderInfo] = useState({id:'',type:''})
+    const updateHeaderInfo = (id, type) => {
+        setHeaderInfo({
+            id: id,
+            type: type
+        })
+    }
 
     const getHeaderValue = () => {
         if (channelData) {
@@ -42,9 +54,9 @@ const Main = () => {
     return (
         <div className="h-full grid main-grid bg-gray-800">
             <Workspace onClick={updateIsNewMessage}/>
-            <Sidebar />
+            <Sidebar updateMsgStat={updateIsNewMessage}/>
             <MainHeader title={getHeaderValue()}/>
-            <ChatInterface msgStat={isNewMessage} activeUser={activeUser} />
+            <ChatInterface msgStat={isNewMessage} activeUser={activeUser} updateMsgStat={updateIsNewMessage}/>
             <RightSidebar />
         </div>
     )
