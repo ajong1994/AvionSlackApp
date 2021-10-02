@@ -6,6 +6,7 @@ import Sidebar from '../parts/Sidebar';
 import Workspace from '../parts/Workspace';
 import MainHeader from '../parts/MainHeader';
 import ChatInterface from '../parts/ChatInterface';
+//import LeftSidebar from '../parts/LeftSidebar';
 import { getAllUsers, getAllSubscribedChannels } from '../utils/Utils'
 
 
@@ -34,6 +35,7 @@ const Main = () => {
             <Sidebar />
             <MainHeader title={isNewMessage ? 'New message' : 'Channel or DM placeholder'}/>
             <ChatInterface msgStat={isNewMessage} activeUser={activeUser} />
+            {/* <LeftSidebar /> */}
         </div>
     )
 }

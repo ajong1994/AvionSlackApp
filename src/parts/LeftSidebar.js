@@ -9,7 +9,7 @@ import { SessionContext } from '../contexts/SessionContext';
 
 
 
-const Sidebar = () => {
+const LeftSidebar = () => {
     const {isAuthenticated, setAuth, activeUser, setUser} = useContext(AuthContext)
     const { channelList } = useContext(SessionContext)
 
@@ -29,14 +29,14 @@ const Sidebar = () => {
 
   
     return (
-        <div className="col-start-1 col-end-2 row-start-2">
+        <div className="col-start-2 row-start-2">
             <div className="h-full p-4 border-r border-gray-600 flex flex-col items-start text-gray-300 bg-gray-900">
                 <Disclosure>
                     <Disclosure.Button className="py-2">
                         Channels
                     </Disclosure.Button>
                     <Disclosure.Panel className="text-gray-500">
-                    <div className="overflow-y-scroll h-72">
+                    <div className="overflow-scroll h-48">
                     {channelList?.map(channel => (
                         <li key={channel.id} className="p-2 list-none">
                             {channel.name}
@@ -64,4 +64,4 @@ const Sidebar = () => {
     )
 }
 
-export default Sidebar
+export default LeftSidebar
