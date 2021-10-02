@@ -10,9 +10,9 @@ import { ChevronRightIcon } from '@heroicons/react/solid';
 import { Transition } from '@headlessui/react'
 
 
-const Sidebar = () => {
+const Sidebar = ({updateMsgStat}) => {
     const {isAuthenticated, setAuth, activeUser, setUser} = useContext(AuthContext)
-    const { userList,channelList } = useContext(SessionContext)
+    const { userList,channelList, updateRecipientMetadata, updateMsgRecipient, updateMsgList } = useContext(SessionContext)
 
     //Use Util function to get Channel list and set ChannelList State
 
@@ -33,7 +33,12 @@ const Sidebar = () => {
         removeUserSession(setAuth, setUser, history);
     }
 
-
+    const handleMsgClick = (id, type, email) => {
+        updateMsgList([])
+        updateMsgStat(false)
+        updateRecipientMetadata(id, type)
+        updateMsgRecipient(email)
+    }
 
   
     return (
@@ -94,11 +99,12 @@ const Sidebar = () => {
                             leave="transition duration-75 ease-out"
                             leaveFrom="transform scale-100 opacity-100"
                             leaveTo="transform scale-95 opacity-0"
+                            className="w-full"
                         >
                             <Disclosure.Panel className="text-gray-500 w-full" static>
                                 {!!dmList?.length
                                 && dmList.map((user) => (
-                                <div key={user.id} className="flex py-1 px-6 items-center hover:bg-gray-700 cursor-pointer">
+                                <div key={user.id} className="flex py-1 px-6 items-center hover:bg-gray-700 cursor-pointer" onClick={()=>handleMsgClick(user?.id, "User", user.uid)}>
                                     <div className="flex justify-center items-center h-5 w-5 mr-2">
                                         <span className={assignBg(user?.id)}>
                                             <img src={assignImage(user?.id, "User")} className="h-5 w-5 items-center"/>

@@ -18,12 +18,42 @@ const SessionContextProvider = ({children}) => {
     const updateChannelData = (channeldata) => {
         setChannelData(channeldata)
     }
+    const [msgRecipient, setMsgRecipient] = useState('');
+    const updateMsgRecipient = (recipient) => {
+        setMsgRecipient(recipient)
+    }
+    const [recipientMetadata, setRecipientMetadata] = useState({id:'', type:''});
+    const updateRecipientMetadata = (id, type) => {
+        setRecipientMetadata({
+            id: id,
+            type: type
+        })
+    }
+    const [msgList, setMsgList] = useState([])
+    const updateMsgList = (messages) => {
+        setMsgList(messages)
+    }
+
+    const props = {
+        userList,
+        updateUserList,
+        channelList,
+        updateChannelList,
+        channelData,
+        updateChannelData,
+        msgRecipient,
+        updateMsgRecipient,
+        recipientMetadata,
+        updateRecipientMetadata,
+        msgList,
+        updateMsgList
+    }
 
     return (
         //We add the Provider property from the created AuthContext object which will provide all children with necessary values/states without
         //passing them directly as props. In this case, we pass our user login states and updaters to the value prop of Provider,
         //so we can access these in children components using useContext
-        <SessionContext.Provider value={{userList, updateUserList, channelList, updateChannelList, channelData, updateChannelData}}>
+        <SessionContext.Provider value={props}>
             {children}
         </SessionContext.Provider>
     )

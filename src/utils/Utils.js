@@ -406,17 +406,15 @@ export const assignImage = (id, type) => {
 
 /* UTIL FUNCTION FOR IMAGE ASSIGNMENT */
 export const assignBg = (id) => {
-    switch(id % 5) {
+    switch(id % 4) {
         case 1 :
             return "bg-red-300 rounded"
         case 2: 
             return "bg-indigo-200 rounded"
         case 3:
-            return "bg-pink-200 rounded"
-        case 4: 
-            return "bg-yellow-200 rounded"
+            return "bg-green-200 rounded"
         default:
-            return "bg-gray-200 rounded"
+            return "bg-yellow-200 rounded"
     }
 }
 /* END OF UTIL FUNCTION FOR IMAGE ASSIGNMENT */
