@@ -122,10 +122,10 @@ export const createUserSession = (email, password, setAuth, setUser, toggleToast
         password: password, 
     };
     var config = {
-    method: 'POST',
-    url: 'https://slackapi.avionschool.com/api/v1/auth/sign_in',
-    headers: {},
-    data : data
+        method: 'POST',
+        url: 'https://slackapi.avionschool.com/api/v1/auth/sign_in',
+        headers: {},
+        data : data
     };
     
     axios(config)
@@ -189,7 +189,7 @@ export const postCreateChannel = (channelName, user_ids, activeUser, updateChann
     var data = {
         name: channelName,
         user_ids: user_ids  //should this be an array instead? >> yes, the passed argument should be an array
-      };
+    };
     var config = {
         method: 'POST',
         url: 'https://slackapi.avionschool.com/api/v1/channels',

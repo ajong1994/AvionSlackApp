@@ -6,7 +6,7 @@ import Sidebar from '../parts/Sidebar';
 import Workspace from '../parts/Workspace';
 import MainHeader from '../parts/MainHeader';
 import ChatInterface from '../parts/ChatInterface';
-//import LeftSidebar from '../parts/LeftSidebar';
+import RightSidebar from '../parts/RightSidebar';
 import { getAllUsers, getAllSubscribedChannels } from '../utils/Utils'
 
 
@@ -17,6 +17,16 @@ const Main = () => {
     const updateIsNewMessage = (bool) => {
         setIsNewMessage(bool);
     }
+
+    const getHeaderValue = () => {
+        if (channelData) {
+            return isNewMessage ? 'New message - ' + channelData['name'] : channelData['name']
+        } else {
+            return '';
+        }
+        // return 'Test'
+    }
+
 
     useEffect(() => {
         if (activeUser) {
@@ -33,9 +43,9 @@ const Main = () => {
         <div className="h-full grid main-grid bg-gray-800">
             <Workspace onClick={updateIsNewMessage}/>
             <Sidebar />
-            <MainHeader title={isNewMessage ? 'New message' : 'Channel or DM placeholder'}/>
+            <MainHeader title={getHeaderValue()}/>
             <ChatInterface msgStat={isNewMessage} activeUser={activeUser} />
-            {/* <LeftSidebar /> */}
+            <RightSidebar />
         </div>
     )
 }

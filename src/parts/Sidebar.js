@@ -6,12 +6,13 @@ import {removeUserSession} from '../utils/Utils'
 import { useHistory } from 'react-router'
 import { AuthContext } from '../contexts/AuthContext'
 import { SessionContext } from '../contexts/SessionContext';
-
+import { PlusCircleIcon } from '@heroicons/react/solid';
+import { getChannelData } from '../utils/Utils';
 
 
 const Sidebar = () => {
-    const {isAuthenticated, setAuth, activeUser, setUser} = useContext(AuthContext)
-    const { channelList } = useContext(SessionContext)
+    const { setAuth, setUser, activeUser } = useContext(AuthContext)
+    const { channelList, updateChannelData } = useContext(SessionContext)
 
     //Use Util function to get Channel list and set ChannelList State
 
@@ -26,25 +27,32 @@ const Sidebar = () => {
     const handleSignOutClick = () => {
         removeUserSession(setAuth, setUser, history);
     }
+    
+    const handleChannelNameClick = (id) => {
+        getChannelData(activeUser, id, updateChannelData)
+        console.log('hello')
+    }
 
-  
+
+
     return (
         <div className="col-start-1 col-end-2 row-start-2">
             <div className="h-full p-4 border-r border-gray-600 flex flex-col items-start text-gray-300 bg-gray-900">
-                <Disclosure>
+                <Disclosure defaultOpen={true}>
                     <Disclosure.Button className="py-2">
                         Channels
                     </Disclosure.Button>
                     <Disclosure.Panel className="text-gray-500">
-                    <ul className="overflow-y-scroll no-scrollbar bg-white w-52 h-72">
-                    {channelList?.map(channel => (
-                        <li key={channel.id} className="p-2 list-none">
-                            {channel.name}
-                         </li>))} 
+                    <ul className="overflow-y-scroll no-scrollbar w-52 h-72">
+                        {channelList?.map(channel => (
+                            <li key={channel.id}  onClick={() => { handleChannelNameClick(channel.id) }} className="cursor-pointer p-2 list-none">
+                                {channel.name}
+                            </li>))} 
                     </ul>
-                        <Button onClick={toggleModal}>
-                        add channel
-                        </Button>
+                    <div className="flex relative" onClick={toggleModal}>
+                        <PlusCircleIcon className="absolute -top-1 right-14 top-0 cursor-pointer mx-3 h-9 w-6"  stroke="currentColor"/>
+                        <span>Add channel</span>
+                    </div>
                     </Disclosure.Panel>
                 </Disclosure>
                 {openModal && <CreateChannel openModal={openModal} setOpenModal={setOpenModal}/>} 

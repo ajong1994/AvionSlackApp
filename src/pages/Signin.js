@@ -36,6 +36,7 @@ const Login = () => {
 
     const history = useHistory();
 
+    console.log(activeUser)
     useEffect(() => {
         let emailResult = validateEmail(email)
         const ignoredError = 'Invalid email address'

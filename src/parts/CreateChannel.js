@@ -1,19 +1,19 @@
-import { useState, useEffect, useContext, Fragment, useRef} from 'react'
+import { useState, useEffect, useContext, Fragment } from 'react'
 import { AuthContext } from '../contexts/AuthContext'
-import { Redirect } from 'react-router-dom';
-import { useHistory } from 'react-router'
-import Button from '../components/Button'
 import Textfield from '../components/Textfield';
-import { getAllSubscribedChannels, getAllUsers, postCreateChannel } from '../utils/Utils';
+import { postCreateChannel } from '../utils/Utils';
 import { Dialog, Transition  } from '@headlessui/react'
 import { SessionContext } from '../contexts/SessionContext'
 import ReactPaginate from 'react-paginate';
 import Toast from './Toast';
 
+import { ArrowCircleRightIcon } from '@heroicons/react/solid';
+import { ArrowCircleLeftIcon } from '@heroicons/react/solid';
+
 
 const CreateChannel = ({setOpenModal, openModal}) => {
-    const {isAuthenticated, setAuth, activeUser, setUser} = useContext(AuthContext)
-    const { userList, updateUserList, channelList, updateChannelList} = useContext(SessionContext)
+    const { activeUser } = useContext(AuthContext)
+    const { userList, channelList, updateChannelList} = useContext(SessionContext)
     const [user_ids, setUser_ids] = useState([])
     const [channelName, setChannelName] = useState(null)
     const [isToastShowing, setIsToastShowing] = useState(false)
@@ -36,12 +36,11 @@ const CreateChannel = ({setOpenModal, openModal}) => {
       }
     },[searchFriend])
 
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(0);
     const PER_PAGE = 10;
     const offset = currentPage * PER_PAGE;
 
     const pageCount = Math.ceil(searchFriendList?.length / PER_PAGE);
-    const pageRangeDisplayed = 2;
 
     const [selectedUsers, setSelectedUsers] = useState([])
     const handleUserSelect = (e) => {
@@ -64,7 +63,7 @@ const CreateChannel = ({setOpenModal, openModal}) => {
     const handleCreateChannelClick = () => {
       postCreateChannel( channelName, user_ids, activeUser, updateChannelList, toggleToast, updateToastStat)
       setOpenModal(false)
-      console.log(channelList)
+      console.log(channelName)
       toggleToast(true)
     }
 
@@ -99,7 +98,7 @@ const CreateChannel = ({setOpenModal, openModal}) => {
             className="fixed inset-0 z-10 overflow-y-auto"
             onClose={() => setOpenModal(false)}
           >
-            <div className="min-h-screen px-4 text-center">
+            <div className="min-h-screen px-4 text-center ">
               <Transition.Child
                 as={Fragment}
                 enter="ease-out duration-300"
@@ -128,10 +127,10 @@ const CreateChannel = ({setOpenModal, openModal}) => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <div className="inline-block p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl min-w-200">
+                <div className="inline-block w-2/6 bg-gray-300 p-6 my-8 overflow-hidden text-left align-middle transition-all transform shadow-xl rounded-2xl min-w-200">
                   <div className="mt-2">
-                    <Textfield onChange={handleChannelName} label='channel Name' id='channelName'type='text' placeholder='channel name'/>
-                    <Textfield onChange={handleSearchFriendChange} label='search Friends' type='text' placeholder='type the name of a friend'/>
+                    <Textfield onChange={handleChannelName} label='Channel Name' id='channelName'type='text' placeholder='channel name'/>
+                    <Textfield onChange={handleSearchFriendChange} label='Search Friends' type='text' placeholder='type the name of a friend'/>
                   </div>
               
                   <div className="mt-2">
@@ -139,24 +138,27 @@ const CreateChannel = ({setOpenModal, openModal}) => {
                 
                     <ul className="h-40 overflow-y-scroll no-scrollbar">
                       {searchFriendList?.slice(offset, offset + PER_PAGE).map(user => (
-                        <li key={user.uid} className="p-2">
+                        <li key={user.uid} className=" flex p-2 ">                      
+                          <input onClick={handleUserSelect} className="m-2" type='checkbox' value={user.uid}/>
                           <label htmlFor={user.uid}>{user.uid}</label>
-                          <input onClick={handleUserSelect} className="flex justify-end" type='checkbox' value={user.uid}/>
                         </li>
                       ))}
                     </ul>
-                    <ReactPaginate classname="flex bg-black"
-                      previousLabel={"← Previous"}
-                      nextLabel={"Next →"}
-                      pageCount={pageCount}
-                      onPageChange={handlePageClick}
-                      containerClassName={"pagination"}
-                      previousLinkClassName={"pagination__link"}
-                      nextLinkClassName={"pagination__link"}
-                      disabledClassName={"pagination__link--disabled"}
-                      activeClassName={"pagination__link--active"}
-                      pageRangeDisplayed={pageRangeDisplayed}
-                    />
+                    <div id='react-paginate'>
+                      <ReactPaginate
+                        previousLabel={<ArrowCircleLeftIcon className="h-9 w-6 flex items-center"/>}
+                        nextLabel={<ArrowCircleRightIcon className="h-9 w-6 flex items-center"/>}
+                        pageCount={pageCount}
+                        onPageChange={handlePageClick}
+                        containerClassName={"pagination"}
+                        previousLinkClassName={"pagination__link"}
+                        nextLinkClassName={"pagination__link"}
+                        disabledClassName={"pagination__link--disabled"}
+                        activeClassName={"pagination__link--active"}
+                        pageRangeDisplayed={3}
+                        marginPagesDisplayed={1}
+                      />
+                    </div>
                   </div>
                   <div className="mt-4">
                     <button
