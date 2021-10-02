@@ -354,10 +354,24 @@ export const postMsg = (activeUser, receiverId, msg, type) => {
         console.log(error);
     });
 };
+
+// export const getAllMsgsFromAll = (userList, activeUser, setMsgList) => {
+//     const tempArr = []
+//     userList.map((user) => {
+//         getAllMsgs(activeUser, user.id, 'User')
+//             .then((data) => {
+//                 if (data.length) {
+//                     tempArr.push(user.email) 
+//                 }
+//             })
+//     })
+//     setMsgList(tempArr)
+// }
+
 /* END OF UTILITY FUNCTIONS RELATED TO MESSAGES */
 
-//Outside click custom hook from https://codesandbox.io/s/989y0758np
-export default function useComponentVisible(initialIsVisible) {
+/* CUSTOM HOOK FOR OUTSIDE CLICK DETECTION FROM https://codesandbox.io/s/989y0758np */
+export function useComponentVisible(initialIsVisible) {
     const [isComponentVisible, setIsComponentVisible] = useState(initialIsVisible);
     const ref = useRef(null);
     const handleClickOutside = (event) => {
@@ -375,3 +389,34 @@ export default function useComponentVisible(initialIsVisible) {
     });
     return { ref, isComponentVisible, setIsComponentVisible };
 }
+/* END OF CUSTOM HOOK FOR OUTSIDE CLICK DETECTION */
+
+
+/* UTIL FUNCTION FOR IMAGE ASSIGNMENT */
+export const assignImage = (id, type) => {
+    if (type === "User") {
+        const n = String(id% 100).padStart(2, '0')
+        return `/icons/punk-01${n}.png`
+    } else {
+        const n = id % 25
+        return `/icons/punk${n}@20x.png`
+    }
+}
+/* END OF UTIL FUNCTION FOR IMAGE ASSIGNMENT */
+
+/* UTIL FUNCTION FOR IMAGE ASSIGNMENT */
+export const assignBg = (id) => {
+    switch(id % 5) {
+        case 1 :
+            return "bg-red-300 rounded"
+        case 2: 
+            return "bg-indigo-200 rounded"
+        case 3:
+            return "bg-pink-200 rounded"
+        case 4: 
+            return "bg-yellow-200 rounded"
+        default:
+            return "bg-gray-200 rounded"
+    }
+}
+/* END OF UTIL FUNCTION FOR IMAGE ASSIGNMENT */

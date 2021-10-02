@@ -7,7 +7,7 @@ import Workspace from '../parts/Workspace';
 import MainHeader from '../parts/MainHeader';
 import ChatInterface from '../parts/ChatInterface';
 //import LeftSidebar from '../parts/LeftSidebar';
-import { getAllUsers, getAllSubscribedChannels } from '../utils/Utils'
+import { getAllUsers, getAllSubscribedChannels} from '../utils/Utils'
 
 
 const Main = () => {
