@@ -7,7 +7,7 @@ import Workspace from '../parts/Workspace';
 import MainHeader from '../parts/MainHeader';
 import ChatInterface from '../parts/ChatInterface';
 //import LeftSidebar from '../parts/LeftSidebar';
-import { getAllUsers, getAllSubscribedChannels } from '../utils/Utils'
+import { getAllUsers, getAllSubscribedChannels} from '../utils/Utils'
 
 
 const Main = () => {
@@ -16,6 +16,18 @@ const Main = () => {
     const [isNewMessage, setIsNewMessage] = useState(false);
     const updateIsNewMessage = (bool) => {
         setIsNewMessage(bool);
+    }
+    const [chatTitle, setChatTitle] = useState('New message')
+    const updateChatTitle = (newTitle) => {
+        setChatTitle(newTitle)
+    }
+    // This is for the avatar image beside the chat interface title (displays nothing if it's a new message)
+    const [headerInfo, setHeaderInfo] = useState({id:'',type:''})
+    const updateHeaderInfo = (id, type) => {
+        setHeaderInfo({
+            id: id,
+            type: type
+        })
     }
 
     useEffect(() => {
@@ -32,9 +44,9 @@ const Main = () => {
     return (
         <div className="h-full grid main-grid bg-gray-800">
             <Workspace onClick={updateIsNewMessage}/>
-            <Sidebar />
-            <MainHeader title={isNewMessage ? 'New message' : 'Channel or DM placeholder'}/>
-            <ChatInterface msgStat={isNewMessage} activeUser={activeUser} />
+            <Sidebar updateMsgStat={updateIsNewMessage}/>
+            <MainHeader/>
+            <ChatInterface msgStat={isNewMessage} updateMsgStat={updateIsNewMessage}/>
             {/* <LeftSidebar /> */}
         </div>
     )
