@@ -36,12 +36,12 @@ const Sidebar = () => {
                         Channels
                     </Disclosure.Button>
                     <Disclosure.Panel className="text-gray-500">
-                    <div className="overflow-y-scroll h-72">
+                    <ul className="overflow-y-scroll no-scrollbar bg-white w-52 h-72">
                     {channelList?.map(channel => (
                         <li key={channel.id} className="p-2 list-none">
                             {channel.name}
                          </li>))} 
-                    </div>
+                    </ul>
                         <Button onClick={toggleModal}>
                         add channel
                         </Button>

@@ -137,7 +137,7 @@ const CreateChannel = ({setOpenModal, openModal}) => {
                   <div className="mt-2">
                     <span>List of friends</span>
                 
-                    <ul className="h-40 overflow-y-auto">
+                    <ul className="h-40 overflow-y-scroll no-scrollbar">
                       {searchFriendList?.slice(offset, offset + PER_PAGE).map(user => (
                         <li key={user.uid} className="p-2">
                           <label htmlFor={user.uid}>{user.uid}</label>
