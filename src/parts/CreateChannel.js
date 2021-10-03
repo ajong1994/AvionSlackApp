@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, Fragment } from 'react'
+import { useState, useEffect, useContext, Fragment, useReducer } from 'react'
 import { AuthContext } from '../contexts/AuthContext'
 import Textfield from '../components/Textfield';
 import { postCreateChannel } from '../utils/Utils';
@@ -13,7 +13,7 @@ import { ArrowCircleLeftIcon } from '@heroicons/react/solid';
 
 const CreateChannel = ({setOpenModal, openModal}) => {
     const { activeUser } = useContext(AuthContext)
-    const { userList, channelList, updateChannelList} = useContext(SessionContext)
+    const { userList, updateChannelList} = useContext(SessionContext)
     const [user_ids, setUser_ids] = useState([])
     const [channelName, setChannelName] = useState(null)
     const [isToastShowing, setIsToastShowing] = useState(false)
@@ -43,13 +43,29 @@ const CreateChannel = ({setOpenModal, openModal}) => {
     const pageCount = Math.ceil(searchFriendList?.length / PER_PAGE);
 
     const [selectedUsers, setSelectedUsers] = useState([])
+    const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
     const handleUserSelect = (e) => {
 
-      if(e.target.checked) {
-        setSelectedUsers((prevState) => [...prevState, e.target.value])
+      // if(e.target.checked) {
+      //   setSelectedUsers((prevState) => [...prevState, e.target.value])
+      // } else {
+      //   setSelectedUsers(selectedUsers.filter(email => email !== e.target.value))
+      // }
+      let selected_users = selectedUsers;
+
+      if (!selected_users.includes(e.target.value)) {
+        selected_users.push(e.target.value)
       } else {
-        setSelectedUsers(selectedUsers.filter(email => email !== e.target.value))
+        let index = selected_users.indexOf(e.target.value);
+        if (index > -1) {
+          selected_users.splice(index, 1);
+        }
       }
+
+      forceUpdate();
+
+      setSelectedUsers(selected_users);
+    
     }
     
     const handleSearchFriendChange = (e) => {
@@ -139,7 +155,7 @@ const CreateChannel = ({setOpenModal, openModal}) => {
                     <ul className="h-40 overflow-y-scroll no-scrollbar">
                       {searchFriendList?.slice(offset, offset + PER_PAGE).map(user => (
                         <li key={user.uid} className=" flex p-2 ">                      
-                          <input onClick={handleUserSelect} className="m-2" type='checkbox' value={user.uid}/>
+                          <input onClick={handleUserSelect} className="m-2" type='checkbox' checked={selectedUsers.includes(user.uid)} value={user.uid}/>
                           <label htmlFor={user.uid}>{user.uid}</label>
                         </li>
                       ))}
