@@ -1,20 +1,17 @@
 import { Disclosure } from '@headlessui/react';
 import { useState, useContext, useEffect } from 'react';
-import Button from '../components/Button'
 import CreateChannel from './CreateChannel';
-import { useHistory } from 'react-router'
 import { AuthContext } from '../contexts/AuthContext'
 import { SessionContext } from '../contexts/SessionContext';
-import { PlusCircleIcon } from '@heroicons/react/solid';
 import { getChannelData } from '../utils/Utils';
-import { assignImage, assignBg, removeUserSession } from "../utils/Utils";
-import { ChevronRightIcon } from '@heroicons/react/solid';
+import { assignImage, assignBg} from "../utils/Utils";
+import { ChevronRightIcon, PlusSmIcon } from '@heroicons/react/solid';
 import { Transition } from '@headlessui/react'
 
 
 
 const Sidebar = ({updateMsgStat}) => {
-    const { isAuthenticated, setAuth, setUser, activeUser } = useContext(AuthContext)
+    const { activeUser } = useContext(AuthContext)
     const { userList, channelList, updateChannelData, updateRecipientMetadata, updateMsgRecipient, updateMsgList  } = useContext(SessionContext)
 
     //Use Util function to get Channel list and set ChannelList State
@@ -30,31 +27,23 @@ const Sidebar = ({updateMsgStat}) => {
         setDmList(userList?.slice(-10))
     },[userList])
 
-    const history = useHistory();
-
-    const handleSignOutClick = () => {
-        removeUserSession(setAuth, setUser, history);
-    }
-    
-    const handleChannelNameClick = (id) => {
-        getChannelData(activeUser, id, updateChannelData)
-        console.log('hello')
-    }
-
-    const handleMsgClick = (id, type, email) => {
+    const handleMsgClick = (id, type, name) => {
         updateMsgList([])
         updateMsgStat(false)
         updateRecipientMetadata(id, type)
-        updateMsgRecipient(email)
+        updateMsgRecipient(name)
+        if (type === "Channel") {
+            getChannelData(activeUser, id, updateChannelData)
+        }
     }
 
     return (
         <div className="col-start-1 col-end-2 row-start-2">
-            <div className="h-full p-4 border-r border-gray-600 flex flex-col items-start text-gray-300 bg-gray-900 truncate">
+            <div className="h-full border-r border-gray-600 flex flex-col items-start text-gray-300 bg-gray-900 truncate">
                 <Disclosure>
                     {({open}) => (
                         <>
-                            <Disclosure.Button className="py-2 px-4 flex items-center">
+                            <Disclosure.Button className="pt-6 pb-2 px-4 flex items-center">
                                 <ChevronRightIcon
                                     className={`${open ? 'transform rotate-90' : ''} w-5 h-5 text-gray-300 mr-2`} />
                                 <span>Channels</span>
@@ -67,16 +56,22 @@ const Sidebar = ({updateMsgStat}) => {
                                 leave="transition duration-75 ease-out"
                                 leaveFrom="transform scale-100 opacity-100"
                                 leaveTo="transform scale-95 opacity-0"
+                                className="w-full pb-6"
                             >
-                                <Disclosure.Panel className="text-gray-500" static>
-                                    <ul className="overflow-y-scroll no-scrollbar w-52 h-72">
-                                        {channelList?.map(channel => (
-                                            <li key={channel.id} onClick={() => { handleChannelNameClick(channel.id); } } className="cursor-pointer p-2 list-none">
-                                                {channel.name}
-                                            </li>))}
-                                    </ul>
-                                    <div className="flex relative" onClick={toggleModal}>
-                                        <PlusCircleIcon className="absolute -top-1 right-14 top-0 cursor-pointer mx-3 h-9 w-6" stroke="currentColor" />
+                                <Disclosure.Panel className="text-gray-500" static as="ul">
+                                    {channelList?.map(channel => (
+                                        <li key={channel.id} className="flex py-1 px-6 items-center hover:bg-gray-700 cursor-pointer" onClick={()=>handleMsgClick(channel?.id, "Channel", channel?.name)}>
+                                            <div className="flex justify-center items-center h-5 w-5 mr-2 flex-shrink-0">
+                                                <span className={assignBg(channel?.id)}>
+                                                    <img src={assignImage(channel?.id, "Channel")} className="h-5 w-5 items-center"/>
+                                                </span>
+                                            </div>
+                                            <div className="text-gray-300 truncate text-sm">{channel?.name}</div>
+                                        </li>))}
+                                    <div className="flex py-1 px-6 items-center hover:bg-gray-700 cursor-pointer text-gray-300" onClick={toggleModal}>
+                                        <div className="flex items-center justify-center bg-gray-600 h-5 w-5 mr-2 flex-shrink-0 rounded">
+                                            <PlusSmIcon className="h-5 w-5" />
+                                        </div>
                                         <span>Add channel</span>
                                     </div>
                                 </Disclosure.Panel>
@@ -106,23 +101,22 @@ const Sidebar = ({updateMsgStat}) => {
                             leaveTo="transform scale-95 opacity-0"
                             className="w-full"
                         >
-                            <Disclosure.Panel className="text-gray-500 w-full" static>
+                            <Disclosure.Panel className="text-gray-500 w-full" static as="ul">
                                 {!!dmList?.length
                                 && dmList.map((user) => (
-                                <div key={user.id} className="flex py-1 px-6 items-center hover:bg-gray-700 cursor-pointer" onClick={()=>handleMsgClick(user?.id, "User", user.uid)}>
-                                    <div className="flex justify-center items-center h-5 w-5 mr-2">
+                                <li key={user.id} className="flex py-1 px-6 items-center hover:bg-gray-700 cursor-pointer" onClick={()=>handleMsgClick(user?.id, "User", user.uid)}>
+                                    <div className="flex justify-center items-center h-5 w-5 mr-2 flex-shrink-0">
                                         <span className={assignBg(user?.id)}>
                                             <img src={assignImage(user?.id, "User")} className="h-5 w-5 items-center"/>
                                         </span>
                                     </div>
-                                    <div className="text-gray-300 truncate text-sm">{user.uid}</div>
-                                </div>))}
+                                    <div className="text-gray-300 truncate text-sm">{user?.uid}</div>
+                                </li>))}
                             </Disclosure.Panel>
                         </Transition>
                     </>
                     )}
                 </Disclosure>
-                <Button onClick={()=>handleSignOutClick()}>Sign Out</Button>
             </div>
             </div>
     )
