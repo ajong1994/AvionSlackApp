@@ -7,6 +7,6 @@ module.exports = {
   variants: {
     extend: {},
   },
-  plugins: [ require('ps-scrollbar-tailwind')],
+  plugins: [ ],
 }
 

@@ -9,8 +9,9 @@ import { SessionContext } from '../contexts/SessionContext';
 
 
 
-const LeftSidebar = () => {
-    const {isAuthenticated, setAuth, activeUser, setUser} = useContext(AuthContext)
+const RightSidebar = () => {
+  
+    const {setAuth, setUser} = useContext(AuthContext)
     const { channelList } = useContext(SessionContext)
 
     //Use Util function to get Channel list and set ChannelList State
@@ -27,24 +28,21 @@ const LeftSidebar = () => {
         removeUserSession(setAuth, setUser, history);
     }
 
-  
+
     return (
-        <div className="col-start-2 row-start-2">
+        <div className="col-start-3 row-start-2">
             <div className="h-full p-4 border-r border-gray-600 flex flex-col items-start text-gray-300 bg-gray-900">
-                <Disclosure>
+                <Disclosure defaultOpen={true}>
                     <Disclosure.Button className="py-2">
                         Channels
                     </Disclosure.Button>
                     <Disclosure.Panel className="text-gray-500">
-                    <div className="overflow-scroll h-48">
-                    {channelList?.map(channel => (
-                        <li key={channel.id} className="p-2 list-none">
-                            {channel.name}
-                         </li>))} 
-                    </div>
-                        <Button onClick={toggleModal}>
-                        add channel
-                        </Button>
+                    <ul className="overflow-y-scroll no-scrollbar w-52 h-72">
+                        {channelList?.map(channel => (
+                            <li key={channel.id} className="p-2 list-none">
+                                {channel.name}
+                            </li>))} 
+                    </ul>
                     </Disclosure.Panel>
                 </Disclosure>
                 {openModal && <CreateChannel openModal={openModal} setOpenModal={setOpenModal}/>} 
@@ -64,4 +62,4 @@ const LeftSidebar = () => {
     )
 }
 
-export default LeftSidebar
+export default RightSidebar

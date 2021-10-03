@@ -5,14 +5,17 @@ import CreateChannel from './CreateChannel';
 import { useHistory } from 'react-router'
 import { AuthContext } from '../contexts/AuthContext'
 import { SessionContext } from '../contexts/SessionContext';
+import { PlusCircleIcon } from '@heroicons/react/solid';
+import { getChannelData } from '../utils/Utils';
 import { assignImage, assignBg, removeUserSession } from "../utils/Utils";
 import { ChevronRightIcon } from '@heroicons/react/solid';
 import { Transition } from '@headlessui/react'
 
 
+
 const Sidebar = ({updateMsgStat}) => {
-    const {isAuthenticated, setAuth, activeUser, setUser} = useContext(AuthContext)
-    const { userList,channelList, updateRecipientMetadata, updateMsgRecipient, updateMsgList } = useContext(SessionContext)
+    const { isAuthenticated, setAuth, setUser, activeUser } = useContext(AuthContext)
+    const { userList, channelList, updateChannelData, updateRecipientMetadata, updateMsgRecipient, updateMsgList  } = useContext(SessionContext)
 
     //Use Util function to get Channel list and set ChannelList State
 
@@ -32,6 +35,11 @@ const Sidebar = ({updateMsgStat}) => {
     const handleSignOutClick = () => {
         removeUserSession(setAuth, setUser, history);
     }
+    
+    const handleChannelNameClick = (id) => {
+        getChannelData(activeUser, id, updateChannelData)
+        console.log('hello')
+    }
 
     const handleMsgClick = (id, type, email) => {
         updateMsgList([])
@@ -40,44 +48,41 @@ const Sidebar = ({updateMsgStat}) => {
         updateMsgRecipient(email)
     }
 
-  
     return (
         <div className="col-start-1 col-end-2 row-start-2">
-            <div className="h-full py-4 border-r border-gray-600 flex flex-col items-start text-gray-300 bg-gray-900 truncate">
+            <div className="h-full p-4 border-r border-gray-600 flex flex-col items-start text-gray-300 bg-gray-900 truncate">
                 <Disclosure>
                     {({open}) => (
                         <>
-                        <Disclosure.Button className="py-2 px-4 flex items-center">
-                            <ChevronRightIcon
-                                className={`${
-                                    open ? 'transform rotate-90' : ''
-                                } w-5 h-5 text-gray-300 mr-2`}
-                            />
-                            <span>Channels</span>
-                        </Disclosure.Button>
-                        <Transition
-                            show={open}
-                            enter="transition duration-100 ease-out"
-                            enterFrom="transform scale-95 opacity-0"
-                            enterTo="transform scale-100 opacity-100"
-                            leave="transition duration-75 ease-out"
-                            leaveFrom="transform scale-100 opacity-100"
-                            leaveTo="transform scale-95 opacity-0"
-                        >
-                            <Disclosure.Panel className="text-gray-500" static>
-                            <div className="overflow-y-scroll h-72">
-                            {channelList?.map(channel => (
-                                <li key={channel.id} className="p-2 list-none">
-                                    {channel.name}
-                                </li>))} 
-                            </div>
-                                <Button onClick={toggleModal}>
-                                add channel
-                                </Button>
-                            </Disclosure.Panel>
-                        </Transition>
+                            <Disclosure.Button className="py-2 px-4 flex items-center">
+                                <ChevronRightIcon
+                                    className={`${open ? 'transform rotate-90' : ''} w-5 h-5 text-gray-300 mr-2`} />
+                                <span>Channels</span>
+                            </Disclosure.Button>
+                            <Transition
+                                show={open}
+                                enter="transition duration-100 ease-out"
+                                enterFrom="transform scale-95 opacity-0"
+                                enterTo="transform scale-100 opacity-100"
+                                leave="transition duration-75 ease-out"
+                                leaveFrom="transform scale-100 opacity-100"
+                                leaveTo="transform scale-95 opacity-0"
+                            >
+                                <Disclosure.Panel className="text-gray-500" static>
+                                    <ul className="overflow-y-scroll no-scrollbar w-52 h-72">
+                                        {channelList?.map(channel => (
+                                            <li key={channel.id} onClick={() => { handleChannelNameClick(channel.id); } } className="cursor-pointer p-2 list-none">
+                                                {channel.name}
+                                            </li>))}
+                                    </ul>
+                                    <div className="flex relative" onClick={toggleModal}>
+                                        <PlusCircleIcon className="absolute -top-1 right-14 top-0 cursor-pointer mx-3 h-9 w-6" stroke="currentColor" />
+                                        <span>Add channel</span>
+                                    </div>
+                                </Disclosure.Panel>
+                            </Transition>
                         </>
-                    )}
+                     )}
                 </Disclosure>
                 {openModal && <CreateChannel openModal={openModal} setOpenModal={setOpenModal}/>} 
                 <Disclosure>
@@ -119,7 +124,7 @@ const Sidebar = ({updateMsgStat}) => {
                 </Disclosure>
                 <Button onClick={()=>handleSignOutClick()}>Sign Out</Button>
             </div>
-        </div>
+            </div>
     )
 }
 
