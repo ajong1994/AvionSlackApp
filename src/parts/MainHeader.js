@@ -4,7 +4,7 @@ import { SessionContext } from '../contexts/SessionContext';
 
 
 const MainHeader = () => {
-    const {msgRecipient, recipientMetadata, channelData} = useContext(SessionContext);
+    const {msgRecipient, recipientMetadata} = useContext(SessionContext);
     return (
         <div className="col-start-2 row-start-1 flex items-center py-2 px-4 border-b border-gray-600">
             {!!(recipientMetadata?.id !== '') && 

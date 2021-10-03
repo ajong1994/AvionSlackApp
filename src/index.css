@@ -42,10 +42,10 @@
         width: calc(100% - 2rem);
         top: 50px;
     }
-    .no-scrollbar {
-        -ms-overflow-style: none;  /* IE and Edge */
-        scrollbar-width: none;  /* Firefox */
-    }
+    /* .no-scrollbar {
+        -ms-overflow-style: none;  
+        scrollbar-width: none;  
+    } */
 
     #react-paginate ul {
         display: flex;
