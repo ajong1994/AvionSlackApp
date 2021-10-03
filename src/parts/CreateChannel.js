@@ -43,28 +43,14 @@ const CreateChannel = ({setOpenModal, openModal}) => {
     const pageCount = Math.ceil(searchFriendList?.length / PER_PAGE);
 
     const [selectedUsers, setSelectedUsers] = useState([])
-    const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
     const handleUserSelect = (e) => {
 
-      // if(e.target.checked) {
-      //   setSelectedUsers((prevState) => [...prevState, e.target.value])
-      // } else {
-      //   setSelectedUsers(selectedUsers.filter(email => email !== e.target.value))
-      // }
-      let selected_users = selectedUsers;
-
-      if (!selected_users.includes(e.target.value)) {
-        selected_users.push(e.target.value)
+      if(e.target.checked) {
+        setSelectedUsers((prevState) => [...prevState, e.target.value])
       } else {
-        let index = selected_users.indexOf(e.target.value);
-        if (index > -1) {
-          selected_users.splice(index, 1);
-        }
+        setSelectedUsers(selectedUsers.filter(email => email !== e.target.value))
       }
-
-      forceUpdate();
-
-      setSelectedUsers(selected_users);
+      
     
     }
     
@@ -79,7 +65,7 @@ const CreateChannel = ({setOpenModal, openModal}) => {
     const handleCreateChannelClick = () => {
       postCreateChannel( channelName, user_ids, activeUser, updateChannelList, toggleToast, updateToastStat)
       setOpenModal(false)
-      console.log(channelName)
+      //console.log(channelName)
       toggleToast(true)
     }
 
