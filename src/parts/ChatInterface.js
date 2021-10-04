@@ -82,7 +82,7 @@ const ChatInterface = ({msgStat, updateMsgStat}) => {
     }
     
     return (
-        <div className="col-start-2 row-start-2 flex flex-col overflow-hidden">
+        <div className="col-start-2 col-end-4 row-start-2 flex flex-col overflow-hidden">
             {msgStat &&
                 <div className="flex text-gray-300 items-center p-4 border-b border-gray-600 relative">
                     <p className="pr-4">To:</p>

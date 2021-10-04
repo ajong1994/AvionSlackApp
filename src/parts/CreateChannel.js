@@ -13,8 +13,8 @@ import { ArrowCircleLeftIcon } from '@heroicons/react/solid';
 
 const CreateChannel = ({setOpenModal, openModal}) => {
     const { activeUser } = useContext(AuthContext)
-    const { userList, channelList, updateChannelList} = useContext(SessionContext)
-    const [user_ids, setUser_ids] = useState([])
+    const { userList, updateChannelList} = useContext(SessionContext)
+    //const [user_ids, setUser_ids] = useState([])
     const [channelName, setChannelName] = useState(null)
     const [isToastShowing, setIsToastShowing] = useState(false)
     const [toastStat, setToastStat] = useState({
@@ -50,6 +50,8 @@ const CreateChannel = ({setOpenModal, openModal}) => {
       } else {
         setSelectedUsers(selectedUsers.filter(email => email !== e.target.value))
       }
+
+      console.log(selectedUsers)
     }
     
     const handleSearchFriendChange = (e) => {
@@ -58,12 +60,13 @@ const CreateChannel = ({setOpenModal, openModal}) => {
 
     const handleChannelName =  (e) => {
       setChannelName(e.target.value)
+
+      console.log(channelName)
     }
   
     const handleCreateChannelClick = () => {
-      postCreateChannel( channelName, user_ids, activeUser, updateChannelList, toggleToast, updateToastStat)
+      postCreateChannel( channelName, selectedUsers, activeUser, updateChannelList, toggleToast, updateToastStat)
       setOpenModal(false)
-      console.log(channelName)
       toggleToast(true)
     }
 
@@ -139,7 +142,7 @@ const CreateChannel = ({setOpenModal, openModal}) => {
                     <ul className="h-40 overflow-y-scroll no-scrollbar">
                       {searchFriendList?.slice(offset, offset + PER_PAGE).map(user => (
                         <li key={user.uid} className=" flex p-2 ">                      
-                          <input onClick={handleUserSelect} className="m-2" type='checkbox' value={user.uid}/>
+                          <input onClick={handleUserSelect} className="m-2" type='checkbox' defaultChecked={selectedUsers.includes(user.uid)} value={user.uid}/>
                           <label htmlFor={user.uid}>{user.uid}</label>
                         </li>
                       ))}
