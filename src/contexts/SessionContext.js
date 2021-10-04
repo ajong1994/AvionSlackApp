@@ -1,4 +1,4 @@
-import {useState, createContext} from 'react';
+import {useState, createContext, useEffect} from 'react';
 
 //We first create a context--similar to State, but mutable and can be accessed by any consumer/child by using useContext 
 export const SessionContext = createContext();
@@ -18,6 +18,21 @@ const SessionContextProvider = ({children}) => {
     const updateChannelData = (channeldata) => {
         setChannelData(channeldata)
     }
+    const [moreChannelData, setMoreChannelData] = useState({creator:'', members:''})
+    useEffect(() => {
+        if (channelData) {
+            const temp_mems = channelData.channel_members.map( mem => mem.user_id)
+            setMoreChannelData((prevState) => ({
+                ...prevState,
+                members: userList.filter(user => temp_mems.includes(user.id))
+            }))
+            setMoreChannelData((prevState) => ({
+                ...prevState,
+                creator: userList.filter(user => user.id === channelData.owner_id)
+            }))
+            
+        }
+    },[channelData])
     const [msgRecipient, setMsgRecipient] = useState('');
     const updateMsgRecipient = (recipient) => {
         setMsgRecipient(recipient)
@@ -46,7 +61,8 @@ const SessionContextProvider = ({children}) => {
         recipientMetadata,
         updateRecipientMetadata,
         msgList,
-        updateMsgList
+        updateMsgList,
+        moreChannelData
     }
 
     return (
