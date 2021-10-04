@@ -60,10 +60,12 @@ const CreateChannel = ({setOpenModal, openModal}) => {
 
     const handleChannelName =  (e) => {
       setChannelName(e.target.value)
+
+      console.log(channelName)
     }
   
     const handleCreateChannelClick = () => {
-      postCreateChannel( channelName, searchFriend, activeUser, updateChannelList, toggleToast, updateToastStat)
+      postCreateChannel( channelName, selectedUsers, activeUser, updateChannelList, toggleToast, updateToastStat)
       setOpenModal(false)
       toggleToast(true)
     }
