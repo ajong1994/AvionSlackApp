@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, Fragment, useReducer } from 'react'
+import { useState, useEffect, useContext, Fragment } from 'react'
 import { AuthContext } from '../contexts/AuthContext'
 import Textfield from '../components/Textfield';
 import { postCreateChannel } from '../utils/Utils';
