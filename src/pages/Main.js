@@ -12,33 +12,8 @@ import { getAllUsers, getAllSubscribedChannels } from '../utils/Utils'
 
 const Main = () => {
     const {isAuthenticated, setAuth, activeUser, setUser} = useContext(AuthContext);
-    const {userList, updateUserList, channelList, updateChannelList, channelData, updateChannelData} = useContext(SessionContext);
+    const {updateUserList,updateChannelList} = useContext(SessionContext);
     const [isNewMessage, setIsNewMessage] = useState(false);
-    const updateIsNewMessage = (bool) => {
-        setIsNewMessage(bool);
-    }
-    const [chatTitle, setChatTitle] = useState('New message')
-    const updateChatTitle = (newTitle) => {
-        setChatTitle(newTitle)
-    }
-    // This is for the avatar image beside the chat interface title (displays nothing if it's a new message)
-    const [headerInfo, setHeaderInfo] = useState({id:'',type:''})
-    const updateHeaderInfo = (id, type) => {
-        setHeaderInfo({
-            id: id,
-            type: type
-        })
-    }
-
-    const getHeaderValue = () => {
-        if (channelData) {
-            return isNewMessage ? 'New message - ' + channelData['name'] : channelData['name']
-        } else {
-            return '';
-        }
-    }
-
-
     useEffect(() => {
         if (activeUser) {
             getAllUsers(activeUser, updateUserList)
@@ -46,15 +21,19 @@ const Main = () => {
         }
     },[activeUser])
 
-    if (!isAuthenticated && activeUser) {
+    const updateIsNewMessage = (bool) => {
+        setIsNewMessage(bool);
+    }
+
+    if (!isAuthenticated || !activeUser) {
         return <Redirect to='/signin' />
     }
 
     return (
         <div className="h-full grid main-grid bg-gray-800">
-            <Workspace onClick={updateIsNewMessage}/>
+            <Workspace msgStat={isNewMessage} onClick={updateIsNewMessage}/>
             <Sidebar updateMsgStat={updateIsNewMessage}/>
-            <MainHeader title={getHeaderValue()}/>
+            <MainHeader/>
             <ChatInterface msgStat={isNewMessage} activeUser={activeUser} updateMsgStat={updateIsNewMessage}/>
             <RightSidebar />
         </div>

@@ -2,7 +2,7 @@ import { assignImage, assignBg } from "../utils/Utils";
 
 const RecipientResults = ({onClick, recipientList, resultChannelList}) => {
     return (
-        <div className="text-gray-200 max-h-96 overflow-y-auto ml-6 mr-2 border-gray-600 border rounded-lg bg-gray-700 py-2">
+        <div className="text-gray-200 max-h-96 overflow-y-auto ml-6 mr-2 border-gray-600 border rounded-lg bg-gray-700 py-2 modified-scrollbar">
             { !!resultChannelList?.length && resultChannelList.map((channel) => (
                 <div key={channel.id} onClick={() => onClick({identifier: channel?.name, id: channel?.id, type:'Channel'})}>
                     <div className="px-6 py-1 flex gap-2 text-white hover:bg-white hover:text-gray-700 cursor-pointer">
