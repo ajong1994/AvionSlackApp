@@ -56,23 +56,37 @@
         @apply bg-gray-400 rounded-md;
     }
     .modified-scrollbar::-webkit-scrollbar-track-piece {
-        @apply bg-gray-900
+        @apply bg-gray-900;
+    }
+
+
+    .modal-scrollbar::-webkit-scrollbar {
+        width: 3px;
+    }
+    .modal-scrollbar::-webkit-scrollbar-thumb {
+        @apply bg-gray-400;
+    }
+    .modal-scrollbar::-webkit-scrollbar-track-piece {
+        @apply bg-gray-900;
     }
 
     #react-paginate ul {
         display: flex;
-        justify-content: space-around;
+        gap: 0;
+        justify-content: center;
         padding-left: 15px;
         padding-right: 15px;
     }
       
-      #react-paginate li {
-        display: inline-block;
-        border: 1px solid gray;
-        padding: 8px;
-        border-radius: 5px;
-        color: gray;
-        margin: 8px;
-      }
-    
+    /* #react-paginate li {
+    display: inline-block;
+    border: 1px solid gray;
+    padding: 8px;
+    border-radius: 5px;
+    color: gray;
+    } */
+
+    .modal-width {
+        width: 28%
+    }
 }
