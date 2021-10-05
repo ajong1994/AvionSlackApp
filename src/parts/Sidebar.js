@@ -39,7 +39,7 @@ const Sidebar = ({updateMsgStat}) => {
 
     return (
         <div className="col-start-1 col-end-2 row-start-2">
-            <div className="h-full border-r border-gray-600 flex flex-col items-start text-gray-300 bg-gray-900 truncate">
+            <div className="h-full border-r border-gray-600 flex flex-col items-start text-gray-300 bg-gray-900 truncate no-scrollbar">
                 <Disclosure>
                     {({open}) => (
                         <>

@@ -42,10 +42,22 @@
         width: calc(100% - 2rem);
         top: 50px;
     }
-    /* .no-scrollbar {
+
+    .no-scrollbar::-webkit-scrollbar {
         -ms-overflow-style: none;  
         scrollbar-width: none;  
-    } */
+        width: 0px;
+    }
+
+    .modified-scrollbar::-webkit-scrollbar {
+        width: 10px;
+    }
+    .modified-scrollbar::-webkit-scrollbar-thumb {
+        @apply bg-gray-400 rounded-md;
+    }
+    .modified-scrollbar::-webkit-scrollbar-track-piece {
+        @apply bg-gray-900
+    }
 
     #react-paginate ul {
         display: flex;
