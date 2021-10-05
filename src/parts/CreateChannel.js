@@ -1,14 +1,13 @@
 import { useState, useEffect, useContext, Fragment } from 'react'
 import { AuthContext } from '../contexts/AuthContext'
-import Textfield from '../components/Textfield';
-import { postCreateChannel } from '../utils/Utils';
+import ModalTextfield from '../components/ModalTextfield';
+import { postCreateChannel, assignImage, assignBg } from '../utils/Utils';
 import { Dialog, Transition  } from '@headlessui/react'
 import { SessionContext } from '../contexts/SessionContext'
 import ReactPaginate from 'react-paginate';
 import Toast from './Toast';
-
-import { ArrowCircleRightIcon } from '@heroicons/react/solid';
-import { ArrowCircleLeftIcon } from '@heroicons/react/solid';
+import { ChevronLeftIcon} from '@heroicons/react/outline';
+import { ChevronRightIcon } from '@heroicons/react/outline';
 
 
 const CreateChannel = ({setOpenModal, openModal}) => {
@@ -57,18 +56,15 @@ const CreateChannel = ({setOpenModal, openModal}) => {
 
   // initial states for checked users in the checkbox
   const [selectedUsers, setSelectedUsers] = useState([])
-
   //setting the selected users in an array
   const handleUserSelect = (e) => {
     if(e.target.checked) {
       setSelectedUsers((prevState) => [...prevState, e.target.value])
     } else {
-      setSelectedUsers(selectedUsers.filter(email => email !== e.target.value))
-    }
+      setSelectedUsers(selectedUsers.filter(email => email !== e.target.value));
 
-    console.log(selectedUsers)
+    }
   }
-  
 
   const handleCreateChannelClick = () => {
     postCreateChannel( channelName, selectedUsers, activeUser, updateChannelList)
@@ -125,7 +121,7 @@ const CreateChannel = ({setOpenModal, openModal}) => {
               className="inline-block h-screen align-middle"
               aria-hidden="true"
             >
-              &#8203;
+        
             </span>
             <Transition.Child
               as={Fragment}
@@ -136,46 +132,61 @@ const CreateChannel = ({setOpenModal, openModal}) => {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <div className="inline-block w-2/6 bg-gray-300 p-6 my-8 overflow-hidden text-left align-middle transition-all transform shadow-xl rounded-2xl min-w-200">
+              <div className="inline-block modal-width bg-gray-800 p-4 my-8 overflow-hidden text-left align-middle transition-all transform shadow-md rounded-lg border border-black min-w-200">
+                <h3 className="text-gray-100 text-lg mb-1">Create a Channel</h3>
+                <p className="text-gray-400 text-xs mb-6">Make a channel name no longer than 15 characters and select users to add to your channel.</p>
                 <div className="mt-2">
-                <Textfield onChange={handleChannelName} label='Channel Name' id='channelName'type='text' placeholder='Type a schannel name'/>
-                    <Textfield onChange={handleSearchUser} label='Search Friends' type='text' placeholder="Type a friend's email"/>
+                  <ModalTextfield onChange={handleChannelName} id='channelName' type='text' placeholder='Type a channel name' labelClass="text-gray-200" 
+                    inputClass="mt-2 py-1 px-2 rounded bg-gray-900 text-sm text-gray-300 border-transparent focus:ring-0 focus:outline-none focus:border-transparent"/>
+                  <ModalTextfield onChange={handleSearchUser} type='text' placeholder="Type the email of a friend" labelClass="text-gray-200 mt-2" 
+                    inputClass="mt-2 py-1 px-2 rounded bg-gray-900 text-sm text-gray-300 border-transparent focus:ring-0 focus:outline-none focus:border-transparent"/>
                 </div>
-            
-                <div className="mt-2">
-                  <span>List of friends</span>
-              
-                  <ul className="h-40 overflow-y-scroll no-scrollbar">
+                <div className="mt-6">
+                  {/* <span className="text-gray-200">List of friends</span> */}
+                  <ul className="h-40 overflow-y-scroll modal-scrollbar">
                     {searchUserList?.slice(offset, offset + PER_PAGE).map(user => (
-                      <li key={user.uid} className=" flex p-2 ">                      
-                        <input onClick={handleUserSelect} className="m-2" type='checkbox' defaultChecked={selectedUsers.includes(user.id)} value={user.id}/>
-                        <label htmlFor={user.uid}>{user.uid}</label>
+                      <li key={user.uid} className="flex py-1 px-2 items-center hover:bg-gray-600 cursor-pointer">   
+                        <div className="flex justify-center items-center h-6 w-6 mr-2 flex-shrink-0">
+                            <span className={assignBg(user?.id)}>
+                                <img src={assignImage(user?.id, "User")} className="h-6 w-6 items-center"/>
+                            </span>
+                        </div>                   
+                        <label htmlFor={user.uid} className="text-gray-300 text-sm cursor-pointer" onClick={handleUserSelect}>
+                          {user.uid}
+                          <span className="pl-2 text-gray-400">(UID: {user.id})</span>
+                        </label>
+                        <input onClick={handleUserSelect} className="ml-auto border border-gray-300 bg-transparent rounded focus:ring-0 focus:ring-offset-0 focus:outline-none active:ring-0 checked:bg-green-300
+                          text-green-300 w-5 h-5 cursor-pointer" 
+                          id={user.uid} type='checkbox' defaultChecked={selectedUsers.includes(String(user.id))} value={user.id}/>
                       </li>
                     ))}
                   </ul>
-                  <div id='react-paginate'>
+                  <div id='react-paginate' className="pt-6 pb-2">
                     <ReactPaginate
-                      previousLabel={<ArrowCircleLeftIcon className="h-9 w-6 flex items-center"/>}
-                      nextLabel={<ArrowCircleRightIcon className="h-9 w-6 flex items-center"/>}
+                      previousLabel={<ChevronLeftIcon className="h-5 w-5"/>}
+                      nextLabel={<ChevronRightIcon className="h-5 w-5"/>}
                       pageCount={pageCount}
+                      breakLabel={"..."}
+                      breakClassName={"m-0 py-1 px-3 text-gray-300 flex items-center"}
                       onPageChange={handlePageClick}
-                      containerClassName={"pagination"}
-                      previousLinkClassName={"pagination__link"}
-                      nextLinkClassName={"pagination__link"}
+                      containerClassName={"items-center justify-center flex"}
+                      pageClassName	= {"m-0 py-1 px-3 mx-2 text-gray-300"}
+                      previousLinkClassName={"text-gray-300 mr-2 flex items-center"}
+                      nextLinkClassName={"text-gray-300 ml-2 flex items-center"}
                       disabledClassName={"pagination__link--disabled"}
-                      activeClassName={"pagination__link--active"}
+                      activeClassName={"bg-gray-600 border border-gray-500 text-gray-300 rounded"}
                       pageRangeDisplayed={3}
-                      marginPagesDisplayed={1}
+                      marginPagesDisplayed={0}
                     />
                   </div>
                 </div>
                 <div className="mt-4">
                   <button
                     type="button"
-                    className="inline-flex justify-center px-4 py-2 text-sm font-large text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+                    className="w-full px-4 py-2 text-sm font-large text-green-900 bg-green-200 border border-transparent rounded-md hover:bg-green-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
                     onClick={handleCreateChannelClick} 
                   >
-                    Create
+                    Create New Channel
                   </button>
                 </div>
               </div>
