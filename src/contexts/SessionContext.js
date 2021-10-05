@@ -33,6 +33,7 @@ const SessionContextProvider = ({children}) => {
             
         }
     },[channelData])
+    
     const [msgRecipient, setMsgRecipient] = useState('');
     const updateMsgRecipient = (recipient) => {
         setMsgRecipient(recipient)

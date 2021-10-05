@@ -188,7 +188,7 @@ export const getAllUsers = (activeUser, updateUserList) => {
 export const postCreateChannel = (channelName, user_ids, activeUser, updateChannelList, toggleToast, updateToastStat) => {
     var data = {
         name: channelName,
-        user_ids: user_ids  //should this be an array instead? >> yes, the passed argument should be an array
+        user_ids: user_ids
     };
     var config = {
         method: 'POST',
@@ -204,8 +204,8 @@ export const postCreateChannel = (channelName, user_ids, activeUser, updateChann
     axios(config)
     .then(function (response) {
         //Display success toast for creation
-        toggleToast(true);
-        updateToastStat('success','Success! Channel has been created.')
+       // toggleToast(true);
+        //updateToastStat('success','Success! Channel has been created.')
         //Reload channel list from API to ensure it was added
         getAllSubscribedChannels(activeUser, updateChannelList)
     })
@@ -270,8 +270,8 @@ export const postInviteToChannel = (activeUser, channelId, memberId, updateChann
         member_id: memberId
     };
     var config = {
-        method: 'GET',
-        url: `https://slackapi.avionschool.com/api/v1/channels/${channelId}`,
+        method: 'POST',
+        url: `https://slackapi.avionschool.com/api/v1/channel/add_member`,
         headers: { 
             'access-token': activeUser['access-token'],
             'client': activeUser.client, 
