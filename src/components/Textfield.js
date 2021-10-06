@@ -7,7 +7,7 @@ const Textfield = ({label, id, type, placeholder, onChange, value}) => {
             <input 
             onChange={onChange}
             value={value}
-            className='border border-black rounded p-2'
+            className='border border-gray p-3 rounded p-2'
             id={id} 
             name={id} 
             type={type} 

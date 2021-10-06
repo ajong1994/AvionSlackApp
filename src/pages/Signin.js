@@ -109,13 +109,13 @@ const Login = () => {
 
 
     return (
-        <div className='pt-8 h-full'>
-            <div className='flex justify-center pb-8'>
-                <Slacklogo width={120}/>
+        <div className='max-h-screen items-center flex flex-col'>
+            <div className='flex justify-center my-12'>
+                <Slacklogo width={145}/>
             </div>
-            <h2 className='text-center'>Avion School on Slack</h2>
-            <p className='text-center'>Sign in to your account</p>
-            <div className='mx-auto max-w-md mt-20'>
+            <h2 className='text-center text-5xl'>Avion School on Slack</h2>
+            <p className='text-center text-xl mt-5'>Sign in to your account</p>
+            <div className='w-96 mt-10'>
                 <Form>
                     <div className='flex flex-col gap-4'>
                     <Textfield label='Email' value={email === null ? '' : email} onChange={(e) => {handleValueChange(e,'email')} } id='email' type='text' placeholder='Enter your email'/>
@@ -123,7 +123,7 @@ const Login = () => {
                         <Textfield label='Password' value={password === null ? '' : password} onChange={(e) => {handleValueChange(e,'password')}} id='password' type='password' placeholder='Enter a password'/>
                         {passwordValidationPrompt && <span className='text-red-400'>{passwordValidationPrompt}</span>}
                         <Button onClick={()=>handleSignUpClick(validators)}>Sign In</Button>
-                        <Link to='/signup'>No account yet? Sign up here.</Link>
+                        <span>Don't have an account yet? <Link to='/signup' className="text-blue-800 underline font-semibold"> Create an account</Link></span>
                     </div>
                 </Form>
             </div>
