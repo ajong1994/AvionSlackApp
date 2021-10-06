@@ -49,6 +49,17 @@ const SessionContextProvider = ({children}) => {
     const updateMsgList = (messages) => {
         setMsgList(messages)
     }
+    const [isMsgListLoading, setIsMsgListLoading] = useState(true)
+    useEffect(() => {
+        // if (msgList?.length) {
+            // setIsMsgListLoading(false)
+        // }
+        const timer = setTimeout(() => {
+            setIsMsgListLoading(false)
+        }, 1000)
+        return ()=>{clearTimeout(timer)}
+    },[msgList])
+    
 
     const props = {
         userList,
@@ -63,7 +74,9 @@ const SessionContextProvider = ({children}) => {
         updateRecipientMetadata,
         msgList,
         updateMsgList,
-        moreChannelData
+        moreChannelData,
+        isMsgListLoading, 
+        setIsMsgListLoading
     }
 
     return (

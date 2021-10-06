@@ -7,14 +7,15 @@ import { getChannelData } from '../utils/Utils';
 import { assignImage, assignBg} from "../utils/Utils";
 import { ChevronRightIcon, PlusSmIcon } from '@heroicons/react/solid';
 import { Transition } from '@headlessui/react'
-
+import Toast from './Toast';
 
 
 const Sidebar = ({updateMsgStat}) => {
     const { activeUser } = useContext(AuthContext)
-    const { userList, channelList, updateChannelData, updateRecipientMetadata, updateMsgRecipient, updateMsgList  } = useContext(SessionContext)
-
-    //Use Util function to get Channel list and set ChannelList State
+    const { userList, channelList, updateChannelData, updateRecipientMetadata, updateMsgRecipient, updateMsgList, setIsMsgListLoading  } = useContext(SessionContext)
+    useEffect(() => {
+        setDmList(userList?.slice(-10))
+    },[userList])
 
     //Create Util function to open modal when Add Channel is clicked
     const [openModal, setOpenModal] = useState(false)
@@ -22,13 +23,36 @@ const Sidebar = ({updateMsgStat}) => {
         setOpenModal(!openModal)
     }
     const [dmList, setDmList] = useState(null)
+    const [isToastShowing, setIsToastShowing] = useState(false)
+    const [toastStat, setToastStat] = useState({
+        toastType: '',
+        toastMsg: ''
+    });
+
+    /*----TOAST HANDLER FUNCTIONS----*/
+    const toggleToast = (bool) => {
+        setIsToastShowing(bool);
+    }
+
+    const updateToastStat = (type, msg) => {
+        setToastStat({
+            toastType: type,
+            toastMsg: msg
+        });
+    };
 
     useEffect(() => {
-        setDmList(userList?.slice(-10))
-    },[userList])
+        const timer = setTimeout(() => {
+            setIsToastShowing(false);
+        },2000)
+        return () => clearTimeout(timer);
+    }, [isToastShowing]) 
+    /*----TOAST HANDLER FUNCTIONS----*/
+
 
     const handleMsgClick = (id, type, name) => {
-        updateMsgList([])
+        // updateMsgList([])
+        setIsMsgListLoading(true)
         updateMsgStat(false)
         updateRecipientMetadata(id, type)
         updateMsgRecipient(name)
@@ -79,7 +103,7 @@ const Sidebar = ({updateMsgStat}) => {
                         </>
                      )}
                 </Disclosure>
-                {openModal && <CreateChannel openModal={openModal} setOpenModal={setOpenModal}/>} 
+                {openModal && <CreateChannel openModal={openModal} setOpenModal={setOpenModal} toastStat={toastStat} isToastShowing={isToastShowing} toggleToast={toggleToast} updateToastStat={updateToastStat}/>} 
                 <Disclosure>
                 {({open}) => (
                     <>
@@ -118,6 +142,17 @@ const Sidebar = ({updateMsgStat}) => {
                     )}
                 </Disclosure>
             </div>
+            <Transition
+                show={isToastShowing}
+                enter="transition-opacity duration-75"
+                enterFrom="opacity-0"
+                enterTo="opacity-100"
+                leave="transition-opacity duration-150"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0"
+            >
+                <Toast type={toastStat.toastType} onClick={() => {toggleToast(false)}}>{toastStat.toastMsg}</Toast>
+            </Transition> 
             </div>
     )
 }
