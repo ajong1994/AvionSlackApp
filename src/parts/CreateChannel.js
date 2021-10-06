@@ -60,7 +60,7 @@ const CreateChannel = ({setOpenModal, openModal}) => {
 
   //setting the selected users in an array
   const handleUserSelect = (e) => {
-    if(e.target.checked) {
+    if(selectedUsers.includes(e.target.value)) {
       setSelectedUsers((prevState) => [...prevState, e.target.value])
     } else {
       setSelectedUsers(selectedUsers.filter(email => email !== e.target.value))
@@ -139,8 +139,23 @@ const CreateChannel = ({setOpenModal, openModal}) => {
               <div className="inline-block w-2/6 bg-gray-300 p-6 my-8 overflow-hidden text-left align-middle transition-all transform shadow-xl rounded-2xl min-w-200">
                 <div className="mt-2">
                 <Textfield onChange={handleChannelName} label='Channel Name' id='channelName'type='text' placeholder='Type a schannel name'/>
-                    <Textfield onChange={handleSearchUser} label='Search Friends' type='text' placeholder="Type a friend's email"/>
+                <Textfield onChange={handleSearchUser} label='Search Friends' type='text' placeholder="Type a friend's email"/>
                 </div>
+                {/* <div className="chip flex">
+                  <ul>
+                  {
+                   selectedUsers?.map((user) => (
+                        <li key={user.uid} className="flex py-1 px-6 items-center">
+                          <div className="flex chip">
+                              <span className="text-gray-900">
+                                {user?.uid}
+                              </span>
+                          </div>
+                        </li>
+                    ))
+                  }
+                  </ul>
+                </div> */}
             
                 <div className="mt-2">
                   <span>List of friends</span>

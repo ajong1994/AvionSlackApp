@@ -1,27 +1,27 @@
 import { Disclosure } from '@headlessui/react';
 import { useState, useContext, useEffect } from 'react';
-import Button from '../components/Button'
-import CreateChannel from './CreateChannel';
-import {removeUserSession} from '../utils/Utils'
-import { useHistory } from 'react-router'
 import { AuthContext } from '../contexts/AuthContext'
 import { SessionContext } from '../contexts/SessionContext';
 import Textfield from '../components/Textfield'
-import { ChevronRightIcon, PlusSmIcon } from '@heroicons/react/solid';
 import { Transition } from '@headlessui/react'
 import {assignImage, assignBg, postInviteToChannel} from "../utils/Utils"
+import { DotsHorizontalIcon } from '@heroicons/react/solid';
+
 
 const RightSidebar = () => {
   
   const { activeUser } = useContext(AuthContext)
-  const { channelData, moreChannelData, updateChannelData, setMoreChannelData, userList } = useContext(SessionContext)
+  const { channelData, moreChannelData, updateChannelData, userList } = useContext(SessionContext)
 
+  //handles the changes on the input box
   const [searchUser, setSearchUser] = useState('')
-  const [searchUserList, setSearchUserList] = useState([])
 
   const handleSearchUserChange = (e) => {
     setSearchUser(e.target.value)
   }
+
+  //an array that shows real-time search
+  const [searchUserList, setSearchUserList] = useState([])
   
   useEffect(() => {
     if (searchUser !== '') {
@@ -32,16 +32,33 @@ const RightSidebar = () => {
     }
   },[searchUser])
 
+ //function that invites clicked user in the array 
   const handleInviteUserClick = (user_id) => {
     postInviteToChannel(activeUser, channelData.id, user_id, updateChannelData)
+    setSearchUser('')
   }
 
     return (
         <Disclosure className="relative ">
             {({open}) => (
                 <>
-                    <Disclosure.Button className=" text-gray-300 flex flex-row-reverse float mr-20 items-center col-start-3 col-end-5 row-start-1">
-                        <div> badges' div</div>
+                    <Disclosure.Button className=" text-gray-300 flex float mr-20 items-center justify-end col-start-3 col-end-5 row-start-1">
+                        {
+                            moreChannelData.members && moreChannelData.members.slice(0, 3).map((user) => (
+                                <div className="flex justify-center items-center h-8 w-8 mr-1 flex-shrink-0">
+                                    <span className={assignBg(user?.id)}>
+                                        <img src={assignImage(user?.id, "User")} classname="h-8 w-8 items-center"/>
+                                    </span> 
+                                </div>
+                            ))
+                        }
+                        {
+                            moreChannelData?.members.length > 3 && <div classname="flex justify-center items-start">
+                                    <DotsHorizontalIcon className="h-5 w-5"/>
+                                </div>
+                        }
+
+    
                     </Disclosure.Button>
                     <Transition
                         show={open}
@@ -56,38 +73,37 @@ const RightSidebar = () => {
                         <Disclosure.Panel className="row-start-2 text-gray-500 border-l border-gray-600 bg-gray-900" static as="ul">
                             <div>
                                 <div className="h-full p-4 flex flex-col items-start text-gray-300 bg-gray-900">
-                                   <Textfield onChange={handleSearchUserChange}  label='Invite User' id='inviteUser'type='text' className="mb-4" placeholder=" invite a friend" />
+                                   <Textfield onChange={handleSearchUserChange} id='inviteUser'type='text' className="mb-4" placeholder=" invite a friend" />
 
                                    <ul className="pt-2">
                                        {
-                                           searchUserList && searchUserList.map((user) => (
-                                               <li key={user.id} className="flex py-2 px-2 items-center hover:bg-gray-700 cursor-pointer" onClick={()=>handleInviteUserClick(user.id)}>
-                                                   <div className="flex justify-center items-center h-5 w-5 mr-2 flex-shrink-0">
-                                                       <span className={assignBg(user?.id)}>
-                                                           <img src={assignImage(user?.id, "User")} className="h-5 w-5 items-center"/>
-                                                       </span>
-                                                   </div>
-                                                   <div className="text-gray-300 truncate text-sm">{user?.uid}</div>
-                                               </li>
-                                           ))
-                                       }
-                                   </ul>
-                                </div>
-                                <div className="h-full p-4 flex flex-col items-start text-gray-300 bg-gray-900">
-                                 <span>Channel Members:</span>
-
-                                 <ul>
-                                     {
-                                         moreChannelData?.members && moreChannelData.members.map((user) => (
-                                             <li key={user.id} className="flex py-1 px-6 items-center">
-                                                <div className="flex justify-center items-center h-5 w-5 mr-2 flex-shrink-0">
+                                        searchUserList?.map((user) => (
+                                            <li key={user.id} className="flex py-2 px-2 items-center hover:bg-gray-700 cursor-pointer" onClick={()=>handleInviteUserClick(user.id)}>
+                                                <div className="flex justify-center items-center h-5 w-5 mr-2">
                                                     <span className={assignBg(user?.id)}>
                                                         <img src={assignImage(user?.id, "User")} className="h-5 w-5 items-center"/>
                                                     </span>
                                                 </div>
                                                 <div className="text-gray-300 truncate text-sm">{user?.uid}</div>
-                                             </li>
-                                         ))
+                                            </li>
+                                        ))
+                                       }
+                                   </ul>
+                                </div>
+                                <div className="h-full p-4 flex flex-col items-start text-gray-300 bg-gray-900">
+                                 <span className="pb-4">Channel Members:</span>
+                                 <ul>
+                                     {
+                                        moreChannelData.members && moreChannelData.members.map((user) => (
+                                            <li key={user.id} className="flex py-1 px-2 items-center">
+                                            <div className="flex justify-center items-center h-5 w-5 mr-2 flex-shrink-0">
+                                                <span className={assignBg(user?.id)}>
+                                                    <img src={assignImage(user?.id, "User")} className="h-5 w-5 items-center"/>
+                                                </span>
+                                            </div>
+                                            <div className="text-gray-300 truncate text-sm">{user?.uid}</div>
+                                            </li>
+                                        ))
                                      }
                                  </ul>
                                 </div>
