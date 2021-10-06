@@ -159,9 +159,9 @@ const ChatInterface = ({msgStat, updateMsgStat}) => {
             </div>
             <div className="mt-auto flex gap-2 p-4">
                 <textarea className="custom-textarea" ref={msgRef} placeholder="Enter a message" onKeyPress={(e)=>handleMsgSubmit(e,'keypress')}/>
-                <div className={msgRecipient === ''
+                <div className={recipientMetadata?.id === ''
                     ? "bg-green-900 flex items-center justify-center px-4 rounded"
-                    :"bg-green-700 hover:bg-green-500 cursor-pointer flex items-center justify-center px-4 rounded"}
+                    :"bg-green-300 hover:bg-green-500 cursor-pointer flex items-center justify-center px-4 rounded"}
                     onClick={(e)=>handleMsgSubmit(e,'click')}>
                     <PaperAirplaneIcon className="h-6 w-6 transform rotate-45 -mt-1 pb-1 text-white"/>
                 </div>
