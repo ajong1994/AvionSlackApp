@@ -25,7 +25,7 @@ const Main = () => {
         setIsNewMessage(bool);
     }
 
-    if (!isAuthenticated || !activeUser) {
+    if (!isAuthenticated) {
         return <Redirect to='/signin' />
     }
 

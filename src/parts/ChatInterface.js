@@ -113,7 +113,8 @@ const ChatInterface = ({msgStat, updateMsgStat}) => {
             <div className="overflow-auto flex flex-col-reverse modified-scrollbar h-full">
                 <div className='py-4 flex-grow text-gray-200 flex flex-col'>
                     <div className="mt-auto">
-                        {!!(recipientMetadata.id !== '') && 
+                        {!!(recipientMetadata.id !== '') && !isMsgListLoading 
+                        ?
                         <div className="flex flex-col p-4 mb-6 gap-2">
                             <div className="flex gap-2 items-center">
                                 <span className="flex justify-center items-center mr-1">
@@ -130,42 +131,10 @@ const ChatInterface = ({msgStat, updateMsgStat}) => {
                                 ? `This is the very beginning of your direct message history with @${msgRecipient}. Only the two of you are in this conversation, and no one else can join it.`
                                 : `User ${moreChannelData?.creator[0]?.uid} created this private channel on ${new Date(channelData?.created_at).toLocaleDateString([],{month:'long', day:'numeric'})}. This is the very beginning of the #${msgRecipient} channel.`}
                             </p>
-                        </div>}
-                        {/* {!!(msgList?.length) &&  msgList.map((msg, i, arr) => (
-                        <div key={msg.id}>
-                            {!!((i > 0 && (new Date(arr[i]?.created_at).getDate() !== new Date(arr[i-1]?.created_at).getDate())) || i === 0) &&
-                            <div className="relative flex items-center justify-center my-5">
-                                <span className="absolute rounded-full bg-gray-800 px-4 py-2 border border-gray-600 text-xs">
-                                    {new Date(arr[i]?.created_at).toLocaleDateString('en-US',{weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})}
-                                </span>
-                                <div className="h-px bg-gray-600 w-full">
-                                </div>
-                            </div>}
-                            <div className="flex items-center gap-2 py-1 px-4 group hover:bg-gray-700">
-                                {(i > 0 && (arr[i].sender.email !== arr[i-1].sender.email)) || i === 0 || (new Date(arr[i]?.created_at).getDate() !== new Date(arr[i-1]?.created_at).getDate()) ? 
-                                <div className="flex justify-center items-center h-8 w-8">
-                                    <span className={assignBg(msg?.sender.id)}>
-                                        <img src={assignImage(msg?.sender.id, "User")} className="h-8 w-8 items-center"/>
-                                    </span>
-                                </div>
-                                :
-                                <div className="w-8 rounded">
-                                    <p className="text-xs opacity-0 group-hover:opacity-100">{new Date(msg.created_at).toLocaleTimeString([],{hour: '2-digit', minute: '2-digit', hour12:true}).replace("AM","").replace("PM","")}</p>
-                                </div>
-                                }
-                                <div className="flex flex-col">
-                                    {!!((i > 0 && (arr[i].sender.email !== arr[i-1].sender.email)) || i === 0 || (new Date(arr[i]?.created_at).getDate() !== new Date(arr[i-1]?.created_at).getDate())) &&  
-                                    <div className="flex items-center">
-                                        <p className="text-sm font-bold">{msg.sender.email}</p>
-                                        <p className="text-xs pl-2">{new Date(msg.created_at).toLocaleTimeString([],{hour: '2-digit', minute: '2-digit', hour12: true})}</p>
-                                    </div>
-                                    }
-                                    <p className="text-sm">{msg.body}</p>
-                                </div>
-                            </div>
-                        </div>))} */}
-                        {msgList?.length && !isMsgListLoading 
-                        ? msgList.map((msg, i, arr) => (
+                        </div>
+                        : !!isMsgListLoading && <MessageSkeleton/>}
+                        {!!(msgList?.length && !isMsgListLoading) 
+                        && msgList.map((msg, i, arr) => (
                         <div key={msg.id}>
                             {!!((i > 0 && (new Date(arr[i]?.created_at).getDate() !== new Date(arr[i-1]?.created_at).getDate())) || i === 0) &&
                             <div className="relative flex items-center justify-center my-5">
@@ -198,7 +167,6 @@ const ChatInterface = ({msgStat, updateMsgStat}) => {
                                 </div>
                             </div>
                         </div>))
-                        : !!isMsgListLoading && <MessageSkeleton/>
                         }
                     </div>
                 </div>
