@@ -185,7 +185,7 @@ export const getAllUsers = (activeUser, updateUserList) => {
 
 
 /* UTILITY FUNCTIONS RELATED TO CHANNELS */
-export const postCreateChannel = (channelName, user_ids, activeUser, updateChannelList, toggleToast, updateToastStat) => {
+export const postCreateChannel = (channelName, user_ids, activeUser, updateChannelList, toggleToast, updateToastStat, setOpenModal) => {
     var data = {
         name: channelName,
         user_ids: user_ids
@@ -202,15 +202,28 @@ export const postCreateChannel = (channelName, user_ids, activeUser, updateChann
         data : data
     };  
     axios(config)
-    .then(function (response) {
-        //Display success toast for creation
-       // toggleToast(true);
-        //updateToastStat('success','Success! Channel has been created.')
-        //Reload channel list from API to ensure it was added
-        getAllSubscribedChannels(activeUser, updateChannelList)
+    .then(function(response) {
+        console.log(response)
+        if (response.data.data) {
+            //Display success toast for creation
+            toggleToast(true);
+            updateToastStat('success','Success! Channel has been created.')
+            //Reload channel list from API to ensure it was added
+            getAllSubscribedChannels(activeUser, updateChannelList)
+            setOpenModal(false)
+            console.log(response)
+        } else if (response.data.errors) {
+            toggleToast(true);
+            updateToastStat('error', response.data.errors[0])
+        }
     })
     .catch(function (error) {
-      console.log(error);
+        if(error.response) {
+            const errMsg = error.response.data.errors
+            //Display toast error with error message from response
+            toggleToast(true);
+            updateToastStat('error', errMsg)
+        }
     });
 }
 
@@ -264,7 +277,7 @@ export const getChannelData = (activeUser, channelId, updateChannelData) => {
     });
 };
 
-export const postInviteToChannel = (activeUser, channelId, memberId, updateChannelData) => {
+export const postInviteToChannel = (activeUser, channelId, memberId, updateChannelData, toggleToast, updateToastStat,setSearchUser) => {
     var data = {
         id: channelId,
         member_id: memberId
@@ -284,14 +297,23 @@ export const postInviteToChannel = (activeUser, channelId, memberId, updateChann
     axios(config)
     .then(function (response) {
         if(response.data) {
-        //Returns an object with channel ID, owner ID, channel name, create and update dates and an array called channel members
-        //which contains user info as objects
-        console.log(response.data.data)
-        updateChannelData(response.data.data)
+            //Returns an object with channel ID, owner ID, channel name, create and update dates and an array called channel members
+            //which contains user info as objects
+            console.log(response.data.data)
+            updateChannelData(response.data.data)
+            setSearchUser('')
+            toggleToast(true);
+            updateToastStat('success','Success! User was added to channel.')
         }
     })
     .catch(function (error) {
-    console.log(error);
+        if(error.response) {
+            const errMsg = error.response.data.errors
+            //Display toast error with error message from response
+            toggleToast(true);
+            updateToastStat('error', errMsg)
+            console.log(error);
+        }
     });
 };
 

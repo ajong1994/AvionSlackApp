@@ -4,9 +4,10 @@ import { SessionContext } from '../contexts/SessionContext';
 import { AuthContext } from '../contexts/AuthContext';
 import RecipientResults from "./RecipientResults";
 import { postMsg, getAllMsgs, assignImage, assignBg,useComponentVisible, getChannelData} from "../utils/Utils";
+import MessageSkeleton from "../components/MessageSkeleton";
 
 const ChatInterface = ({msgStat, updateMsgStat}) => {
-    const {userList, channelList, channelData, updateChannelData, msgRecipient, updateMsgRecipient, recipientMetadata, updateRecipientMetadata, msgList, updateMsgList, moreChannelData} = useContext(SessionContext);
+    const {userList, channelList, channelData, updateChannelData, msgRecipient, updateMsgRecipient, recipientMetadata, updateRecipientMetadata, msgList, updateMsgList, moreChannelData, isMsgListLoading, setIsMsgListLoading} = useContext(SessionContext);
     const {activeUser} = useContext(AuthContext)
     const msgRef = useRef();
     //Create local state for mapped search results of users
@@ -28,26 +29,34 @@ const ChatInterface = ({msgStat, updateMsgStat}) => {
             setResultChannelList([])
             setIsComponentVisible(false)
             updateRecipientMetadata('','')
-            updateMsgList([])
+            // updateMsgList([])
         }
     },[msgRecipient])
 
+    // useEffect(() => {
+    //     const timer = setInterval(() => {
+    //         if (activeUser) {
+    //         getAllMsgs(activeUser, recipientMetadata?.id, recipientMetadata?.type)
+    //             .then(msgs => updateMsgList(msgs))
+    //             .catch(e => console.error(e))
+    //         }
+    //     }, 1000)
+    //     return ()=>{clearInterval(timer)}
+    // },[recipientMetadata])
+
     useEffect(() => {
-        const timer = setInterval(() => {
-            if (activeUser) {
-            getAllMsgs(activeUser, recipientMetadata?.id, recipientMetadata?.type)
-                .then(msgs => updateMsgList(msgs))
-                .catch(e => console.error(e))
-            }
-        }, 1000)
-        return ()=>{clearInterval(timer)}
+        if (activeUser) {
+        getAllMsgs(activeUser, recipientMetadata?.id, recipientMetadata?.type)
+            .then(msgs => updateMsgList(msgs))
+            .catch(e => console.error(e))
+        }
     },[recipientMetadata])
 
     useEffect(() => {
         if (msgStat === true) {
             updateMsgRecipient('')
             updateRecipientMetadata('','')
-            updateMsgList([])
+            // updateMsgList([])
         } 
     },[msgStat])
 
@@ -57,7 +66,8 @@ const ChatInterface = ({msgStat, updateMsgStat}) => {
     }
 
     const handleRecipientSelect = ({identifier, id, type}) => {
-        updateMsgList([])
+        // updateMsgList([])
+        setIsMsgListLoading(true)
         updateMsgRecipient(identifier)
         updateRecipientMetadata(id, type)
         setIsComponentVisible(false)
@@ -121,7 +131,7 @@ const ChatInterface = ({msgStat, updateMsgStat}) => {
                                 : `User ${moreChannelData?.creator[0]?.uid} created this private channel on ${new Date(channelData?.created_at).toLocaleDateString([],{month:'long', day:'numeric'})}. This is the very beginning of the #${msgRecipient} channel.`}
                             </p>
                         </div>}
-                        {!!(msgList?.length) && msgList.map((msg, i, arr) => (
+                        {/* {!!(msgList?.length) &&  msgList.map((msg, i, arr) => (
                         <div key={msg.id}>
                             {!!((i > 0 && (new Date(arr[i]?.created_at).getDate() !== new Date(arr[i-1]?.created_at).getDate())) || i === 0) &&
                             <div className="relative flex items-center justify-center my-5">
@@ -153,7 +163,43 @@ const ChatInterface = ({msgStat, updateMsgStat}) => {
                                     <p className="text-sm">{msg.body}</p>
                                 </div>
                             </div>
-                        </div>))}
+                        </div>))} */}
+                        {msgList?.length && !isMsgListLoading 
+                        ? msgList.map((msg, i, arr) => (
+                        <div key={msg.id}>
+                            {!!((i > 0 && (new Date(arr[i]?.created_at).getDate() !== new Date(arr[i-1]?.created_at).getDate())) || i === 0) &&
+                            <div className="relative flex items-center justify-center my-5">
+                                <span className="absolute rounded-full bg-gray-800 px-4 py-2 border border-gray-600 text-xs">
+                                    {new Date(arr[i]?.created_at).toLocaleDateString('en-US',{weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})}
+                                </span>
+                                <div className="h-px bg-gray-600 w-full">
+                                </div>
+                            </div>}
+                            <div className="flex items-center gap-2 py-1 px-4 group hover:bg-gray-700">
+                                {(i > 0 && (arr[i].sender.email !== arr[i-1].sender.email)) || i === 0 || (new Date(arr[i]?.created_at).getDate() !== new Date(arr[i-1]?.created_at).getDate()) ? 
+                                <div className="flex justify-center items-center h-8 w-8">
+                                    <span className={assignBg(msg?.sender.id)}>
+                                        <img src={assignImage(msg?.sender.id, "User")} className="h-8 w-8 items-center"/>
+                                    </span>
+                                </div>
+                                :
+                                <div className="w-8 rounded">
+                                    <p className="text-xs opacity-0 group-hover:opacity-100">{new Date(msg.created_at).toLocaleTimeString([],{hour: '2-digit', minute: '2-digit', hour12:true}).replace("AM","").replace("PM","")}</p>
+                                </div>
+                                }
+                                <div className="flex flex-col">
+                                    {!!((i > 0 && (arr[i].sender.email !== arr[i-1].sender.email)) || i === 0 || (new Date(arr[i]?.created_at).getDate() !== new Date(arr[i-1]?.created_at).getDate())) &&  
+                                    <div className="flex items-center">
+                                        <p className="text-sm font-bold">{msg.sender.email}</p>
+                                        <p className="text-xs pl-2">{new Date(msg.created_at).toLocaleTimeString([],{hour: '2-digit', minute: '2-digit', hour12: true})}</p>
+                                    </div>
+                                    }
+                                    <p className="text-sm">{msg.body}</p>
+                                </div>
+                            </div>
+                        </div>))
+                        : !!isMsgListLoading && <MessageSkeleton/>
+                        }
                     </div>
                 </div>
             </div>
