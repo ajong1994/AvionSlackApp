@@ -131,13 +131,13 @@ const Signup = () => {
      }, []) 
 
     return (
-        <div className='pt-8 h-full'>
-            <div className='flex justify-center pb-8'>
-                <Slacklogo width={120}/>
+        <div className='max-h-screen items-center flex flex-col'>
+            <div className='flex justify-center my-12'>
+                <Slacklogo width={145}/>
             </div>
-            <h2 className='text-center'>Join Avion School on Slack</h2>
-            <p className='text-center'>Start by signing up.</p>
-            <div className='mx-auto max-w-md mt-20'>
+            <h2 className='text-center text-5xl'>Join Avion School on Slack</h2>
+            <p className='text-center text-xl mt-5'>Start by entering the email address you use for work.</p>
+            <div className='w-96 mt-10'>
                 <Form>
                     <div className='flex flex-col gap-4'>
                         <Textfield label='Email' value={email === null ? '' : email} onChange={(e) => {handleValueChange(e,'email')} } id='email' type='text' placeholder='Enter your email'/>
@@ -147,7 +147,7 @@ const Signup = () => {
                         <Textfield label='Confirm Password' value={confirmPassword === null ? '' : confirmPassword} onChange={(e) => {handleValueChange(e,'confirmPassword')}} id='confirm_pw' type='password' placeholder='Confirm your password'/>
                         {confirmPasswordValidationPrompt && <span className='text-red-400'>{confirmPasswordValidationPrompt}</span>}
                         <Button onClick={() => handleSignUpClick(validators)}>Sign Up</Button>
-                        <Link to="/signin">Already have an account? Sign in here.</Link>
+                        <span>Already have an account? <Link to="/signin" className="text-blue-800 underline font-semibold"> Sign in instead</Link></span>
                     </div>
                 </Form>
             </div>

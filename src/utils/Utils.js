@@ -14,14 +14,14 @@ export const validateEmail = (email) => {
         } else {
             return {
                 is_valid: false,
-                message: 'Invalid email address'
+                message: 'Please enter a valid email address.'
             } 
         }
     } else if (email === '') {
         //Instead of using else, we use else if to restrict the returning of an object only when a user has typed into the input
         return {
             is_valid: false,
-            message: 'Email cannot be blank'
+            message: 'Email address is required.'
         } 
     }
 }
@@ -32,7 +32,7 @@ export const validatePassword = (password) => {
         if(password.length < 8) {
             return {
                 is_valid: false,
-                message: 'password should not be less than 8 characters'
+                message: 'Password must be at least 8 characters long.'
             }
         }else {
             return {
@@ -43,7 +43,7 @@ export const validatePassword = (password) => {
         //Instead of using else, we use else if to restrict the returning of an object only when a user has typed into the input
         return {
             is_valid: false,
-            message: 'Password cannot be empty'
+            message: 'Password is required.'
         }
     }
 }
@@ -58,14 +58,14 @@ export const validateConfirmPassword = (password, confirmPassword) => {
         }else {
             return {
                 is_valid: false,
-                message: 'passwords do not match'
+                message: 'The password confirmation does not match.'
             }
         }
     } else if (confirmPassword === '') {
         //Instead of using else, we use else if to restrict the returning of an object only when a user has typed into the input
         return {
             is_valid: false,
-            message: 'Confirm password cannot be empty'
+            message: 'Password confirmation is required.'
         }
     }
 }
