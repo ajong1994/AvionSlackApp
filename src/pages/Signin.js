@@ -39,7 +39,7 @@ const Login = () => {
     console.log(activeUser)
     useEffect(() => {
         let emailResult = validateEmail(email)
-        const ignoredError = 'Invalid email address'
+        const ignoredError = 'Please enter a valid email address.'
         if (emailResult?.is_valid || emailResult?.message === ignoredError) {
             setEmailValidationPrompt(null);
         } else if (emailResult?.message !== ignoredError) {
@@ -49,7 +49,7 @@ const Login = () => {
 
     useEffect(() => {
         let passwordResult = validatePassword(password)
-        const ignoredError = 'password should not be less than 8 characters'
+        const ignoredError = 'Password must be at least 8 characters long.'
         if (passwordResult?.is_valid || passwordResult?.message === ignoredError) {
             setPasswordValidationPrompt(null);
         } else if (passwordResult?.message !== ignoredError) {
