@@ -55,10 +55,12 @@ const CreateChannel = ({setOpenModal, openModal, toggleToast, updateToastStat, i
     setSearchUser(e.target.value)
   }
 
+  //invokes API request
   const handleCreateChannelClick = () => {
     postCreateChannel(channelName, selectedUsers, activeUser, updateChannelList, toggleToast, updateToastStat, setOpenModal)
   }
 
+  //handles setting of clicked page
   const handlePageClick = ({ selected: selectedPage }) => {
     setCurrentPage(selectedPage);
   }
