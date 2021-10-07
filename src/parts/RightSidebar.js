@@ -62,7 +62,7 @@ const RightSidebar = () => {
 
     return (
         <>
-            <Disclosure className="col-start-1 col-end-2 row-start-2 ">
+            <Disclosure className="col-start-1 col-end-2 row-start-2">
                 {({open}) => (
                     <>
                         <Disclosure.Button className=" text-gray-300 flex float mr-20 items-center justify-end col-start-3 col-end-5 row-start-1">
@@ -99,9 +99,9 @@ const RightSidebar = () => {
                             leaveTo="transform scale-95 opacity-0"
                             className="row-start-2 col-start-4 flex justify-end max-w-xs "
                         >
-                            <Disclosure.Panel className="max-w-xs text-gray-500 border-l border-gray-600 bg-gray-300" static as="ul">
+                            <Disclosure.Panel className="w-60 text-gray-500 border-l border-gray-600 bg-gray-900" static as="ul">
                                 <div>
-                                    <div className="h-full p-4 text-gray-300 bg-red-900">
+                                    <div className="h-full p-4 text-gray-300 bg-gray-900">
                                 
                                     <ModalTextfield onChange={handleSearchUserChange} id='inviteUser' type='text' placeholder="Invite a friend" value={searchUser}
                                     inputClass="mt-2 py-1 px-2 rounded bg-gray-800 text-sm text-gray-300 border-transparent focus:ring-0 focus:outline-none focus:border-transparent"/>
@@ -109,30 +109,30 @@ const RightSidebar = () => {
                                     <ul className="pt-2">          
                                         {
                                             searchUserList?.map((user) => (
-                                                <li key={user.id} className="flex py-2 px-2 items-center hover:bg-gray-700 cursor-pointer truncate" onClick={()=>handleInviteUserClick(user.id)}>
-                                                    <div className="flex justify-center items-center h-5 w-5 mr-2">
+                                                <li key={user.id} className="flex py-2 px-2 items-center hover:bg-gray-700 cursor-pointer" onClick={()=>handleInviteUserClick(user.id)}>
+                                                    <div className="flex justify-center items-center h-5 w-5 mr-2 ">
                                                         <span className={assignBg(user?.id)}>
                                                             <img src={assignImage(user?.id, "User")} className="h-5 w-5 items-center"/>
                                                         </span>
                                                     </div>
-                                                    <div className="text-gray-300 truncate text-sm">{user?.uid}</div>
+                                                    <div className="text-gray-300 text-sm">{user?.uid}</div>
                                                 </li>
                                             ))
                                         }
                                     </ul>
                                     </div>
-                                    <div className="h-full p-4 flex flex-col items-start text-gray-300 bg-blue-900">
+                                    <div className="h-full p-4 flex flex-col items-start text-gray-300 bg-gray-900">
                                     <span className="pb-4">Channel Members:</span>
-                                    <ul>
+                                    <ul className="w-full">
                                         {
                                             moreChannelData.members && moreChannelData.members.map((user) => (
-                                                <li key={user.id} className="flex py-1 px-2 items-center truncate">
-                                                <div className="flex justify-center items-center h-5 w-5 mr-2 flex-shrink-0">
-                                                    <span className={assignBg(user?.id)}>
-                                                        <img src={assignImage(user?.id, "User")} className="h-5 w-5 items-center"/>
-                                                    </span>
-                                                </div>
-                                                <div className="text-gray-300 truncate text-sm">{user?.uid}</div>
+                                                <li key={user.id} className="flex py-1 px-2 items-center">
+                                                    <div className=" flex justify-center items-center h-5 w-5 mr-2 flex-shrink-0">
+                                                        <span className={assignBg(user?.id)}>
+                                                            <img src={assignImage(user?.id, "User")} className="h-5 w-5 items-center"/>
+                                                        </span>
+                                                    </div>
+                                                    <div className="text-gray-300 text-sm truncate">{user?.uid}</div>
                                                 </li>
                                             ))
                                         }

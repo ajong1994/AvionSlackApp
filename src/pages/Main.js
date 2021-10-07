@@ -37,7 +37,7 @@ const Main = () => {
     }
 
     return (
-        <div className="h-full flex flex-col sm:grid main-grid bg-gray-800">
+        <div className="h-full flex flex-col w-screen sm:grid main-grid bg-gray-800">
             <div className={sidebarClass}>
                 <Workspace msgStat={isNewMessage} onClick={updateIsNewMessage}/>
                 <Sidebar updateMsgStat={updateIsNewMessage} toggleIsSideBarVisible={toggleIsSideBarVisible}/>

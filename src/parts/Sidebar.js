@@ -91,7 +91,7 @@ const Sidebar = ({updateMsgStat, toggleIsSideBarVisible}) => {
                                                     <img src={assignImage(channel?.id, "Channel")} className="h-5 w-5 items-center"/>
                                                 </span>
                                             </div>
-                                            <div className="text-gray-300 truncate text-sm">{channel?.name}</div>
+                                            <div className="text-gray-300 overflow-clip overflow-hidden ... text-sm">{channel?.name}</div>
                                         </li>))}
                                     <div className="flex py-1 px-6 items-center hover:bg-gray-700 cursor-pointer text-gray-300" onClick={toggleModal}>
                                         <div className="flex items-center justify-center bg-gray-600 h-5 w-5 mr-2 flex-shrink-0 rounded">
