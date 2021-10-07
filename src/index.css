@@ -59,7 +59,6 @@
         @apply bg-gray-900;
     }
 
-
     .modal-scrollbar::-webkit-scrollbar {
         width: 3px;
     }
@@ -88,5 +87,9 @@
 
     .modal-width {
         width: 28%
+    }
+
+    .sidebar-calc-height {
+        height: calc(100% - 50px)
     }
 }

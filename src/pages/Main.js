@@ -14,15 +14,22 @@ const Main = () => {
     const {isAuthenticated, setAuth, activeUser, setUser} = useContext(AuthContext);
     const {updateUserList,updateChannelList} = useContext(SessionContext);
     const [isNewMessage, setIsNewMessage] = useState(false);
+    const updateIsNewMessage = (bool) => {
+        setIsNewMessage(bool);
+    }
     useEffect(() => {
         if (activeUser) {
             getAllUsers(activeUser, updateUserList)
             getAllSubscribedChannels(activeUser, updateChannelList)
         }
     },[activeUser])
-
-    const updateIsNewMessage = (bool) => {
-        setIsNewMessage(bool);
+    const [isSideBarVisible, setIsSideBarVisible] = useState(true);
+    const toggleIsSideBarVisible = () => {
+        setIsSideBarVisible(!isSideBarVisible);
+    }
+    let sidebarClass = "absolute sm:static w-full h-full sm:col-start-1 sm:row-start-1 sm:row-end-3"
+    if (!isSideBarVisible) {
+        sidebarClass = "hidden absolute w-full h-full sm:block sm:static  sm:col-start-1 sm:row-start-1 sm:row-end-3"
     }
 
     if (!isAuthenticated) {
@@ -30,9 +37,11 @@ const Main = () => {
     }
 
     return (
-        <div className="h-full grid main-grid bg-gray-800">
-            <Workspace msgStat={isNewMessage} onClick={updateIsNewMessage}/>
-            <Sidebar updateMsgStat={updateIsNewMessage}/>
+        <div className="h-full flex flex-col sm:grid main-grid bg-gray-800">
+            <div className={sidebarClass}>
+                <Workspace msgStat={isNewMessage} onClick={updateIsNewMessage}/>
+                <Sidebar updateMsgStat={updateIsNewMessage} toggleIsSideBarVisible={toggleIsSideBarVisible}/>
+            </div>
             <MainHeader/>
             <ChatInterface msgStat={isNewMessage} activeUser={activeUser} updateMsgStat={updateIsNewMessage}/>
             <RightSidebar />

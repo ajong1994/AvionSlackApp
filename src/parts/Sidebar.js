@@ -10,7 +10,7 @@ import { Transition } from '@headlessui/react'
 import Toast from './Toast';
 
 
-const Sidebar = ({updateMsgStat}) => {
+const Sidebar = ({updateMsgStat, toggleIsSideBarVisible}) => {
     const { activeUser } = useContext(AuthContext)
     const { userList, channelList, updateChannelData, updateRecipientMetadata, updateMsgRecipient, updateMsgList, setIsMsgListLoading  } = useContext(SessionContext)
     useEffect(() => {
@@ -56,13 +56,14 @@ const Sidebar = ({updateMsgStat}) => {
         updateMsgStat(false)
         updateRecipientMetadata(id, type)
         updateMsgRecipient(name)
+        toggleIsSideBarVisible()
         if (type === "Channel") {
             getChannelData(activeUser, id, updateChannelData)
         }
     }
 
     return (
-        <div className="col-start-1 col-end-2 row-start-2 overflow-hidden">
+        <div className="row-start-2 overflow-hidden sidebar-calc-height">
             <div className="h-full border-r border-gray-600 flex flex-col items-start text-gray-300 bg-gray-900 no-scrollbar overflow-y-auto">
                 <Disclosure>
                     {({open}) => (
