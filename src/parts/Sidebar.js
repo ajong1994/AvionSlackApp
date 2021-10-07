@@ -21,6 +21,7 @@ const Sidebar = ({updateMsgStat, toggleIsSideBarVisible}) => {
     const [openModal, setOpenModal] = useState(false)
     const toggleModal = () => {
         setOpenModal(!openModal)
+        toggleIsSideBarVisible()
     }
     const [dmList, setDmList] = useState(null)
     const [isToastShowing, setIsToastShowing] = useState(false)
@@ -49,7 +50,7 @@ const Sidebar = ({updateMsgStat, toggleIsSideBarVisible}) => {
     }, [isToastShowing]) 
     /*----TOAST HANDLER FUNCTIONS----*/
 
-    
+
     const handleMsgClick = (id, type, name) => {
         // updateMsgList([])
         setIsMsgListLoading(true)
@@ -63,7 +64,7 @@ const Sidebar = ({updateMsgStat, toggleIsSideBarVisible}) => {
     }
 
     return (
-        <div className="row-start-2 overflow-hidden sidebar-calc-height">
+        <div className="row-start-2 overflow-hidden">
             <div className="h-full border-r border-gray-600 flex flex-col items-start text-gray-300 bg-gray-900 no-scrollbar overflow-y-auto">
                 <Disclosure>
                     {({open}) => (
@@ -91,7 +92,7 @@ const Sidebar = ({updateMsgStat, toggleIsSideBarVisible}) => {
                                                     <img src={assignImage(channel?.id, "Channel")} className="h-5 w-5 items-center"/>
                                                 </span>
                                             </div>
-                                            <div className="text-gray-300 overflow-clip overflow-hidden ... text-sm">{channel?.name}</div>
+                                            <div className="text-gray-300 truncate text-sm">{channel?.name}</div>
                                         </li>))}
                                     <div className="flex py-1 px-6 items-center hover:bg-gray-700 cursor-pointer text-gray-300" onClick={toggleModal}>
                                         <div className="flex items-center justify-center bg-gray-600 h-5 w-5 mr-2 flex-shrink-0 rounded">
@@ -104,7 +105,7 @@ const Sidebar = ({updateMsgStat, toggleIsSideBarVisible}) => {
                         </>
                      )}
                 </Disclosure>
-                {openModal && <CreateChannel openModal={openModal} setOpenModal={setOpenModal} toastStat={toastStat} isToastShowing={isToastShowing} toggleToast={toggleToast} updateToastStat={updateToastStat}/>} 
+                {openModal && <CreateChannel openModal={openModal} setOpenModal={setOpenModal} toggleToast={toggleToast} updateToastStat={updateToastStat}/>} 
                 <Disclosure>
                 {({open}) => (
                     <>

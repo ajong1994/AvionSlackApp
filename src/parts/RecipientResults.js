@@ -22,7 +22,7 @@ const RecipientResults = ({onClick, recipientList, resultChannelList}) => {
                     <div className="px-6 py-1 flex gap-2 text-white hover:bg-white hover:text-gray-700 cursor-pointer">
                         <span className="flex justify-center items-center">
                             <span className={assignBg(recipient?.id)}>
-                                <img src={assignImage(recipient?.id, "User")} className="h-5 w-5 items-center rounded"/>
+                                <img src={assignImage(recipient?.id, "User")} className="h-5 w-5 items-center"/>
                             </span>
                         </span>
                         <span>

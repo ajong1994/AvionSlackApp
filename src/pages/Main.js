@@ -6,7 +6,6 @@ import Sidebar from '../parts/Sidebar';
 import Workspace from '../parts/Workspace';
 import MainHeader from '../parts/MainHeader';
 import ChatInterface from '../parts/ChatInterface';
-import RightSidebar from '../parts/RightSidebar';
 import { getAllUsers, getAllSubscribedChannels } from '../utils/Utils'
 
 
@@ -27,9 +26,9 @@ const Main = () => {
     const toggleIsSideBarVisible = () => {
         setIsSideBarVisible(!isSideBarVisible);
     }
-    let sidebarClass = "absolute sm:static w-full h-full sm:col-start-1 sm:row-start-1 sm:row-end-3"
+    let sidebarClass = "absolute sm:static w-full h-full sm:col-start-1 sm:row-start-1 sm:row-end-3 z-20 sm:z-0 grid sidebar-grid"
     if (!isSideBarVisible) {
-        sidebarClass = "hidden absolute w-full h-full sm:block sm:static  sm:col-start-1 sm:row-start-1 sm:row-end-3"
+        sidebarClass = "hidden absolute w-full h-full sm:grid sm:static sm:col-start-1 sm:row-start-1 sm:row-end-3 z-20 sm:z-0 sidebar-grid"
     }
 
     if (!isAuthenticated) {
@@ -44,7 +43,6 @@ const Main = () => {
             </div>
             <MainHeader/>
             <ChatInterface msgStat={isNewMessage} activeUser={activeUser} updateMsgStat={updateIsNewMessage}/>
-            <RightSidebar />
         </div>
     )
 }
