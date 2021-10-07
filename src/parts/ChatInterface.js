@@ -3,8 +3,9 @@ import { PaperAirplaneIcon } from "@heroicons/react/solid";
 import { SessionContext } from '../contexts/SessionContext';
 import { AuthContext } from '../contexts/AuthContext';
 import RecipientResults from "./RecipientResults";
-import { postMsg, getAllMsgs, assignImage, assignBg,useComponentVisible, getChannelData} from "../utils/Utils";
+import { postMsg, getAllMsgs, assignImage, assignBg, useComponentVisible, getChannelData} from "../utils/Utils";
 import MessageSkeleton from "../components/MessageSkeleton";
+
 
 const ChatInterface = ({msgStat, updateMsgStat}) => {
     const {userList, channelList, channelData, updateChannelData, msgRecipient, updateMsgRecipient, recipientMetadata, updateRecipientMetadata, msgList, updateMsgList, moreChannelData, isMsgListLoading, setIsMsgListLoading} = useContext(SessionContext);
@@ -22,7 +23,7 @@ const ChatInterface = ({msgStat, updateMsgStat}) => {
     useEffect(() => {
         if (msgRecipient !== '') {
             const regex = new RegExp(`${msgRecipient}`, 'i')
-            setRecipientList(userList?.filter(user => (regex.test(user.email) || regex.test(user.id))));
+            setRecipientList(userList?.filter(user => (regex.test(user.email) || regex.test(user.id))).slice(0, 10));
             setResultChannelList(channelList?.filter(channel => (regex.test(channel.name))));
         } else {
             setRecipientList([])
@@ -92,7 +93,7 @@ const ChatInterface = ({msgStat, updateMsgStat}) => {
     }
     
     return (
-        <div className="col-start-2 col-end-4 row-start-2 flex flex-col overflow-hidden">
+        <div className="col-start-2 col-end-4 row-start-2 flex flex-col overflow-hidden flex-grow">
             {msgStat &&
                 <div className="flex text-gray-300 items-center p-4 border-b border-gray-600 relative">
                     <p className="pr-4">To:</p>

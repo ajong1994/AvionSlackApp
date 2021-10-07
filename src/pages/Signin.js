@@ -123,7 +123,8 @@ const Login = () => {
                         <Textfield label='Password' value={password === null ? '' : password} onChange={(e) => {handleValueChange(e,'password')}} id='password' type='password' placeholder='Enter a password'/>
                         {passwordValidationPrompt && <span className='text-red-400'>{passwordValidationPrompt}</span>}
                         <Button onClick={()=>handleSignUpClick(validators)}>Sign In</Button>
-                        <span>Don't have an account yet? <Link to='/signup' className="text-blue-800 underline font-semibold"> Create an account</Link></span>
+                        <span>Don't have an account yet? <br/>
+                        <Link to='/signup' className="text-blue-800 underline font-semibold"> Create an account</Link></span>
                     </div>
                 </Form>
             </div>

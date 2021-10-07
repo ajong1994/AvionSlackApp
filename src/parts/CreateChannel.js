@@ -7,9 +7,10 @@ import { SessionContext } from '../contexts/SessionContext'
 import ReactPaginate from 'react-paginate';
 import { ChevronLeftIcon} from '@heroicons/react/outline';
 import { ChevronRightIcon } from '@heroicons/react/outline';
+import { XIcon } from '@heroicons/react/solid';
 
 
-const CreateChannel = ({setOpenModal, openModal, toggleToast, updateToastStat, isToastShowing, toastStat}) => {
+const CreateChannel = ({setOpenModal, openModal, toggleToast, updateToastStat}) => {
   const { activeUser } = useContext(AuthContext)
   const { userList, updateChannelList} = useContext(SessionContext)
 
@@ -103,7 +104,10 @@ const CreateChannel = ({setOpenModal, openModal, toggleToast, updateToastStat, i
               leaveTo="opacity-0 scale-95"
             >
               <div className="inline-block modal-width bg-gray-800 p-4 my-8 overflow-hidden text-left align-middle transition-all transform shadow-md rounded-lg border border-black min-w-200">
-                <h3 className="text-gray-100 text-lg mb-1">Create a Channel</h3>
+                <div className="flex justify-between items-center"> 
+                  <h3 className="text-gray-100 text-lg mb-1">Create a Channel</h3>
+                  <XIcon className="h-5 w-5 cursor-pointer text-gray-100" onClick={() => setOpenModal(false)}/>
+                </div>
                 <p className="text-gray-400 text-xs mb-6">Make a channel name no longer than 15 characters and select users to add to your channel.</p>
                 <div className="mt-2">
                   <ModalTextfield onChange={handleChannelName} id='channelName' type='text' placeholder='Type a channel name' labelClass="text-gray-200" 
