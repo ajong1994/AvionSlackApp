@@ -109,15 +109,15 @@ const Login = () => {
 
 
     return (
-        <div className='max-h-screen items-center flex flex-col'>
-            <div className='flex justify-center my-12'>
+        <div className='h-full p-10 flex flex-col items-center justify-center'>
+            <div className='flex justify-center my-10'>
                 <Slacklogo width={145}/>
             </div>
-            <h2 className='text-center text-5xl'>Avion School on Slack</h2>
-            <p className='text-center text-xl mt-5'>Sign in to your account</p>
-            <div className='w-96 mt-10'>
+            <h2 className='text-center text-2xl lg:text-5xl'>Avion School on Slack</h2>
+            <p className='text-center text-lg lg:text-xl my-5'>Sign in to your account</p>
+            <div className='w-96 lg:w-2/5 my-5 px-5'>
                 <Form>
-                    <div className='flex flex-col gap-4'>
+                    <div className='flex flex-col gap-4 p-2'>
                     <Textfield label='Email' value={email === null ? '' : email} onChange={(e) => {handleValueChange(e,'email')} } id='email' type='text' placeholder='Enter your email'/>
                         {emailValidationPrompt && <span className='text-red-400'>{emailValidationPrompt}</span>}
                         <Textfield label='Password' value={password === null ? '' : password} onChange={(e) => {handleValueChange(e,'password')}} id='password' type='password' placeholder='Enter a password'/>

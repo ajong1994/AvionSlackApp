@@ -49,7 +49,7 @@ const Sidebar = ({updateMsgStat, toggleIsSideBarVisible}) => {
     }, [isToastShowing]) 
     /*----TOAST HANDLER FUNCTIONS----*/
 
-
+    
     const handleMsgClick = (id, type, name) => {
         // updateMsgList([])
         setIsMsgListLoading(true)

@@ -131,15 +131,15 @@ const Signup = () => {
      }, []) 
 
     return (
-        <div className='max-h-screen items-center flex flex-col'>
-            <div className='flex justify-center my-12'>
-                <Slacklogo width={145}/>
+        <div className='h-full p-10 flex flex-col items-center justify-center'>
+            <div className='flex justify-center my-10'>
+                <Slacklogo width={150}/>
             </div>
-            <h2 className='text-center text-5xl'>Join Avion School on Slack</h2>
-            <p className='text-center text-xl mt-5'>Start by entering the email address you use for work.</p>
-            <div className='w-96 mt-10'>
+            <h2 className='text-center text-2xl lg:text-5xl'>Join Avion School on Slack</h2>
+            <p className='text-center text-xl lg:text-xl my-5'>Start by entering the email address you use for work.</p>
+            <div className='w-96 lg:w-2/5 my-5 px-5'>
                 <Form>
-                    <div className='flex flex-col gap-4'>
+                    <div className='flex flex-col gap-4 p-2'>
                         <Textfield label='Email' value={email === null ? '' : email} onChange={(e) => {handleValueChange(e,'email')} } id='email' type='text' placeholder='Enter your email'/>
                         {emailValidationPrompt && <span className='text-red-400'>{emailValidationPrompt}</span>}
                         <Textfield label='Password' value={password === null ? '' : password} onChange={(e) => {handleValueChange(e,'password')}} id='password' type='password' placeholder='Enter a password'/>
@@ -147,6 +147,7 @@ const Signup = () => {
                         <Textfield label='Confirm Password' value={confirmPassword === null ? '' : confirmPassword} onChange={(e) => {handleValueChange(e,'confirmPassword')}} id='confirm_pw' type='password' placeholder='Confirm your password'/>
                         {confirmPasswordValidationPrompt && <span className='text-red-400'>{confirmPasswordValidationPrompt}</span>}
                         <Button onClick={() => handleSignUpClick(validators)}>Sign Up</Button>
+                        {/* <span>Already have an account? <Link to="/signin" className="text-blue-800 underline font-semibold"> Sign in instead</Link></span> */}
                         <span>Already have an account? <Link to="/signin" className="text-blue-800 underline font-semibold"> Sign in instead</Link></span>
                     </div>
                 </Form>
