@@ -167,7 +167,7 @@ const ChannelInfoModal = ({setOpenModal, openModal, toggleToast, updateToastStat
                         leaveFrom="opacity-100 scale-100"
                         leaveTo="opacity-0 scale-95"
                     >
-                    <div className="inline-block modal-width bg-gray-800 p-4 my-8 text-left align-middle transition-all sm:transform shadow-md rounded-lg border border-black min-w-200">
+                    <div className="inline-block modal-width bg-gray-800 p-4 my-8 text-left align-middle transition-all sm:transform shadow-2xl rounded-lg border border-black min-w-200">
                         <div className="flex text-gray-100 text-lg justify-between items-center mb-6"> 
                             <h3>Channel Information</h3>
                             <XIcon className="h-5 w-5 cursor-pointer" onClick={() => setOpenModal(false)}/>

@@ -49,26 +49,27 @@ const MainHeader = () => {
                 }
                 <h3 className="text-white">{recipientMetadata.id === '' ? 'New message' : msgRecipient}</h3>
             </div>
-            <div className="text-gray-300 py-2 px-4 cursor-pointer" onClick={toggleModal}>
-                <div className="rounded-lg border-b border-t border-r border-gray-300 flex items-center">
+            <div className="text-gray-300 py-1 flex items-center mr-2 cursor-pointer" onClick={toggleModal}>
+                <div className="flex items-center p-1">
                     <div className="flex align-center -space-x-2 overflow-hidden">
                         {
                             moreChannelData.members && moreChannelData.members.slice(0, 3).map((user) => (
-                                <div className="inline-block rounded ring-2 ring-gray-600">
-                                    <div className="flex justify-center items-center h-8 w-8">
-                                        <span className={assignBg(user?.id)} >
-                                            <img src={assignImage(user?.id, "User")} classname="h-8 w-8 items-center"/>
+                                <div className="inline-block rounded-full ring-4 ring-gray-800">
+                                    <div className="flex justify-center items-center h-7 w-7">
+                                        <span className={assignBg(user?.id) + " rounded-full"} >
+                                            <img src={assignImage(user?.id, "User")} classname="h-7 w-7 items-center"/>
                                         </span> 
                                     </div>
                                 </div>
                             ))
                         }
+                        {moreChannelData?.members.length > 3 && 
+                        <div className="h-7 w-7 flex items-center justify-center text-xs rounded-full bg-gray-600 ring-4 ring-gray-800 text-gray-200">
+                            {moreChannelData.members.length}
+                        </div>
+                        }
                     </div>
-                    {moreChannelData?.members.length > 3 && 
-                    <div className="h-8 w-8 pl-2 mr-4 flex items-center">
-                        {moreChannelData.members.length}
-                    </div>
-                    }
+
                 </div>
                 
             </div>
