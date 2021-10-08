@@ -33,10 +33,8 @@ const Login = () => {
         setter: setPassword
     }
     ]
-
     const history = useHistory();
 
-    console.log(activeUser)
     useEffect(() => {
         let emailResult = validateEmail(email)
         const ignoredError = 'Please enter a valid email address.'
@@ -100,11 +98,11 @@ const Login = () => {
        }
     }, [activeUser]) 
 
-    useEffect(() => {
-        if (isAuthenticated && activeUser) {
-            return <Redirect to='/' />
-        }
-     }, []) 
+
+    if (isAuthenticated && activeUser) {
+        return <Redirect to='/' />
+    }
+
 
 
 
