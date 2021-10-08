@@ -1,4 +1,4 @@
-import { useContext } from "react"
+import { useContext, useEffect, useState } from "react"
 
 /** ICONS **/
 import { MenuAlt1Icon } from '@heroicons/react/solid';
@@ -15,13 +15,15 @@ const MobileNavbar = ({toggleIsSideBarVisible}) => {
     const { setUser, userList } = useContext(SessionContext)
 
 
-    const getActiveUser = () => {
+    const [activeUserProfile, setActiveUserProfile] = useState([])
+
+    useEffect(() => {
         if(activeUser) {
-            let activeUserProfile = userList.filter(user => user.uid === activeUser.uid)
-            activeUser.user = activeUserProfile[0]
-            setUser(activeUser)
+            setActiveUserProfile(userList?.filter(user => user.uid === activeUser.uid))
+            
         }
-    }
+    }, [activeUser])
+
 
     // button for sidebar toggle and getting the profile picture of the activeUser
     return(
@@ -31,10 +33,10 @@ const MobileNavbar = ({toggleIsSideBarVisible}) => {
             </span>
 
             {
-            activeUser.user && <div className="text-gray-300 flex py-1 px-2 self-end items-center">   
+            activeUserProfile && <div className="text-gray-300 flex py-1 px-2 self-end items-center">   
                 <div className=" flex justify-center items-center h-5 w-5 mr-2 flex-shrink-0">
-                    <span className={assignBg(activeUser.id)}>
-                        <img src={assignImage(activeUser.id, "User")} className="h-5 w-5 items-center"/>
+                    <span className={assignBg(activeUserProfile[0]?.id)}>
+                        <img src={assignImage(activeUserProfile[0]?.id, "User")} className="h-5 w-5 items-center"/>
                     </span>
                 </div>
             </div>
