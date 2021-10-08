@@ -21,7 +21,7 @@ const MobileNavbar = ({toggleIsSideBarVisible}) => {
         if(activeUser) {
             setActiveUserProfile(userList?.filter(user => user.uid === activeUser.uid))
         }
-    }, [activeUser])
+    }, [activeUser, userList])
 
 
     // button for sidebar toggle and getting the profile picture of the activeUser

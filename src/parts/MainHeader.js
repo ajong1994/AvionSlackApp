@@ -54,10 +54,10 @@ const MainHeader = () => {
                     <div className="flex align-center -space-x-2 overflow-hidden">
                         {
                             moreChannelData.members && moreChannelData.members.slice(0, 3).map((user) => (
-                                <div className="inline-block rounded-full ring-4 ring-gray-800">
+                                <div key={user.id} className="inline-block rounded-full ring-4 ring-gray-800">
                                     <div className="flex justify-center items-center h-7 w-7">
                                         <span className={assignBg(user?.id) + " rounded-full"} >
-                                            <img src={assignImage(user?.id, "User")} classname="h-7 w-7 items-center"/>
+                                            <img src={assignImage(user?.id, "User")} className="h-7 w-7 items-center"/>
                                         </span> 
                                     </div>
                                 </div>
