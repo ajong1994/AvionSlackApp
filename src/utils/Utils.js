@@ -418,10 +418,10 @@ export function useComponentVisible(initialIsVisible) {
 export const assignImage = (id, type) => {
     if (type === "User") {
         const n = String(id% 100).padStart(2, '0')
-        return `/icons/punk-01${n}.png`
+        return `icons/punk-01${n}.png`
     } else {
         const n = id % 25
-        return `/icons/punk${n}@20x.png`
+        return `icons/punk${n}@20x.png`
     }
 }
 /* END OF UTIL FUNCTION FOR IMAGE ASSIGNMENT */
