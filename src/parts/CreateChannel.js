@@ -35,13 +35,14 @@ const CreateChannel = ({setOpenModal, openModal, toggleToast, updateToastStat, i
   },[searchUser])
   // initial states for checked users in the checkbox
   const [selectedUsers, setSelectedUsers] = useState([])
+
   //setting the selected users in an array
   const handleUserSelect = (e) => {
-    if(selectedUsers.includes(e.target.value)) {
-      setSelectedUsers((prevState) => [...prevState, e.target.value])
+    let userId = parseInt(e.target.value)
+    if(!selectedUsers.includes(userId)) {
+      setSelectedUsers((prevState) => [...prevState, userId])
     } else {
-      setSelectedUsers(selectedUsers.filter(email => email !== e.target.value));
-
+      setSelectedUsers(selectedUsers.filter(id => id !== userId));
     }
   }
 
@@ -112,7 +113,6 @@ const CreateChannel = ({setOpenModal, openModal, toggleToast, updateToastStat, i
                     inputClass="mt-2 py-1 px-2 rounded bg-gray-900 text-sm text-gray-300 border-transparent focus:ring-0 focus:outline-none focus:border-transparent"/>
                 </div>
                 <div className="mt-6">
-                  {/* <span className="text-gray-200">List of friends</span> */}
                   <ul className="h-40 overflow-y-scroll modal-scrollbar">
                     {searchUserList?.slice(offset, offset + PER_PAGE).map(user => (
                       <li key={user.uid} className="flex py-1 px-2 items-center hover:bg-gray-600 cursor-pointer">   
@@ -127,7 +127,7 @@ const CreateChannel = ({setOpenModal, openModal, toggleToast, updateToastStat, i
                         </label>
                         <input onClick={handleUserSelect} className="ml-auto border border-gray-300 bg-transparent rounded focus:ring-0 focus:ring-offset-0 focus:outline-none active:ring-0 checked:bg-green-300
                           text-green-300 w-5 h-5 cursor-pointer" 
-                          id={user.uid} type='checkbox' defaultChecked={selectedUsers.includes(String(user.id))} value={user.id}/>
+                          id={user.uid} type='checkbox' defaultChecked={selectedUsers.includes(user.id)} value={user.id}/>
                       </li>
                     ))}
                   </ul>

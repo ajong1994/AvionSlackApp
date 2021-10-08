@@ -159,7 +159,7 @@ export const removeUserSession = (setAuth, setUser, history) => {
     history.push('/signin')
 }
 
-export const getAllUsers = (activeUser, updateUserList) => {
+export const getAllUsers = (activeUser, setUser, updateUserList) => {
     var config = {
         method: 'GET',
         url: 'https://slackapi.avionschool.com/api/v1/users',

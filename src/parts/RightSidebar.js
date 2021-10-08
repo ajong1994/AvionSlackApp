@@ -72,7 +72,7 @@ const RightSidebar = () => {
                                             <div className="flex rounded border-2 border-gray-900">
                                                 <div className="flex justify-center items-center h-8 w-8 overflow-hidden flex-reverse">
                                                     <span className={assignBg(user?.id)} >
-                                                        <img src={assignImage(user?.id, "User")} classname="h-8 w-8 items-center"/>
+                                                        <img src={assignImage(user?.id, "User")} className="h-8 w-8 items-center"/>
                                                     </span> 
                                                 </div>
                                             </div>
