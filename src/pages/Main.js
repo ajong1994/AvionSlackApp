@@ -38,11 +38,11 @@ const Main = () => {
 
     return (
         <div className="h-full flex flex-col w-screen sm:grid main-grid bg-gray-800">
-            <MobileNavbar toggleIsSideBarVisible={toggleIsSideBarVisible} />
             <div className={sidebarClass}>
                 <Workspace msgStat={isNewMessage} onClick={updateIsNewMessage}/>
                 <Sidebar updateMsgStat={updateIsNewMessage} toggleIsSideBarVisible={toggleIsSideBarVisible}/>
             </div>
+            <MobileNavbar toggleIsSideBarVisible={toggleIsSideBarVisible} />
             <MainHeader/>
             <ChatInterface msgStat={isNewMessage} activeUser={activeUser} updateMsgStat={updateIsNewMessage}/>
         </div>
