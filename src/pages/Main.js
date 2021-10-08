@@ -7,6 +7,7 @@ import Workspace from '../parts/Workspace';
 import MainHeader from '../parts/MainHeader';
 import ChatInterface from '../parts/ChatInterface';
 import { getAllUsers, getAllSubscribedChannels } from '../utils/Utils'
+import MobileNavbar from '../parts/MobileNavbar';
 
 
 const Main = () => {
@@ -37,6 +38,7 @@ const Main = () => {
 
     return (
         <div className="h-full flex flex-col w-screen sm:grid main-grid bg-gray-800">
+            <MobileNavbar toggleIsSideBarVisible={toggleIsSideBarVisible} />
             <div className={sidebarClass}>
                 <Workspace msgStat={isNewMessage} onClick={updateIsNewMessage}/>
                 <Sidebar updateMsgStat={updateIsNewMessage} toggleIsSideBarVisible={toggleIsSideBarVisible}/>
