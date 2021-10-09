@@ -38,7 +38,7 @@ const CreateChannel = ({setOpenModal, openModal, toggleToast, updateToastStat}) 
   const [selectedUsers, setSelectedUsers] = useState([])
   //setting the selected users in an array
   const handleUserSelect = (e) => {
-    if(selectedUsers.includes(e.target.value)) {
+    if(!selectedUsers.includes(e.target.value)) {
       setSelectedUsers((prevState) => [...prevState, e.target.value])
     } else {
       setSelectedUsers(selectedUsers.filter(email => email !== e.target.value));

@@ -1,6 +1,5 @@
 import axios from 'axios'
 import { useState, useEffect, useRef } from 'react';
-import Toast from '../parts/Toast'
 
 /* UTILITY FUNCTIONS RELATED TO VALIDATION */
 export const validateEmail = (email) => {
@@ -155,7 +154,7 @@ export const removeUserSession = (setAuth, setUser, history) => {
     setAuth(false);
     //setting new values (null), as to somehow delete it from the session storage
     setUser(null);
-    //Redirect to Main page
+    //Redirect to signin page
     history.push('/signin')
 }
 
