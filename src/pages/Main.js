@@ -32,11 +32,10 @@ const Main = () => {
         sidebarClass = "hidden absolute w-full h-full sm:grid sm:static sm:col-start-1 sm:row-start-1 sm:row-end-3 z-20 sm:z-0 sidebar-grid"
     }
 
-    useEffect(() => {
-        if (isAuthenticated && activeUser.uid) {
-            return <Redirect to='/signin' />
-        }
-     }, []) 
+    if (isAuthenticated === false || activeUser === null) {
+        return <Redirect to='/signin' />
+    }
+
 
     return (
         <div className="h-full flex flex-col w-screen sm:grid main-grid bg-gray-800">
