@@ -13,9 +13,12 @@ const Workspace = ({msgStat, onClick}) => {
 
     const history = useHistory();
     const { setAuth, setUser } = useContext(AuthContext)
-    const {updateUserList,updateChannelList, updateMsgList, updateMsgRecipient, updateRecipientMetadata} = useContext(SessionContext);
+    const {updateMsgList, updateMsgRecipient, updateRecipientMetadata} = useContext(SessionContext);
     const handleSignOutClick = () => {
         removeUserSession(setAuth, setUser, history);
+        updateMsgList([])
+        updateMsgRecipient('')
+        updateRecipientMetadata('','')
     }
 
     useEffect(() => {

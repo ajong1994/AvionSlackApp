@@ -34,8 +34,13 @@ const ChannelInfoModal = ({setOpenModal, openModal, toggleToast, updateToastStat
 
     //function that invites clicked user in the array 
     const handleInviteUserClick = (user_id) => {
+        if (!moreChannelData.members.filter(member => member?.id === user_id).length){
         postInviteToChannel(activeUser, channelData.id, user_id, updateChannelData, toggleToast, updateToastStat, setSearchUser)
         setIsComponentVisible(false)
+        } else {
+            toggleToast(true);
+            updateToastStat('error','User is already in channel.')
+        }
     }
 
     return (
