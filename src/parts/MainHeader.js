@@ -53,7 +53,8 @@ const MainHeader = () => {
                 <div className="flex items-center p-1">
                     <div className="flex align-center -space-x-2 overflow-hidden">
                         {
-                            moreChannelData.members && moreChannelData.members.slice(0, 3).map((user) => (
+                            !!(recipientMetadata?.type === "Channel" && moreChannelData.members) 
+                            && moreChannelData.members.slice(0, 3).map((user) => (
                                 <div key={user.id} className="inline-block rounded-full ring-4 ring-gray-800">
                                     <div className="flex justify-center items-center h-7 w-7">
                                         <span className={assignBg(user?.id) + " rounded-full"} >
@@ -63,7 +64,7 @@ const MainHeader = () => {
                                 </div>
                             ))
                         }
-                        {moreChannelData?.members.length > 3 && 
+                        {!!(recipientMetadata?.type === "Channel" && moreChannelData?.members.length > 3) && 
                         <div className="h-7 w-7 flex items-center justify-center text-xs rounded-full bg-gray-600 ring-4 ring-gray-800 text-gray-200">
                             {moreChannelData.members.length}
                         </div>
