@@ -11,7 +11,7 @@ import Toast from '../parts/Toast'
 import { AuthContext } from '../contexts/AuthContext'
 import { Link, Redirect } from 'react-router-dom';
 
-const Login = () => {
+const Signin = () => {
     const [email, setEmail] = useState(null)
     const [password, setPassword] = useState(null)
     const [emailValidationPrompt, setEmailValidationPrompt] = useState(undefined)
@@ -145,4 +145,4 @@ const Login = () => {
     )
 }
 
-export default Login
+export default Signin
