@@ -62,7 +62,7 @@ const Login = () => {
             setPassword(e.target.value)
         } 
     }
-    const handleSignUpClick = (validators) => {
+    const handleSignInClick = (validators) => {
         validators.forEach((validationPrompt) => {
             if (validationPrompt.state === undefined) {
                 validationPrompt.setter('')
@@ -120,7 +120,7 @@ const Login = () => {
                         {emailValidationPrompt && <span className='text-red-400'>{emailValidationPrompt}</span>}
                         <Textfield label='Password' value={password === null ? '' : password} onChange={(e) => {handleValueChange(e,'password')}} id='password' type='password' placeholder='Enter a password'/>
                         {passwordValidationPrompt && <span className='text-red-400'>{passwordValidationPrompt}</span>}
-                        <Button onClick={()=>handleSignUpClick(validators)}>Sign In</Button>
+                        <Button onClick={()=>handleSignInClick(validators)}>Sign In</Button>
                         <span>Don't have an account yet? <br/>
                         <Link to='/signup' className="text-blue-800 underline font-semibold"> Create an account</Link></span>
                     </div>
