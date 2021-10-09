@@ -202,7 +202,6 @@ export const postCreateChannel = (channelName, user_ids, activeUser, updateChann
     };  
     axios(config)
     .then(function(response) {
-        console.log(response)
         if (response.data.data) {
             //Display success toast for creation
             toggleToast(true);
@@ -210,7 +209,6 @@ export const postCreateChannel = (channelName, user_ids, activeUser, updateChann
             //Reload channel list from API to ensure it was added
             getAllSubscribedChannels(activeUser, updateChannelList)
             setOpenModal(false)
-            console.log(response)
         } else if (response.data.errors) {
             toggleToast(true);
             updateToastStat('error', response.data.errors[0])
@@ -298,7 +296,6 @@ export const postInviteToChannel = (activeUser, channelId, memberId, updateChann
         if(response.data) {
             //Returns an object with channel ID, owner ID, channel name, create and update dates and an array called channel members
             //which contains user info as objects
-            console.log(response.data.data)
             updateChannelData(response.data.data)
             setSearchUser('')
             toggleToast(true);

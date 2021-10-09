@@ -125,7 +125,7 @@ const Signup = () => {
     //Wrapped Redirect in a on-mount useEffect so that it will not be triggered by re-renders caused by updates to Global States
     //like setIsAuthenticated or setUser. This way, only history.push can redirect the user (after displaying success toast)
     useEffect(() => {
-        if (isAuthenticated && activeUser) {
+        if (isAuthenticated && activeUser.uid) {
             return <Redirect to='/' />
         }
      }, []) 

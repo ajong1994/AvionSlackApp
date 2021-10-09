@@ -12,7 +12,7 @@ import { SessionContext } from "../contexts/SessionContext";
 const MobileNavbar = ({toggleIsSideBarVisible}) => {
 
     const { activeUser } = useContext(AuthContext)
-    const { setUser, userList } = useContext(SessionContext)
+    const { userList } = useContext(SessionContext)
 
 
     const [activeUserProfile, setActiveUserProfile] = useState([])
@@ -32,7 +32,7 @@ const MobileNavbar = ({toggleIsSideBarVisible}) => {
             </span>
 
             {
-            activeUserProfile && 
+            !!(activeUserProfile && activeUserProfile.length) && 
             <div className="text-gray-300 flex py-1 items-center relative">   
                 <div className="flex justify-center items-center h-6 w-6 flex-shrink-0">
                     <span className={assignBg(activeUserProfile[0]?.id)}>

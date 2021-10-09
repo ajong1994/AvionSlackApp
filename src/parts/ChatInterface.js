@@ -97,7 +97,7 @@ const ChatInterface = ({msgStat, updateMsgStat}) => {
             {msgStat &&
                 <div className="flex text-gray-300 items-center p-4 border-b border-gray-600 relative">
                     <p className="pr-4">To:</p>
-                    {!!recipientMetadata.id && 
+                    {!!(recipientMetadata.id !== '') && 
                         <span className="flex justify-center items-center mr-1">
                             <span className={assignBg(recipientMetadata?.id)}>
                                 <img src={assignImage(recipientMetadata?.id, recipientMetadata?.type)} className="h-5 w-5 items-center"/>
